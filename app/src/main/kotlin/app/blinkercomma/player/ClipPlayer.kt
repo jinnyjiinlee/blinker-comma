@@ -83,7 +83,7 @@ class ClipPlayer(
         val clip = playing ?: return
         val playedMs = (now() - clip.startedAt).inWholeMilliseconds
         settle()
-        deck.close()
+        deck.finish()
         Log.i(TAG, "end s=${clip.index + 1} by=clock playedMs=$playedMs")
         onEvent(ReaderEvent.ClipEnded(now(), clip.index))
     }
@@ -103,15 +103,17 @@ class ClipPlayer(
         return ++ticket
     }
 
-    /** 다음에 쓸 클립을 미리 준비 — 문장 사이·쉼표 뒤 재개가 준비 시간을 기다리지 않게. */
+    /** [index]부터 [LOOKAHEAD]개를 미리 준비 — 문장 사이·쉼표 뒤 재개가 준비 시간을 기다리지 않게. */
     private fun preload(index: Int) {
         val ready = pack as? LoadedPack.Ready ?: return
-        ready.pack.clips.getOrNull(index)?.let { deck.preload("${ready.folder}/${it.file}") }
+        val clips = ready.pack.clips.drop(index).take(LOOKAHEAD)
+        deck.preload(clips.map { "${ready.folder}/${it.file}" })
     }
 
     private fun clipOf(index: Int): SentenceClip? = (pack as? LoadedPack.Ready)?.pack?.clips?.getOrNull(index)
 
     private companion object {
         const val TAG = "CommaPlayer"
+        const val LOOKAHEAD = 2 // 준비가 한 번 막혀도(에뮬레이터 최대 7.6초 — D4) 바로 다음 문장은 준비돼 있게
     }
 }
