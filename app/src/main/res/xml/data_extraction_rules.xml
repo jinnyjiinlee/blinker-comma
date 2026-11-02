@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 오늘 카운트·설정은 기기 안에만 — 클라우드 백업·기기 이전 모두 제외 (설계서 원칙 3) -->
+<data-extraction-rules>
+    <cloud-backup><exclude domain="root" path="." /></cloud-backup>
+    <device-transfer><exclude domain="root" path="." /></device-transfer>
+</data-extraction-rules>

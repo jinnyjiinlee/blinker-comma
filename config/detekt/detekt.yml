@@ -1,0 +1,85 @@
+# android-app 스킬 기준 — buildUponDefaultConfig = true 위에 덮어씀
+# ⚠️ threshold = 「이 값부터 실패」 → SKILL.md 상한 + 1
+complexity:
+  LongMethod:
+    active: true
+    threshold: 16                      # 15줄까지
+    ignoreAnnotated: ['Composable']    # 화면 함수는 check_size.py가 30줄로 잼
+  LongParameterList:
+    active: true
+    functionThreshold: 5               # 4개까지
+    constructorThreshold: 7            # 6개까지
+    ignoreDefaultParameters: true
+  NestedBlockDepth:
+    active: true
+    threshold: 4                       # 3단까지
+  CyclomaticComplexMethod:
+    active: true
+    threshold: 11                      # 10까지
+naming:
+  FunctionNaming:
+    active: true
+    functionPattern: '[a-z][a-zA-Z0-9]*'
+    ignoreAnnotated: ['Composable']
+  BooleanPropertyNaming:
+    active: true
+    allowedPattern: '^(is|has|can|should|are)'
+  VariableNaming:
+    active: true
+potential-bugs:
+  UnsafeCallOnNullableType:
+    active: true
+coroutines:
+  GlobalCoroutineUsage:
+    active: true
+  SuspendFunSwallowedCancellation:
+    active: true                       # 타입 분석 경로에서만 동작
+style:
+  ReturnCount:
+    active: true
+    max: 2
+    excludeGuardClauses: true
+  VarCouldBeVal:
+    active: true
+  UnusedPrivateMember:
+    active: true
+    ignoreAnnotated: ['Preview']
+  MagicNumber:
+    active: true
+    ignorePropertyDeclaration: true
+    ignoreCompanionObjectPropertyDeclaration: true
+    excludes: ['**/test/**', '**/androidTest/**', '**/androidUnitTest/**', '**/*.kts']
+  MaxLineLength:
+    active: true
+    maxLineLength: 120
+  WildcardImport:
+    active: true
+  ForbiddenImport:
+    active: true
+    excludes: ['**/ui/theme/**', '**/test/**', '**/androidTest/**', '**/screenshotTest/**']
+    imports:
+      - value: 'androidx.compose.ui.unit.dp'
+        reason: '간격·크기는 ui/theme 토큰(CommaSpace·CommaSize)으로'
+      - value: 'androidx.compose.ui.unit.sp'
+        reason: '글자 크기는 CommaType 토큰으로'
+      - value: 'androidx.compose.ui.graphics.Color'
+        reason: '색은 CommaColors 토큰으로 — 화면 코드는 CommaTheme.colors.x만'
+      - value: 'androidx.compose.animation.*'
+        reason: '운전 화면은 애니메이션 없음 (계획서 3장 화면 공통)'
+  ForbiddenAnnotation:
+    active: true                       # 타입 분석 필요 — detektTest 경로
+    annotations:
+      - reason: '꺼 둔 테스트는 check를 통과시킨다 — 고치거나 지운다'
+        value: 'org.junit.jupiter.api.Disabled'
+      - reason: '꺼 둔 테스트는 check를 통과시킨다 — 고치거나 지운다'
+        value: 'kotlin.test.Ignore'
+      - reason: '꺼 둔 테스트는 check를 통과시킨다 — 고치거나 지운다'
+        value: 'org.junit.Ignore'
+  ForbiddenMethodCall:
+    active: true
+    includes: ['**/engine/src/main/**']
+    methods:
+      - reason: 'engine은 시계를 직접 읽지 않는다 — 이벤트의 at을 쓴다'
+        value: 'java.lang.System.currentTimeMillis'
+      - reason: 'engine은 시계를 직접 읽지 않는다 — 이벤트의 at을 쓴다'
+        value: 'java.lang.System.nanoTime'

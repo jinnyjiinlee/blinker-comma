@@ -1,0 +1,6 @@
+#!/bin/bash
+# fix: 커밋은 그 버그를 재현하는 테스트를 같이 담는다 (android-app 스킬 §4-1)
+if head -1 "$1" | grep -q '^fix:' && ! git diff --cached --name-only | grep -qE '/src/(test|androidTest)/'; then
+    echo '✗ fix: 커밋인데 테스트 변경이 없음 — 버그를 재현하는 테스트를 먼저 쓰고 같이 커밋' >&2
+    exit 1
+fi
