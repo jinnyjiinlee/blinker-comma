@@ -212,3 +212,26 @@
 - 결함 4(컷 2 VC 신호 drift) — conductor `play_vc`에도 확인·재시도 추가 검토(적용은 개발 담당, 11/10 전).
 - 94eb272 블라인드 히스토리 정리 — 대표 승인 대기, 11/15 제출 전 필수.
 - 그 외는 progress.md D5 「남은 일」과 동일(42dot 문의, stage_pack.json 실제 길이 전환 등 — 이번 범위 밖).
+
+## P1 (2026-11-02 19:30)
+
+### 한 일
+- 제출 패키지 `submit/blinker-comma_제출본/`(저장소 밖, `hyundai-app-contest/submit/`) 신규 생성. 코드 변경 0 — 이 저장소(`blinker-comma/`)는 읽기만 했다.
+- `submit/build_form_blinker-comma.py`(`build_form_seal.py` 복사해 내용만 교체) → 접수양식 01~04를 담은 docx·pdf 1벌. 01·04는 운영용 실명(기존 두 제출본과 같은 관례, 블라인드 대상 아님), **02는 블라인드**(성명·연락처·이메일·소속·로컬 경로 grep 0 — 02 섹션만 분리 추출해 재확인, 전체 문서 기준으로도 재확인). 5번 「개발 계획」은 `docs/status_for_form.md` 표를 그대로 삽입. 과장 문구(유일·최초·완벽 등) grep 0. 7쪽 전체 PNG 캡처로 잘림·침범 육안 확인(이상 없음). 04 서명 칸은 비워 둠(대표 몫).
+- 시연 영상: `setup/build_shots/rehearsal_final.mp4`(이 저장소 밖, M2 최종 리허설 84.45초)에 타이틀 카드(앱 이름 + 「실제 소리 없음 · 소리는 편집 합성, 시각은 앱 로그 기준」 고지)·엔드 카드(스토어 한 줄)를 이어 붙여 91.47초로 제작. 실명·로컬 경로 0(프레임 샘플 7장 육안 확인).
+- GitHub 업로드용 소스 zip: `git archive HEAD`로 생성 — `.git`·`local.properties`·키스토어·`*.jks` 0건(zip 내용 grep으로 확인). APK는 git 추적 파일이라 zip 안에도 포함되고, 별도 사본도 제출본 폴더에 둠.
+- `mail_body.md`(존댓말, 수신 appdevchallenge@hyundai-partners.com, 제목 규정 그대로)·`CHECKLIST.md`(필수 항목 완료 표시 + 대표 몫 📌 6개 + 위험 4개) 작성. **메일 발송·GitHub push·외부 업로드는 하지 않음**(원칙대로).
+
+### 실측
+- 접수양식 02 섹션 블라인드 grep(android-app 스킬 금지어 목록 — 대표 성명·회사명·대표 이메일·휴대폰번호·로컬 절대경로 패턴) 전부 0건(전체 문서 기준 재확인 포함) — `submit/깜빡이쉼표_접수양식_v1.docx`.
+- 과장 문구(유일·최초·완벽·세계 최초·업계 최초) grep 0건.
+- PDF 7쪽 전수 캡처(100dpi PNG) 육안 확인 — 잘림·표 침범·빈 쪽 0건.
+- 시연 영상 1차 시도(오버레이 자막 합성)는 인코딩이 12분을 넘기며 `moov atom not found`로 손상(ffprobe duration이 5483초로 깨짐) — 폐기. 타이틀 카드에 고지 문구를 포함시키고 `concat` demuxer(`-c copy`)로 재시도해 91.47초 정상 파일 확보(ffprobe 확인).
+- 소스 zip `unzip -l` grep: `.git/`·`local.properties`·키스토어·`*.jks` 0건.
+
+### 남은 일 (제출 전 — 전부 대표 몫, CHECKLIST.md에 상세)
+- 04 서명 칸 채우기.
+- 익명 GitHub 계정 생성 + push — **이 저장소를 그대로 push하지 말 것**: 과거 커밋 `94eb272`에 블라인드 금지어가 여전히 남아 있음(위 D5·M2 기록). push 전 히스토리 정리 필수. 제출용 zip 자체는 `git archive`라 이 문제와 무관.
+- mail_body.md 검토 후 발송 승인(용량 문제로 메일엔 접수양식+영상만, 소스 zip·APK는 GitHub 링크로 전달하도록 본문 구성).
+- 메일 제목 — 개인 참가 규정 문구("팀명(개인은 성명)_대표자명")를 그대로 적용하면 대표 성명이 두 번 반복되는 모양이 됨. 그대로 둘지 확인 요청(`mail_body.md` 참고).
+- 42dot 문의·가출원 여부는 기존처럼 승인 대기(이번 단계에서 새로 만들지 않음).
