@@ -53,3 +53,32 @@
 - D2 실측 필수: `-no-audio` 완료 콜백 · `keyevent 85` 수신(→ 엔진엔 onPlay로 오는지) · VC 1.7초 간격 콜백 2개 → `docs/signals_measured.md`.
 - 실제 팩이 생기면 시나리오 테스트를 실제 `pack.json` 길이로 다시 돌린다. 컷 1은 문장 A가 3.1초 이하여야 ⓓ가 5초 안(ⓓ = A + 1.9초) — 2.6초 근처 문장을 A로 고른다.
 - 콘텐츠 원본(퍼블릭 도메인 낭독) 선정·라이선스 원문 확인.
+
+## D2 (2026-11-02 16:50)
+
+### 한 일
+- 신호 어댑터 3종: `PleosVehicleSource`(깜빡이·기어 — road-interpreter에서 복사해 조향·문·좌석 제거, 리스너 해제 안 함) · `CarSpeedSource`(복사 + 권한 먼저 확인 — 거부면 AAOS가 조용해서) · `carEvents`(셋을 엔진 이벤트 하나로, 실패한 신호는 「확인 안 됨」 로그). 원본 저장소 변경 0.
+- 낭독 서비스 `ReaderService`: MediaBrowserServiceCompat + MediaSessionCompat(제목만, 문장 본문 0) + 재생 시작 때만 포그라운드(mediaPlayback) · `AudioFocusGate`(GAIN, 줄임도 멈춤으로, 정지에서만 반납) · `EffectRunner`.
+- `ReaderSession`: 엔진 상태 한 곳(메인 스레드) · `DeadlineTicker`(`nextDeadline` 1회 깨우기) · ⏸ 끄기를 실제 소리 시작까지 미룸.
+- 플레이어 `ClipPlayer`·`ClipDeck`: 문장 끝 = 팩 길이 시계 · 재생마다 새 MediaPlayer(전용 스레드) · 놓기는 별도 스레드 · 다음 클립 미리 준비 · 준비 중 멈춤이면 소리 안 냄(표 재확인). 실측하며 설계를 4번 바꿈(아래 실측).
+- 디버그 빌드 전용 시연 주입: `src/debug` 수신기(DUMP 권한 = adb 셸만) → 엔진 이벤트 + 화면 노란 「시연 주입」 + 로그 `CommaInject`. 릴리스 APK엔 없음.
+- 임시 P 화면(▶/❙❙ · 오늘 카운트 · 자동 재개 토글 · ⏸ · 시연 주입) — 실측 손잡이용, 정식 화면은 D3.
+- 측정용 합성음 팩(`tools/make_probe_pack.sh`, 사인파 8클립 2.2~5.0초) — 낭독 팩 전 임시. 실측 도구 `tools/measure_signals.py`+`measure_plans.py`+`device.py`(VC·adb·화면 누르기·주입, logcat 표지 줄).
+- 문서: `docs/signals_measured.md`(정본) · SPEC 신호 표·권한·원칙 10·app 부품·위험 갱신 · ARCHITECTURE 패키지 지도·용어(시연 주입·미리 준비·소리 시작·표)·스레드 · CONVENTIONS 공통 부품·테스트 대장 · README.
+
+### 실측 (에뮬레이터 2.1.0 · API 34 · `-no-audio -no-window` · 근거 `docs/logs/d2_*.txt`, 시각은 에뮬레이터 시계)
+- 깜빡이 ✅ 지연 5~7ms · 1.7초 간격 토글 콜백 2개 ✅(간격 1.738초) · 기어 ✅ 7~8ms · 속도 ✅ 40km/h → 11.11m/s, 지연 141~178ms(이전 실행 최대 455ms) · 속도 0에서 레버 → `no comma` ✅ — `d2_signals_logcat.txt`.
+- 핸들 키 `keyevent 85`(시연 주입) ✅ 우리 세션 수신 · 재생 중 PAUSE · 멈춤 중 PLAY · 쉼표 중(자동 재개 끔) PLAY → 같은 문장 처음부터 · 키→콜백 약 0.3초 — `d2_cut3_logcat.txt`. 컷 3 유지.
+- 오디오 포커스: 다른 앱의 실제 요청 → LOSS_TRANSIENT 멈춤 → 3초 뒤 GAIN, 멈춘 2805ms부터 ✅ · 디버그 주입도 ✅ + 화면 「시연 주입」 확인.
+- 권한 최소 집합: CAR_LIGHTS(깜빡이) + CAR_DRIVE(기어) + CAR_SPEED — 없으면 SecurityException(`d2_perm_none_logcat.txt` 4·39행, `d2_perm_lights_only_logcat.txt` 4행).
+- 완료 콜백 ❌ 믿을 수 없음: 4.0초 클립에 4.85초(1차 실행 — 로그 덮어씀), 3.0초 클립에 2.23초(`d2_breath2_logcat.txt`). → 팩 길이 시계로, 콜백은 기록만.
+- 플레이어 막힘(에뮬레이터): 일시정지한 플레이어 재사용 시 start 5~6초 · prepare 1.3~7.2초 · release 최대 7.6초 · 옛 플레이어 setVolume 8.5초(중간 실행들 — 덮어씀). 대응 뒤 최종 4개 로그 열기 25번 전부 `warm=true prepareMs=0`, 시작 0~94ms.
+- 컷 1 모양 2회(문장 2 실제 소리 시작 = 0): ⓐ 2.45/2.47 · ⓑ 3.01/3.00 · ⓒ 4.19/4.22 · ⓓ 5.00/5.02(= ⓒ + 0.80) · ⏸ 꺼짐 ⓓ + 3~4ms — `d2_breath_logcat.txt`·`d2_breath2_logcat.txt`. (ⓒ가 끝 + 1.2인 건 측정 손 간격 — 실제 대본은 +1.1)
+- 검사: `scripts/check.sh .` → `tests OK (app 28, engine 116)` · `check OK` — `docs/logs/d2_check.txt`.
+- 확인 안 됨: 실차의 완료 콜백·시계 차이 · LEFT 레버(VC로 안 넣어 봄, 엔진은 같은 뜻) · 앱 실행 직후 메인 4초 늦음 1/4회의 원인.
+
+### 남은 일
+- 콘텐츠: 퍼블릭 도메인 영어 낭독 고르기·라이선스 원문 확인 · `tools/cut_pack.py`(문장 자르기, 끝 무음 패딩 — 시계로 끊으므로) · 실제 `pack.json` 길이로 시나리오 테스트 재실행 · 문장 A 2.6초 근처.
+- D3: 정식 P·D·권한 화면(⏸ x ≥ 780dp · 속도 「확인 안 됨」 한 줄 · 권한 안내) · 테마 토큰 · 런처 아이콘. 임시 화면(`ReaderScreen`) 대체.
+- D4: conductor `anchor`는 엔진 `clipStart`가 아니라 `CommaPlayer start s=N`(실제 소리 시작)에 · 녹화 전 앱 띄워 두기(첫 준비·실행 직후 지연 흡수).
+- 서비스: 앱이 백그라운드일 때 핸들 키로 첫 재생(포그라운드 시작 제약) 미확인 · MediaButtonReceiver 미설치.

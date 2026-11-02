@@ -1,0 +1,51 @@
+--------- beginning of main
+11-01 23:20:59.549 I/CommaMeasure(31423): step reset P speed0 lever OFF
+11-01 23:21:00.640 I/CommaMeasure(31692): step launch app
+11-01 23:21:01.375 W/CommaSignal(31723): gear 확인 안 됨 — 구독 실패
+11-01 23:21:01.375 W/CommaSignal(31723): java.lang.SecurityException: registerGearSelection need Permission
+11-01 23:21:01.375 W/CommaSignal(31723): 	at ai.pleos.playground.vehicle.utils.f.a(SourceFile:147)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at ai.pleos.playground.vehicle.service.b.a(SourceFile:5)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at ai.pleos.playground.vehicle.api.implement.GearImpl.registerGearSelection(SourceFile:4)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at app.blinkercomma.vehicle.PleosVehicleSource$gears$1.invokeSuspend(PleosVehicleSource.kt:42)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at app.blinkercomma.vehicle.PleosVehicleSource$gears$1.invoke(Unknown Source:8)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at app.blinkercomma.vehicle.PleosVehicleSource$gears$1.invoke(Unknown Source:4)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at kotlinx.coroutines.flow.ChannelFlowBuilder.collectTo$suspendImpl(Builders.kt:316)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at kotlinx.coroutines.flow.ChannelFlowBuilder.collectTo(Unknown Source:0)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at kotlinx.coroutines.flow.CallbackFlowBuilder.collectTo(Builders.kt:330)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at kotlinx.coroutines.flow.internal.ChannelFlow$collectToFun$1.invokeSuspend(ChannelFlow.kt:56)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:104)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at kotlinx.coroutines.EventLoop.processUnconfinedEvent(EventLoop.common.kt:65)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at kotlinx.coroutines.internal.DispatchedContinuationKt.resumeCancellableWith(DispatchedContinuation.kt:371)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at kotlinx.coroutines.intrinsics.CancellableKt.startCoroutineCancellable(Cancellable.kt:26)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at kotlinx.coroutines.intrinsics.CancellableKt.startCoroutineCancellable$default(Cancellable.kt:21)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at kotlinx.coroutines.CoroutineStart.invoke(CoroutineStart.kt:88)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at kotlinx.coroutines.AbstractCoroutine.start(AbstractCoroutine.kt:123)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at kotlinx.coroutines.BuildersKt__Builders_commonKt.launch(Builders.common.kt:52)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at kotlinx.coroutines.BuildersKt.launch(Unknown Source:1)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at kotlinx.coroutines.BuildersKt__Builders_commonKt.launch$default(Builders.common.kt:43)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at kotlinx.coroutines.BuildersKt.launch$default(Unknown Source:1)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at app.blinkercomma.service.ReaderService.onCreate(ReaderService.kt:48)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at android.app.ActivityThread.handleCreateService(ActivityThread.java:4671)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at android.app.ActivityThread.-$$Nest$mhandleCreateService(Unknown Source:0)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2269)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at android.os.Handler.dispatchMessage(Handler.java:106)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at android.os.Looper.loopOnce(Looper.java:205)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at android.os.Looper.loop(Looper.java:294)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at android.app.ActivityThread.main(ActivityThread.java:8194)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at java.lang.reflect.Method.invoke(Native Method)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:552)
+11-01 23:21:01.375 W/CommaSignal(31723): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:971)
+11-01 23:21:01.696 I/CommaSignal(31723): car SpeedChanged(at=21m 15.236s, speedMps=0.0)
+11-01 23:21:01.867 I/CommaSignal(31723): car TurnSignalChanged(at=21m 15.407s, signal=OFF)
+11-01 23:21:01.869 I/CommaSignal(31723): car TurnSignalChanged(at=21m 15.409s, signal=OFF)
+11-01 23:21:04.777 I/CommaMeasure(32472): step vc gear Drive
+11-01 23:21:06.323 I/CommaMeasure(32759): step vc speed 40
+11-01 23:21:06.331 I/CommaSignal(31723): car SpeedChanged(at=21m 19.871s, speedMps=11.111111640930176)
+11-01 23:21:07.862 I/CommaMeasure(  980): step vc turn-signal BlinkRight
+11-01 23:21:07.870 I/CommaSignal(31723): car TurnSignalChanged(at=21m 21.41s, signal=RIGHT)
+11-01 23:21:07.870 I/Comma   (31723): turnSignal=RIGHT
+11-01 23:21:09.407 I/CommaMeasure( 1742): step vc turn-signal Off
+11-01 23:21:09.414 I/CommaSignal(31723): car TurnSignalChanged(at=21m 22.954s, signal=OFF)
+11-01 23:21:09.414 I/Comma   (31723): turnSignal=OFF
+11-01 23:21:10.939 I/CommaMeasure( 2236): step vc gear Park

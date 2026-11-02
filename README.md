@@ -4,8 +4,10 @@
 
 ## 지금 상태
 - `:engine` 완료: 쉼표 예약 판정 · 낭독 상태 리듀서(쉼표 규칙 R1~R10) · 로그 줄 · 오늘 카운트 · 콘텐츠 팩 검사 · 시연 대본 3컷 리플레이
-- `:app`: 빈 화면 + Pleos 값 변환만. 신호 어댑터·플레이어·서비스·화면은 다음 단계
-- 테스트 수: `scripts/check.sh .`의 `tests OK (…)` 숫자 — 현재 `app 12, engine 116` (app은 debug·release 단위 테스트가 각각 돌아 2배로 셈)
+- `:app`: 신호 어댑터 3종(깜빡이·기어·속도) · 플레이어 · 낭독 서비스(MediaBrowserService + MediaSession + 포그라운드) · 오디오 포커스 · 임시 P 화면 · 디버그 빌드 시연 주입. 정식 화면 3개는 다음 단계(D3)
+- 콘텐츠: 지금 팩은 **측정용 합성음**(`tools/make_probe_pack.sh`) — 퍼블릭 도메인 낭독 팩으로 교체 예정
+- 신호 실측: `docs/signals_measured.md`(에뮬레이터, 이 앱 기준)
+- 테스트 수: `scripts/check.sh .`의 `tests OK (…)` 숫자 — 현재 `app 28, engine 116` (app = 공통 테스트 10개 × debug·release + 디버그 전용 8개)
 
 ## 처음 실행
 ```
@@ -23,6 +25,8 @@ scripts/check.sh .                                    # + 파일 크기·블라�
 
 ## 시연 주입 신호
 - 핸들 미디어 키: Virtual Console에 카드가 없어 `adb shell input keyevent 85`로 넣는다(컷 3, 영상 밖). 대본 `demo/script/cut3_key_resume.tsv`의 `adb` 줄.
+- 그 밖에 VC로 못 넣는 신호(오디오 포커스 등): 디버그 빌드에서만 `adb shell am broadcast --user 10 -a app.blinkercomma.debug.INJECT -p app.blinkercomma --es signal focus --es value LOSS_TRANSIENT` — 화면에 「시연 주입」이 뜬다. 값 목록은 `docs/signals_measured.md` 끝.
+- 에뮬레이터 권한: 앱은 사용자 10에서 돈다 — 속도는 `adb shell pm grant --user 10 app.blinkercomma android.car.permission.CAR_SPEED`.
 
 ## 꼭 지킬 것
 - 블라인드 심사: 커밋 작성자·코드·주석·문서에 실명·회사명·로컬 경로·전화번호 금지

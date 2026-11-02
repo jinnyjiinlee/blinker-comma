@@ -17,13 +17,15 @@
 
 - 시간은 이벤트의 `at`(단조 시각)만 쓴다. 디바운스·상한은 앱이 `ReaderState.nextDeadline(params)` 시각에 `Tick`을 한 번 보내 판정한다 — 100ms 폴링이 아니라서 로그 `OFF held 0.80s`가 실제 유지 시간과 같다.
 - 「자동 재개」는 P 설정이라 앱이 `CommaCardParams.DEFAULT.copy(isAutoResume = …)`로 매번 넘긴다.
+- 스레드: 엔진·세션·서비스 콜백은 전부 **메인 스레드 하나**(Pleos·AAOS 콜백은 Flow로 메인에 모임, 시각 `at`은 콜백 순간). MediaPlayer만 전용 스레드 둘(열기 `clip-player` · 놓기) — 에뮬레이터에서 수 초씩 막혀 메인을 막지 않게(D2 실측).
+- 문장 끝은 플레이어 완료 콜백이 아니라 **팩 `durationMs` 시계**(`ClipPlayer`) — 에뮬레이터 콜백이 늦고 이르게 와서(D2).
 
 ## 2. 모듈
 
 | 모듈 | 성격 | 의존 | 테스트 |
 |---|---|---|---|
 | `:engine` | 순수 Kotlin(JVM) — 쉼표 판정·낭독 상태 리듀서·로그 줄·팩 검사 | kotlinx-serialization-json(팩 JSON) | JVM 단위 + 대본 리플레이(`demo/script`), Kover 줄 90%·분기 85% |
-| `:app` | Android — SDK 어댑터·(예정) 서비스·플레이어·화면 | `:engine`, Pleos Vehicle 2.3.2 | 어댑터 값 변환(JVM) + 에뮬레이터 실측 |
+| `:app` | Android — SDK 어댑터·서비스·플레이어·(D3) 화면. `src/debug`에 시연 주입 수신기 | `:engine`, Pleos Vehicle 2.3.2, androidx.media | 값 변환·재생 위치·주입 해석(JVM) + 에뮬레이터 실측(`tools/measure_signals.py` → `docs/signals_measured.md`) |
 
 ## 3. 용어 사전 (코드에서 이 단어만 쓴다)
 
@@ -44,6 +46,10 @@
 | 팩 | `SentencePack`·`PackFile`·`PackProblem` | APK 에셋 콘텐츠 묶음(`pack.json` + 클립) | album, book |
 | 확인 안 됨 | `null`(`gear`·`speedMps`) | 신호를 못 받음 — 지어내지 않는다(원칙 4) | default, 0 |
 | 대본 | `demo/script` 폴더의 TSV · `StageLine` · `anchor` | conductor·시나리오 테스트·종이 순서표가 같이 읽는 시연 순서 | scenario file |
+| 시연 주입 | `DemoInjectReceiver`·`DemoInjectionMarks`·`toInjectedEvent` | VC로 못 넣는 신호를 디버그 빌드에서 adb 브로드캐스트로 넣음 — 화면 「시연 주입」·로그 `CommaInject` | fake, mock |
+| 미리 준비 | `preload`·`standby` | 다음에 쓸 클립의 플레이어를 소리 없이 준비해 둠(재개 = 시작만) | prefetch, cache |
+| 소리 시작 | `onSoundStarted`·`CommaPlayer start` | 플레이어가 실제로 소리를 낸 순간 — ⏸ 끄기·대본 anchor 기준. 엔진 `clipStart`(명령 순간)와 다름 | — |
+| 표 | `ticket`·`ClipRequest` | 재생 요청 번호 — 늦게 끝난 준비·콜백이 지금 요청 것인지 가림 | token, id |
 
 ## 4. 설계서 이름 ↔ 코드 이름
 
@@ -72,11 +78,16 @@ engine/src/test/kotlin/app/blinkercomma/engine/
   support/  ✅ replay · ReaderScene(기본 장면) · StageScript(TSV) · StageRun(앱 흉내 리플레이)
   scenario/ ✅ Cut1·Cut2·Cut3 + EdgeScenarioTest
 app/src/main/kotlin/app/blinkercomma/
-  vehicle/  ✅ VehicleMapping(Pleos 값 → 엔진 값) · ○ PleosVehicleSource · ○ CarSpeedSource
-  player/   ○ ClipPlayer
-  service/  ○ ReaderService(MBS + MediaSession + 포그라운드) · ○ AudioFocusGate
-  data/     ○ PackRepository · ○ TallyStore
-  ui/       ○ P 화면 · D 화면 · 권한 안내 · 테마
+  (루트)    ✅ BlinkerApp · AppContainer(수동 DI) · Clock(monotonicNow) · MainActivity
+  vehicle/  ✅ VehicleMapping · PleosVehicleSource(깜빡이·기어, 해제 안 함) · CarSpeedSource(권한 먼저 확인)
+  session/  ✅ ReaderSession(엔진 상태·효과·⏸) · DeadlineTicker(nextDeadline 1회 깨우기) · DemoInjectionMarks
+  player/   ✅ ClipPlayer(문장 끝 = 팩 길이 시계) · ClipDeck(MediaPlayer 전용 스레드·미리 준비) · PlayingClip
+  service/  ✅ ReaderService(MBS + MediaSession + 포그라운드) · carEvents · ReaderMediaSession · AudioFocusGate · EffectRunner · ReaderNotification
+  data/     ✅ PackRepository · TallyStore · ReaderSettings(자동 재개)
+  ui/       ✅ 임시 P 화면(ReaderScreen — D2 실측용) · ○ 정식 P 화면 · D 화면 · 권한 안내 · 테마(D3)
+app/src/debug/kotlin/app/blinkercomma/debug/  ✅ DemoInjectReceiver · toInjectedEvent (디버그 빌드 전용)
+app/src/main/assets/packs/en1/  ✅ 측정용 합성음 팩(`tools/make_probe_pack.sh`) · ○ 퍼블릭 도메인 낭독 팩
+tools/      ✅ measure_signals.py · measure_plans.py · device.py(실측) · make_probe_pack.sh
 demo/script/ ✅ cut1_breath · cut2_wait_go · cut3_key_resume (TSV)  ○ conductor(anchor 확장 — D4)
 ```
 

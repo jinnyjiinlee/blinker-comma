@@ -1,0 +1,62 @@
+--------- beginning of main
+11-01 23:41:32.513 I/CommaMeasure(26991): step reset P speed0 lever OFF
+11-01 23:41:33.556 I/CommaMeasure(27202): step launch app
+11-01 23:41:34.693 I/CommaSignal(27227): car SpeedChanged(at=41m 48.233s, speedMps=0.0)
+11-01 23:41:34.931 I/CommaSignal(27227): car TurnSignalChanged(at=41m 48.471s, signal=OFF)
+11-01 23:41:34.936 I/CommaSignal(27227): car TurnSignalChanged(at=41m 48.476s, signal=OFF)
+11-01 23:41:34.943 I/CommaSignal(27227): car GearChanged(at=41m 48.484s, gear=PARK)
+11-01 23:41:34.944 I/Comma   (27227): gear=PARK
+11-01 23:41:37.676 I/CommaMeasure(27979): step tap auto resume off
+11-01 23:41:41.074 I/CommaMeasure(28674): step vc gear Drive + speed 40
+11-01 23:41:41.102 I/CommaSignal(27227): car GearChanged(at=41m 54.642s, gear=DRIVE)
+11-01 23:41:41.103 I/Comma   (27227): gear=DRIVE
+11-01 23:41:41.165 I/CommaSignal(27227): car SpeedChanged(at=41m 54.705s, speedMps=11.111111640930176)
+11-01 23:41:42.772 I/CommaMeasure(29004): step tap play
+11-01 23:41:45.318 I/Comma   (27227): screen PLAY → play s=1
+11-01 23:41:45.322 I/CommaFocus(27227): focus request=1
+11-01 23:41:45.327 I/Comma   (27227): clipStart s=1
+11-01 23:41:45.346 I/CommaDeck(27227): open warm=true prepareMs=0 startMs=17
+11-01 23:41:45.362 I/CommaPlayer(27227): start s=1 fromMs=0 clipMs=2600 openMs=19
+11-01 23:41:48.067 I/CommaPlayer(27227): end s=1 by=clock playedMs=2630
+11-01 23:41:48.077 I/Comma   (27227): clipStart s=2
+11-01 23:41:48.103 I/CommaDeck(27227): open warm=true prepareMs=0 startMs=22
+11-01 23:41:48.105 I/CommaPlayer(27227): start s=2 fromMs=0 clipMs=3000 openMs=26
+11-01 23:41:48.513 I/CommaMeasure(30022): step vc turn-signal BlinkRight
+11-01 23:41:48.546 I/CommaSignal(27227): car TurnSignalChanged(at=42m 2.085s, signal=RIGHT)
+11-01 23:41:48.549 I/Comma   (27227): turnSignal=RIGHT
+11-01 23:41:48.549 I/Comma   (27227): moving → comma armed
+11-01 23:41:51.269 I/CommaDeck(27227): release ms=3165
+11-01 23:41:51.311 I/CommaPlayer(27227): pause s=2 atMs=3000
+11-01 23:41:51.312 I/CommaGlyph(27227): holdGlyph=on
+11-01 23:41:51.313 I/Comma   (27227): endWait 2.50s → hold mid s=2
+11-01 23:41:53.996 I/CommaDeck(27227): release ms=2683
+11-01 23:41:53.998 I/CommaDeck(27227): release ms=1
+11-01 23:41:54.578 I/CommaMeasure(31029): step vc turn-signal Off (expect keep hold)
+11-01 23:41:54.585 I/CommaSignal(27227): car TurnSignalChanged(at=42m 8.126s, signal=OFF)
+11-01 23:41:54.586 I/Comma   (27227): turnSignal=OFF
+11-01 23:41:54.586 I/Comma   (27227): autoResume=off → keep hold
+11-01 23:41:56.615 I/CommaMeasure(31492): step adb keyevent 85 while holding
+11-01 23:41:56.668 I/CommaMedia(27227): media button code=85 action=0
+11-01 23:41:56.668 I/CommaMedia(27227): media button code=85 action=1
+11-01 23:41:56.971 I/Comma   (27227): mediaKey PLAY → play s=2
+11-01 23:41:56.972 I/Comma   (27227): clipStart s=2
+11-01 23:41:56.974 I/CommaDeck(27227): open warm=true prepareMs=0 startMs=2
+11-01 23:41:56.974 I/CommaGlyph(27227): holdGlyph=off
+11-01 23:41:56.975 I/CommaPlayer(27227): start s=2 fromMs=0 clipMs=3000 openMs=2
+11-01 23:41:59.712 I/CommaMeasure(32036): step tap auto resume on
+11-01 23:41:59.975 I/CommaPlayer(27227): end s=2 by=clock playedMs=3002
+11-01 23:41:59.977 I/Comma   (27227): clipStart s=3
+11-01 23:42:00.077 I/CommaDeck(27227): open warm=true prepareMs=0 startMs=94
+11-01 23:42:00.077 I/CommaPlayer(27227): start s=3 fromMs=0 clipMs=4000 openMs=100
+11-01 23:42:00.086 I/CommaDeck(27227): release ms=104
+11-01 23:42:03.414 I/CommaMeasure(  341): step tap pause
+11-01 23:42:04.076 I/CommaPlayer(27227): end s=3 by=clock playedMs=4000
+11-01 23:42:04.077 I/Comma   (27227): clipStart s=4
+11-01 23:42:04.078 I/CommaDeck(27227): open warm=true prepareMs=0 startMs=1
+11-01 23:42:04.078 I/CommaPlayer(27227): start s=4 fromMs=0 clipMs=2200 openMs=2
+11-01 23:42:04.104 I/CommaDeck(27227): release ms=27
+11-01 23:42:06.110 I/CommaFocus(27227): focus abandon=1
+11-01 23:42:06.114 I/CommaPlayer(27227): pause s=4 atMs=2036
+11-01 23:42:06.114 I/Comma   (27227): screen PAUSE → stop s=4
+11-01 23:42:06.151 I/CommaDeck(27227): release ms=12
+11-01 23:42:06.152 I/CommaDeck(27227): release ms=1

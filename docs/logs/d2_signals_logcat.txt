@@ -1,0 +1,139 @@
+--------- beginning of main
+11-01 23:44:22.094 I/CommaMeasure(30676): step reset P speed0 lever OFF
+11-01 23:44:23.160 I/CommaMeasure(30921): step launch app
+11-01 23:44:24.074 I/CommaSignal(30948): car SpeedChanged(at=44m 37.613s, speedMps=0.0)
+11-01 23:44:24.232 I/CommaSignal(30948): car TurnSignalChanged(at=44m 37.772s, signal=OFF)
+11-01 23:44:24.241 I/CommaSignal(30948): car GearChanged(at=44m 37.781s, gear=PARK)
+11-01 23:44:24.242 I/Comma   (30948): gear=PARK
+11-01 23:44:24.242 I/CommaSignal(30948): car GearChanged(at=44m 37.782s, gear=PARK)
+11-01 23:44:24.242 I/CommaSignal(30948): car TurnSignalChanged(at=44m 37.781s, signal=OFF)
+11-01 23:44:27.248 I/CommaMeasure(31764): step vc gear Drive
+11-01 23:44:27.256 I/CommaSignal(30948): car GearChanged(at=44m 40.794s, gear=DRIVE)
+11-01 23:44:27.256 I/Comma   (30948): gear=DRIVE
+11-01 23:44:28.782 I/CommaMeasure(32068): step vc speed 40
+11-01 23:44:28.960 I/CommaSignal(30948): car SpeedChanged(at=44m 42.5s, speedMps=11.111111640930176)
+11-01 23:44:30.318 I/CommaMeasure(32371): step tap play
+11-01 23:44:32.479 I/Comma   (30948): screen PLAY → play s=1
+11-01 23:44:32.481 I/CommaFocus(30948): focus request=1
+11-01 23:44:32.484 I/Comma   (30948): clipStart s=1
+11-01 23:44:32.484 I/CommaDeck(30948): open warm=true prepareMs=0 startMs=1
+11-01 23:44:32.500 I/CommaPlayer(30948): start s=1 fromMs=0 clipMs=2600 openMs=1
+11-01 23:44:35.099 I/CommaPlayer(30948): end s=1 by=clock playedMs=2614
+11-01 23:44:35.100 I/Comma   (30948): clipStart s=2
+11-01 23:44:35.106 I/CommaDeck(30948): open warm=true prepareMs=0 startMs=4
+11-01 23:44:35.121 I/CommaPlayer(30948): start s=2 fromMs=0 clipMs=3000 openMs=6
+11-01 23:44:35.138 I/CommaDeck(30948): release ms=36
+11-01 23:44:38.122 I/CommaPlayer(30948): end s=2 by=clock playedMs=3016
+11-01 23:44:38.122 I/Comma   (30948): clipStart s=3
+11-01 23:44:38.123 I/CommaDeck(30948): open warm=true prepareMs=0 startMs=1
+11-01 23:44:38.124 I/CommaPlayer(30948): start s=3 fromMs=0 clipMs=4000 openMs=2
+11-01 23:44:38.129 I/CommaDeck(30948): release ms=7
+11-01 23:44:39.515 I/CommaMeasure( 3450): step vc turn-signal BlinkRight (comma)
+11-01 23:44:39.522 I/CommaSignal(30948): car TurnSignalChanged(at=44m 53.062s, signal=RIGHT)
+11-01 23:44:39.522 I/Comma   (30948): turnSignal=RIGHT
+11-01 23:44:39.522 I/Comma   (30948): moving → comma armed
+11-01 23:44:42.026 I/CommaPlayer(30948): pause s=3 atMs=3902
+11-01 23:44:42.026 I/CommaGlyph(30948): holdGlyph=on
+11-01 23:44:42.026 I/Comma   (30948): endWait 2.50s → hold mid s=3
+11-01 23:44:42.030 I/CommaDeck(30948): release ms=4
+11-01 23:44:42.031 I/CommaDeck(30948): release ms=1
+11-01 23:44:45.547 I/CommaMeasure( 4929): step vc turn-signal Off (resume)
+11-01 23:44:45.552 I/CommaSignal(30948): car TurnSignalChanged(at=44m 59.093s, signal=OFF)
+11-01 23:44:45.553 I/Comma   (30948): turnSignal=OFF
+11-01 23:44:46.354 I/Comma   (30948): OFF held 0.80s → play s=3
+11-01 23:44:46.354 I/Comma   (30948): clipStart s=3
+11-01 23:44:46.356 I/CommaDeck(30948): open warm=true prepareMs=0 startMs=0
+11-01 23:44:46.356 I/CommaGlyph(30948): holdGlyph=off
+11-01 23:44:46.356 I/CommaPlayer(30948): start s=3 fromMs=0 clipMs=4000 openMs=1
+11-01 23:44:48.587 I/CommaMeasure( 5686): step vc toggle 1.7s: BlinkRight
+11-01 23:44:48.592 I/CommaSignal(30948): car TurnSignalChanged(at=45m 2.132s, signal=RIGHT)
+11-01 23:44:48.592 I/Comma   (30948): turnSignal=RIGHT
+11-01 23:44:48.592 I/Comma   (30948): moving → comma armed
+11-01 23:44:50.325 I/CommaMeasure( 6127): step vc toggle 1.7s: Off
+11-01 23:44:50.330 I/CommaSignal(30948): car TurnSignalChanged(at=45m 3.87s, signal=OFF)
+11-01 23:44:50.330 I/Comma   (30948): turnSignal=OFF
+11-01 23:44:50.330 I/Comma   (30948): comma cancelled
+11-01 23:44:50.356 I/CommaPlayer(30948): end s=3 by=clock playedMs=4000
+11-01 23:44:50.356 I/Comma   (30948): clipStart s=4
+11-01 23:44:50.365 I/CommaDeck(30948): open warm=true prepareMs=0 startMs=9
+11-01 23:44:50.367 I/CommaPlayer(30948): start s=4 fromMs=0 clipMs=2200 openMs=10
+11-01 23:44:52.567 I/CommaPlayer(30948): end s=4 by=clock playedMs=2201
+11-01 23:44:52.567 I/Comma   (30948): clipStart s=5
+11-01 23:44:53.355 I/CommaMeasure( 6907): step adb keyevent 85 while reading
+11-01 23:44:53.391 I/CommaMedia(30948): media button code=85 action=0
+11-01 23:44:53.391 I/CommaMedia(30948): media button code=85 action=1
+11-01 23:44:53.508 I/CommaDeck(30948): release ms=3151
+11-01 23:44:53.574 E/CommaDeck(30948): player error what=1 extra=-19
+11-01 23:44:53.575 I/CommaDeck(30948): open warm=true prepareMs=0 startMs=1
+11-01 23:44:53.575 I/CommaPlayer(30948): start s=5 fromMs=0 clipMs=5000 openMs=1008
+11-01 23:44:53.576 I/CommaDeck(30948): release ms=2
+11-01 23:44:53.693 I/CommaFocus(30948): focus abandon=1
+11-01 23:44:53.694 I/CommaPlayer(30948): pause s=5 atMs=119
+11-01 23:44:53.694 I/Comma   (30948): mediaKey PAUSE → stop s=5
+11-01 23:44:54.368 I/CommaDeck(30948): release ms=673
+11-01 23:44:54.372 I/CommaDeck(30948): release ms=4
+11-01 23:44:55.425 I/CommaMeasure( 7383): step adb keyevent 85 while stopped
+11-01 23:44:55.470 I/CommaMedia(30948): media button code=85 action=0
+11-01 23:44:55.476 I/CommaMedia(30948): media button code=85 action=1
+11-01 23:44:55.778 I/Comma   (30948): mediaKey PLAY → play s=5
+11-01 23:44:55.779 I/CommaFocus(30948): focus request=1
+11-01 23:44:55.793 I/Comma   (30948): clipStart s=5
+11-01 23:44:55.793 I/CommaDeck(30948): open warm=true prepareMs=0 startMs=0
+11-01 23:44:55.808 I/CommaPlayer(30948): start s=5 fromMs=0 clipMs=5000 openMs=0
+11-01 23:44:58.505 I/CommaMeasure( 8001): step probe app focus_nav 3s
+11-01 23:44:58.596 I/CommaFocus(30948): focus change=-2
+11-01 23:44:58.597 I/CommaPlayer(30948): pause s=5 atMs=2805
+11-01 23:44:58.597 I/Comma   (30948): focus=LOSS_TRANSIENT
+11-01 23:44:58.658 I/CommaDeck(30948): release ms=60
+11-01 23:45:01.435 I/CommaDeck(30948): release ms=2777
+11-01 23:45:01.604 I/CommaFocus(30948): focus change=1
+11-01 23:45:01.605 I/Comma   (30948): focus=GAIN
+11-01 23:45:01.605 I/Comma   (30948): clipStart s=5
+11-01 23:45:01.607 I/CommaDeck(30948): open warm=true prepareMs=0 startMs=1
+11-01 23:45:01.607 I/CommaPlayer(30948): start s=5 fromMs=2805 clipMs=5000 openMs=1
+11-01 23:45:03.803 I/CommaPlayer(30948): end s=5 by=clock playedMs=2196
+11-01 23:45:03.803 I/Comma   (30948): clipStart s=6
+11-01 23:45:03.804 I/CommaDeck(30948): open warm=true prepareMs=0 startMs=0
+11-01 23:45:03.804 I/CommaPlayer(30948): start s=6 fromMs=0 clipMs=3500 openMs=0
+11-01 23:45:04.588 I/CommaMeasure( 9208): step back to app
+11-01 23:45:06.671 I/CommaMeasure( 9620): step inject focus LOSS_TRANSIENT
+11-01 23:45:06.717 I/CommaInject(30948): demo inject focus=LOSS_TRANSIENT
+11-01 23:45:06.720 I/CommaPlayer(30948): pause s=6 atMs=2916
+11-01 23:45:06.720 I/Comma   (30948): focus=LOSS_TRANSIENT
+11-01 23:45:08.754 I/CommaDeck(30948): release ms=4951
+11-01 23:45:08.798 I/CommaDeck(30948): release ms=2
+11-01 23:45:08.803 I/CommaDeck(30948): release ms=5
+11-01 23:45:10.901 I/CommaMeasure(10580): CHECK screen 시연 주입: True
+11-01 23:45:10.934 I/CommaMeasure(10592): step inject focus GAIN
+11-01 23:45:10.976 I/CommaInject(30948): demo inject focus=GAIN
+11-01 23:45:10.977 I/Comma   (30948): focus=GAIN
+11-01 23:45:10.977 I/Comma   (30948): clipStart s=6
+11-01 23:45:10.981 I/CommaDeck(30948): open warm=true prepareMs=0 startMs=2
+11-01 23:45:10.981 I/CommaPlayer(30948): start s=6 fromMs=2916 clipMs=3500 openMs=3
+11-01 23:45:11.565 I/CommaPlayer(30948): end s=6 by=clock playedMs=585
+11-01 23:45:11.565 I/Comma   (30948): clipStart s=7
+11-01 23:45:11.581 I/CommaDeck(30948): release ms=14
+11-01 23:45:11.583 I/CommaDeck(30948): open warm=true prepareMs=0 startMs=16
+11-01 23:45:11.601 I/CommaPlayer(30948): start s=7 fromMs=0 clipMs=2800 openMs=17
+11-01 23:45:13.019 I/CommaMeasure(11022): step vc speed 0
+11-01 23:45:13.160 I/CommaSignal(30948): car SpeedChanged(at=45m 26.7s, speedMps=0.0)
+11-01 23:45:14.401 I/CommaPlayer(30948): end s=7 by=clock playedMs=2818
+11-01 23:45:14.401 I/Comma   (30948): clipStart s=8
+11-01 23:45:14.406 I/CommaDeck(30948): open warm=true prepareMs=0 startMs=4
+11-01 23:45:14.406 I/CommaPlayer(30948): start s=8 fromMs=0 clipMs=4500 openMs=4
+11-01 23:45:14.407 I/CommaDeck(30948): release ms=5
+11-01 23:45:14.552 I/CommaMeasure(11337): step vc turn-signal BlinkRight at speed 0
+11-01 23:45:14.557 I/CommaSignal(30948): car TurnSignalChanged(at=45m 28.098s, signal=RIGHT)
+11-01 23:45:14.558 I/Comma   (30948): turnSignal=RIGHT
+11-01 23:45:14.558 I/Comma   (30948): lever=ON speed=0 → no comma
+11-01 23:45:16.593 I/CommaMeasure(11752): step vc turn-signal Off
+11-01 23:45:16.600 I/CommaSignal(30948): car TurnSignalChanged(at=45m 30.14s, signal=OFF)
+11-01 23:45:16.600 I/Comma   (30948): turnSignal=OFF
+11-01 23:45:17.635 I/CommaMeasure(11920): step vc gear Park
+11-01 23:45:17.642 I/CommaSignal(30948): car GearChanged(at=45m 31.182s, gear=PARK)
+11-01 23:45:17.643 I/Comma   (30948): gear=PARK
+11-01 23:45:18.906 I/CommaPlayer(30948): end s=8 by=clock playedMs=4500
+11-01 23:45:18.910 I/CommaFocus(30948): focus abandon=1
+11-01 23:45:18.919 I/Comma   (30948): pack end → stop
+11-01 23:45:18.925 I/CommaDeck(30948): release ms=17
+11-01 23:45:19.173 I/CommaMeasure(12218): step tap pause (if still reading)

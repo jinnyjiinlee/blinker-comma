@@ -16,18 +16,19 @@ S0 · 2026-11-02. 기획 정본 = `../ideas/v3/meeting/DECISION.json`(출품작 
 
 ## 쓰는 신호 (Pleos Vehicle SDK 2.3.2 + AAOS — `../setup/vehicle_sdk_api.md`)
 근거 줄은 실측 로그. 「있음」 = 에뮬에서 같은 리스너로 콜백을 받아 봄 / 「조건부」 = 문서 근거만 있거나 우리 앱 기준 미실측.
+**D2: 이 앱 기준 실측 끝 — 정본 `docs/signals_measured.md`**(신호별 ✅/❌·지연·권한 최소 집합·컷 1 모양 2회). 아래 판정은 그 결과로 갱신.
 
 | 신호 | API | VC로 조작 | 실측 근거 | 판정 | 쓰임 |
 |---|---|---|---|---|---|
 | 깜빡이 LEFT/RIGHT/OFF | `TurnSignal.registerTurnSignalState` → `onTurnSignalStateUpdated(TurnSignalValue)` | ✅ `PUT /vehicle/turn-signal?mode=BlinkLeft·BlinkRight·Off` | `../ideas/v3/meeting/M6/spike_raw/logcat_turnsignal.txt` 3~6행(LEFT·OFF·RIGHT·OFF, 4토글 4콜백) · `../setup/rehearsal_15_logcat_run2.txt` 109행 RIGHT · 161행 OFF | **있음** | 쉼표 트리거(ON) · 재개 트리거(OFF) |
 | 기어 | `Gear.registerGearSelection` → `onSelected(VehicleGear)` | ✅ VC 기어 | `../setup/T_results_1025.md` T1 행 「포그라운드 서비스에서 수신」 | **있음** | D가 아니면 쉼표 안 함 · P/D 화면 전환 |
 | 차속 | AAOS `CarPropertyManager` `PERF_VEHICLE_SPEED`(m/s), 권한 `android.car.permission.CAR_SPEED`(dangerous, 런타임 허용 — 에뮬은 `pm grant --user 10`) | ✅ VC `controls?speed=`(km/h 정수) | `spike_raw/logcat_speed.txt` 3행 `speed mps=22.222223`(80km/h) · run2 108→112행(0 → 8.33m/s) | **있음** | 속도 0이면 쉼표 안 함 |
-| 핸들 미디어 키 | `MediaSessionCompat.Callback` `onPlay/onPause/onSkipToNext` | ❌ VC 카드 없음 → `adb shell input keyevent 85` = **시연 주입** | 문서 ✅(카드 「핸들 미디어 키」 행 — Pleos 미디어 앱 필수 요건) · **에뮬 수신 미실측** | **조건부** | 폴백 재개 · 「자동 재개 끔」 모드의 재개 |
-| 오디오 포커스(내비 안내 등) | `AudioManager.requestAudioFocus` / `OnAudioFocusChangeListener` | — | `spike_raw/logcat_audiofocus.txt` 39행(안내 용도 요청 → 미디어 LOSS_TRANSIENT) · 85·93행(AOSP 뮤직 멈춤·재개) | **있음**(기제) · 우리 플레이어 반응은 D2 실측 | 남이 포커스를 가져가면 멈춤, 돌려주면 재개(표준 매너) |
-| 클립 재생 완료 | `MediaPlayer.setOnCompletionListener` | — | `-no-audio`에서 콜백이 오는지 **미실측** | **조건부** | 문장 끝 시각. 안 오면 클립 길이 타이머로 대체하고 로그에 방식 표기 |
+| 핸들 미디어 키 | `MediaSessionCompat.Callback` `onPlay/onPause/onSkipToNext` | ❌ VC 카드 없음 → `adb shell input keyevent 85` = **시연 주입** | D2 ✅ 우리 세션이 `code=85` 수신 · 재생 중 → onPause · 멈춤·쉼표 중 → onPlay(키 → 콜백 약 0.3초, 더블탭 대기) — `docs/logs/d2_signals_logcat.txt`·`d2_cut3_logcat.txt` | **있음**(입력은 시연 주입) | 폴백 재개 · 「자동 재개 끔」 모드의 재개 |
+| 오디오 포커스(내비 안내 등) | `AudioManager.requestAudioFocus` / `OnAudioFocusChangeListener` | ❌ VC 없음 → 다른 앱의 실제 요청 또는 디버그 주입(시연 주입) | D2 ✅ 다른 앱이 안내 용도로 3초 요청 → LOSS_TRANSIENT 멈춤 → GAIN 멈춘 자리부터 — `d2_signals_logcat.txt` | **있음** | 남이 포커스를 가져가면 멈춤, 돌려주면 재개(표준 매너) |
+| 클립 재생 완료 | `MediaPlayer.setOnCompletionListener` | — | D2 ❌ `-no-audio`에서 늦게도(4.0초 클립에 4.85초) 이르게도(3.0초 클립에 2.23초) 옴 | **안 씀**(기록만) | 문장 끝 = 팩 `durationMs` 단조 시계(로그 `by=clock`). 콜백은 `completion callback` 줄로 실차 비교용 기록 |
 
 **안 쓰는 것**: 조향각(run2 전 구간 -0.0뿐, 각도 변화 미실측) · 브레이크 · 문·좌석(SX1 「트리거 확장」은 발전 단계) · 전조등/램프 상태 · TTS(T11 ❌ — 「Android 표준 TTS 초기화 -1」) · 위치 · 네트워크.
-**권한**: 깜빡이·기어 리스너가 요구하는 Pleos 권한은 road-interpreter 매니페스트(`CAR_LIGHTS`·`CAR_DRIVE` 등)를 출발점으로, **D2에서 최소 집합을 실측**해 줄인다. `FOREGROUND_SERVICE` + `FOREGROUND_SERVICE_MEDIA_PLAYBACK` + `POST_NOTIFICATIONS`.
+**권한**(D2 실측 최소 집합): `pleos.car.permission.CAR_LIGHTS`(없으면 깜빡이 등록 SecurityException) + `CAR_DRIVE`(없으면 기어 등록 SecurityException) + `android.car.permission.CAR_SPEED`(런타임 — 없으면 AAOS가 예외 없이 조용해서 앱이 먼저 권한을 보고 「확인 안 됨」) + `FOREGROUND_SERVICE` + `FOREGROUND_SERVICE_MEDIA_PLAYBACK` + `POST_NOTIFICATIONS`.
 
 ## 반드시 지킬 원칙
 1. **주행 중 조작 0.** D(주행) 화면엔 터치할 것 0 · 글자 0 · 새 화면·팝업 0. 보이는 건 쉼표 중 ⏸ 하나뿐. 설정·재생 시작·숫자 보기는 전부 P(정차)에서.
@@ -39,7 +40,7 @@ S0 · 2026-11-02. 기획 정본 = `../ideas/v3/meeting/DECISION.json`(출품작 
 7. **쉼표는 우리 플레이어 직접 pause/play로 만든다.** 오디오 포커스 왕복을 쉼표 수단으로 쓰지 않는다(카드 쉼표 규칙 3 — 대역 앱 1회 1.4초 반례).
 8. **디바운스는 시연 앱 = 출품 앱.** 0.8초 상수 1개(`CommaCardParams.offDebounce`). 42dot 회신이 「스위치 값」이면 0으로 바꾸되 코드는 하나.
 9. **Pleos 리스너는 한 번 등록하면 해제하지 않는다**(T_results 「문 리스너를 해제하자 기어·깜빡이 콜백까지 끊김」).
-10. **시연 정직 표기.** VC 조작은 실제 신호 경로. VC로 못 넣는 핸들 키는 `adb keyevent` = 「시연 주입」 — D 화면엔 글자 0 원칙이라 README·영상 자막·로그에 표기. 에뮬은 `-no-audio` → 영상의 낭독 소리는 편집 합성, 자막 1회 「소리는 편집 합성 — 시각은 앱 로그 기준」.
+10. **시연 정직 표기.** VC 조작은 실제 신호 경로. VC로 못 넣는 핸들 키는 `adb keyevent` = 「시연 주입」 — README·영상 자막·로그에 표기. 그 밖에 VC로 못 넣는 신호(오디오 포커스 등)는 **디버그 빌드 전용 주입 브로드캐스트**로만 넣고, 넣은 순간부터 화면에 노란 「시연 주입」 + 로그 `CommaInject`(D2 — 릴리스 APK엔 수신기가 없어 D 화면 글자 0 원칙은 출품 앱에서 그대로). 에뮬은 `-no-audio` → 영상의 낭독 소리는 편집 합성, 자막 1회 「소리는 편집 합성 — 시각은 앱 로그 기준」.
 11. **화면 배치**: 깜빡이 때 시스템 측후방 카메라가 앱 창 왼쪽 위 약 750px를 덮는다(T_results) → ⏸는 x ≥ 780dp.
 
 ## 쉼표 규칙 (엔진이 지키는 것 — 카드 「쉼표 규칙 3줄」 + M7 수정)
@@ -82,9 +83,11 @@ road-interpreter `engine/signal/*`·`output/Transition`·테스트 `support/Repl
 |---|---|---|
 | `vehicle/PleosVehicleSource.kt` · `VehicleMapping.kt` | 깜빡이·기어 콜백 → `Flow<CarEvent>` (조향·문·좌석 제거) | road-interpreter 복사·축소 |
 | `vehicle/CarSpeedSource.kt` | AAOS 속도 → `SpeedChanged` | road-interpreter 복사 |
-| `player/ClipPlayer.kt` | `MediaPlayer` 1개로 클립 재생·pause·완료 → `ClipEnded`. 완료 콜백이 안 오면 길이 타이머(방식은 로그에) | road-interpreter `VoiceOut.playRecording` 참고 |
+| `player/ClipPlayer.kt` · `ClipDeck.kt` | 문장 끝 = 팩 길이 시계 → `ClipEnded`. 재생마다 새 `MediaPlayer`(전용 스레드 `ClipDeck`), 멈춤 = 놓고 자리 기억, 다음 클립 미리 준비 · 놓기는 별도 스레드(D2 — 에뮬레이터 준비·놓기 막힘 대응, `docs/signals_measured.md`) | road-interpreter `VoiceOut.playRecording` 참고 |
 | `service/ReaderService.kt` | `MediaBrowserServiceCompat` + `MediaSessionCompat`(Pleos Music/Audio 필수 MBS). 신호·플레이어·키 이벤트 → `reduce` → 효과 실행. 재생 시작 때 `startForeground`. `Tick`은 `ReaderState.nextDeadline(params)` 시각에 1회(D1 변경 — 100ms 폴링이면 로그 `OFF held`가 0.80~0.89로 흔들림) | road-interpreter `RoadWatchService` 구조 참고 |
-| `service/AudioFocusGate.kt` | 재생 시 GAIN 요청, 변화 → `FocusChanged` | — |
+| `service/AudioFocusGate.kt` | 재생 시 GAIN 요청(`setWillPauseWhenDucked`), 변화 → `FocusChanged`, 정지에서만 반납 | — |
+| `session/ReaderSession.kt` | 엔진 상태 한 곳(메인 스레드) · 효과 실행 · ⏸ 끄기는 플레이어의 실제 소리 시작까지 미룸 | — |
+| `debug/DemoInjectReceiver.kt` (src/debug) | 시연 주입 브로드캐스트 → 엔진 이벤트 + 「시연 주입」 표시(원칙 10) | — |
 | `data/PackRepository.kt` · `TallyStore.kt` | 에셋 팩 로드 · 오늘 카운트 저장(SharedPreferences, 날짜 키) | — |
 | `ui/` (Compose) | 아래 화면 3개 + 테마. `distractionOptimized` 메타 | road-interpreter `ui/component`·`theme` 참고 |
 
@@ -168,8 +171,8 @@ road-interpreter `engine/signal/*`·`output/Transition`·테스트 `support/Repl
 | demo 컷 2 「10.0초 Off → 재개」 | Off + 0.8초 뒤 재개 | 디바운스 반영 |
 
 ## 위험 · 미실측 (D2·D4에서 닫을 것)
-- ⚠️ `-no-audio`에서 `MediaPlayer` 완료 콜백 — 안 오면 길이 타이머(로그 표기).
-- ⚠️ 핸들 키 `keyevent 85` → 우리 MediaSession 수신 — ❌면 컷 3 교체.
-- ⚠️ VC 토글 1.7초 간격 콜백 2개 — 컷 1 타이밍.
+- ✅(D2 닫힘) `-no-audio` 완료 콜백 → 믿을 수 없어 팩 길이 시계로 · 핸들 키 `keyevent 85` 수신 ✅(컷 3 유지) · VC 1.7초 간격 콜백 2개 ✅.
+- ⚠️ 에뮬레이터 오디오: 플레이어 준비가 가끔 2~7초 막힘 → 미리 준비로 최종 실측 열기 25번 전부 0ms. 미리 준비가 덜 된 순간 재생하면 그만큼 늦다(1회 1.0초). 대본 anchor는 엔진 `clipStart`가 아니라 **`CommaPlayer start s=N`**(실제 소리 시작)에 건다(D4 conductor).
+- ⚠️ 앱 실행 직후 메인 스레드 약 4초 늦음 1/4회(원인 확인 안 됨) → 녹화 전에 앱을 띄워 둔다.
 - 실차: 레버 자동 복귀 → OFF 이벤트 [짐작] · TURN_SIGNAL_STATE 램프/레버 모호(점멸 채터 → 디바운스로 방어 [가정]) · 레버 OFF 자동 재개의 Pleos 문언 해석 — 42dot 문의는 대표 승인 대기(발송 0).
 - 콘텐츠 라이선스: 고른 녹음의 PD 표기를 원문으로 확인하고 CREDITS에 URL 기록.

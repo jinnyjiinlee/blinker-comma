@@ -1,0 +1,49 @@
+--------- beginning of main
+11-01 23:42:08.482 I/CommaMeasure( 2405): step reset P speed0 lever OFF
+11-01 23:42:09.525 I/CommaMeasure( 2865): step launch app
+11-01 23:42:10.378 I/CommaSignal( 2932): car SpeedChanged(at=42m 23.918s, speedMps=0.0)
+11-01 23:42:13.629 I/CommaMeasure( 4376): step vc gear Drive + speed 40
+11-01 23:42:14.475 I/CommaSignal( 2932): car TurnSignalChanged(at=42m 24.053s, signal=OFF)
+11-01 23:42:14.476 I/CommaSignal( 2932): car TurnSignalChanged(at=42m 24.055s, signal=OFF)
+11-01 23:42:14.476 I/CommaSignal( 2932): car GearChanged(at=42m 24.055s, gear=DRIVE)
+11-01 23:42:14.477 I/Comma   ( 2932): gear=DRIVE
+11-01 23:42:14.477 I/CommaSignal( 2932): car GearChanged(at=42m 24.057s, gear=PARK)
+11-01 23:42:14.477 I/Comma   ( 2932): gear=PARK
+11-01 23:42:14.477 I/CommaSignal( 2932): car GearChanged(at=42m 27.174s, gear=DRIVE)
+11-01 23:42:14.478 I/Comma   ( 2932): gear=DRIVE
+11-01 23:42:14.479 I/CommaSignal( 2932): car SpeedChanged(at=42m 28.02s, speedMps=11.111111640930176)
+11-01 23:42:15.173 I/CommaMeasure( 4747): step tap play
+11-01 23:42:17.552 I/Comma   ( 2932): screen PLAY → play s=1
+11-01 23:42:17.558 I/CommaFocus( 2932): focus request=1
+11-01 23:42:17.565 I/Comma   ( 2932): clipStart s=1
+11-01 23:42:17.588 I/CommaDeck( 2932): open warm=true prepareMs=0 startMs=23
+11-01 23:42:17.628 I/CommaPlayer( 2932): start s=1 fromMs=0 clipMs=2600 openMs=23
+11-01 23:42:20.228 I/CommaPlayer( 2932): end s=1 by=clock playedMs=2640
+11-01 23:42:20.228 I/Comma   ( 2932): clipStart s=2
+11-01 23:42:20.241 I/CommaDeck( 2932): open warm=true prepareMs=0 startMs=10
+11-01 23:42:20.249 I/CommaPlayer( 2932): start s=2 fromMs=0 clipMs=3000 openMs=13
+11-01 23:42:20.253 I/CommaDeck( 2932): release ms=24
+11-01 23:42:22.691 I/CommaMeasure( 6651): step vc turn-signal BlinkRight (end-0.6)
+11-01 23:42:22.698 I/CommaSignal( 2932): car TurnSignalChanged(at=42m 36.238s, signal=RIGHT)
+11-01 23:42:22.698 I/Comma   ( 2932): turnSignal=RIGHT
+11-01 23:42:22.698 I/Comma   ( 2932): moving → comma armed
+11-01 23:42:23.249 I/CommaPlayer( 2932): end s=2 by=clock playedMs=3007
+11-01 23:42:23.257 I/CommaGlyph( 2932): holdGlyph=on
+11-01 23:42:23.257 I/Comma   ( 2932): clipEnd s=2 lever=ON → hold
+11-01 23:42:23.260 I/CommaDeck( 2932): release ms=10
+11-01 23:42:24.434 I/CommaMeasure( 7008): step vc turn-signal Off (+1.1 after end)
+11-01 23:42:24.442 I/CommaSignal( 2932): car TurnSignalChanged(at=42m 37.981s, signal=OFF)
+11-01 23:42:24.443 I/Comma   ( 2932): turnSignal=OFF
+11-01 23:42:25.244 I/Comma   ( 2932): OFF held 0.80s → play s=3
+11-01 23:42:25.244 I/Comma   ( 2932): clipStart s=3
+11-01 23:42:25.247 I/CommaDeck( 2932): open warm=true prepareMs=0 startMs=3
+11-01 23:42:25.248 I/CommaGlyph( 2932): holdGlyph=off
+11-01 23:42:25.248 I/CommaPlayer( 2932): start s=3 fromMs=0 clipMs=4000 openMs=4
+11-01 23:42:27.483 I/CommaMeasure( 7601): step tap pause
+11-01 23:42:29.248 I/CommaPlayer( 2932): end s=3 by=clock playedMs=4000
+11-01 23:42:29.249 I/Comma   ( 2932): clipStart s=4
+11-01 23:42:29.250 I/CommaDeck( 2932): open warm=true prepareMs=0 startMs=2
+11-01 23:42:29.251 I/CommaPlayer( 2932): start s=4 fromMs=0 clipMs=2200 openMs=2
+11-01 23:42:29.649 I/CommaFocus( 2932): focus abandon=1
+11-01 23:42:29.653 I/CommaPlayer( 2932): pause s=4 atMs=402
+11-01 23:42:29.654 I/Comma   ( 2932): screen PAUSE → stop s=4

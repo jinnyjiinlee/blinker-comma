@@ -18,6 +18,11 @@
 | `toWriteLog(ReaderLog)` | engine/log/LogFormat.kt | 로그 줄 효과 — 글자는 `ReaderLog.line` |
 | `toPackFile`·`classifyPackProblems` | engine/pack/ | 팩 JSON 읽기·검사 |
 | `toTurnSignal`·`toGear` | app/vehicle/VehicleMapping.kt | Pleos 값 → 엔진 값 |
+| `ReaderSession.onEvent`·`onSoundStarted` | app/session/ReaderSession.kt | 엔진에 이벤트 넣기(메인 스레드) · 실제 소리 시작 알림 |
+| `carEvents(context, vehicle)` | app/service/CarEvents.kt | 차 신호 3종 → 엔진 이벤트(실패한 신호는 「확인 안 됨」 로그) |
+| `monotonicNow()` | app/Clock.kt | 이벤트 시각(단조) |
+| `ClipPlayer.play`·`pause` | app/player/ClipPlayer.kt | 문장 재생·멈춤 — MediaPlayer는 직접 부르지 말고 이것만 |
+| `tools/device.py`·`measure_plans.py` | tools/ | 에뮬레이터 손(VC·adb·화면 누르기·주입) · 실측 순서표 |
 | `replay`·`logs` | test/support/Replay.kt | 리듀서 리플레이(마지막 상태 + 효과 전부) |
 | `ReaderScene` | test/support/ReaderScene.kt | 기본 장면(D·40km/h·2번째 문장 읽는 중) + 이벤트 도우미 + `holding` |
 | `StageRun`·`readStageScript`·`parseStage` | test/support/ | 대본 TSV를 앱 흉내(클립 길이·마감 Tick)로 돌림 |
@@ -39,4 +44,7 @@
 | 로그 ⓐ~ⓓ·보조 줄 | ReaderLogTest | 완료 |
 | 시연 컷 1·2·3 + 숨은 조작 | scenario/Cut1BreathTest·Cut2WaitGoTest·Cut3KeyResumeTest | 완료(합성 팩 — 실제 팩 길이로 D2에 다시 돌림) |
 | R2 취소·R4 중간 멈춤·R10 내비 안내 장면 | scenario/EdgeScenarioTest | 완료 |
-| 어댑터·플레이어·서비스(에뮬 실측) | — | 미작성(D2) |
+| 시연 주입 해석 | app/testDebug ToInjectedEventTest | 완료 |
+| 재생 위치(단조 시계) | app/test PlayingClipTest | 완료 |
+| 어댑터·플레이어·서비스 | 에뮬레이터 실측 `docs/signals_measured.md`(기기 리허설 — JVM 테스트 아님) | 완료(D2 실측) |
+| 시나리오 테스트를 실제 낭독 팩 길이로 | — | 미작성(낭독 팩 들어온 뒤) |
