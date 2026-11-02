@@ -40,4 +40,13 @@ object CommaSize {
 
     /** D 화면 「읽는 중」 정적 워터마크(쉼표 심볼) 지름 — 애니메이션 없음(ui_plan.md P0-3). */
     val watermarkCommaSize = 560.dp
+
+    /** P 화면 재생 버튼(232dp)을 감싸는 정적 진행 링 지름 — 버튼보다 한 자리 크게(ui_plan.md P1·7절). */
+    val progressRingSize = 280.dp
+
+    /** 진행 링 선 두께. */
+    val progressRingStroke = 14.dp
+
+    /** 오늘 쉼표 타임라인 점 하나의 지름(ui_plan.md P0-4). */
+    val timelineDot = 20.dp
 }

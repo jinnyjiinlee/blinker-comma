@@ -16,6 +16,7 @@ import app.blinkercomma.ui.theme.CommaColors
 import app.blinkercomma.ui.theme.CommaSize
 import app.blinkercomma.ui.theme.CommaSpace
 import app.blinkercomma.ui.theme.HoldGlyphTransition
+import app.blinkercomma.ui.theme.WatermarkFadeTransition
 
 /**
  * D 화면(주행) — 쉼표 중에만 ⏸ 하나, 레버 방향 쪽에서 1회 슬라이드+페이드로 들어온다(측후방 카메라 폭 780dp
@@ -29,7 +30,7 @@ fun DriveScreen(state: ScreenUiState.Drive, modifier: Modifier = Modifier) {
             Modifier.fillMaxSize().padding(start = CommaSize.cameraOverlayWidth),
             contentAlignment = Alignment.Center,
         ) {
-            if (!state.isHoldGlyphOn) CommaWatermark()
+            WatermarkFadeTransition(visible = !state.isHoldGlyphOn) { CommaWatermark() }
             HoldGlyphTransition(visible = state.isHoldGlyphOn, enterFromLeft = state.holdSide == HoldSide.LEFT) {
                 HoldGlyph()
             }

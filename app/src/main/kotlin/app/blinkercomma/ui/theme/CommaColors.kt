@@ -24,6 +24,9 @@ object CommaColors {
     /** 워터마크 불투명도 — ui_plan.md P0-3 「아주 옅게 12%」. */
     const val WATERMARK_ALPHA: Float = 0.12f
 
+    /** 진행 링의 못 채운 세그먼트 불투명도 — 워터마크보다 또렷하되 숫자·글자보다는 약하게. */
+    const val RING_TRACK_ALPHA: Float = 0.22f
+
     val background = Color(BACKGROUND)
     val surface = Color(SURFACE)
     val onSurface = Color(ON_SURFACE)
@@ -34,6 +37,9 @@ object CommaColors {
 
     /** D 화면 워터마크(읽는 중 정적 표시)만 — 정보 전달용이 아니라 장식이라 대비 하한 대상 아님(ui_plan.md 7절). */
     val signalDim = signal.copy(alpha = WATERMARK_ALPHA)
+
+    /** 진행 링 트랙 — 숫자(n/전체)로 이미 전달되는 정보의 보조 그래픽이라 대비 하한 대상 아님(signalDim과 같은 근거). */
+    val ringTrack = onSurfaceMuted.copy(alpha = RING_TRACK_ALPHA)
 
     /** (글자·아이콘 색, 그 바탕) — 새 색을 추가하면 여기에도. `CommaThemeFloorTest`가 대비 4.5 이상을 본다. */
     val contrastPairs: List<Pair<Long, Long>> = listOf(

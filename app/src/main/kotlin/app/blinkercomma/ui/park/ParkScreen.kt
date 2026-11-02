@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import app.blinkercomma.R
@@ -34,11 +34,16 @@ fun ParkScreen(state: ScreenUiState.Park, actions: ParkActions, modifier: Modifi
         modifier.fillMaxSize().background(CommaColors.background).padding(CommaSpace.xlarge),
         horizontalArrangement = Arrangement.spacedBy(CommaSpace.xlarge),
     ) {
-        Column(Modifier.weight(1f).fillMaxHeight(), verticalArrangement = Arrangement.spacedBy(CommaSpace.large)) {
+        Column(
+            Modifier.weight(1f).fillMaxHeight(),
+            verticalArrangement = Arrangement.spacedBy(CommaSpace.large, Alignment.CenterVertically),
+        ) {
             BrandHeader()
             HowItWorks(Modifier.padding(top = CommaSpace.large))
-            Spacer(Modifier.weight(1f))
-            TodayTally(state.todaySentences, state.todayCommas)
+            Column(verticalArrangement = Arrangement.spacedBy(CommaSpace.small)) {
+                TodayTimeline(state.todayCommas)
+                TodayTally(state.todaySentences, state.todayCommas)
+            }
             SettingToggleRow(autoResumeText(state.isAutoResume), state.isAutoResume, actions.onAutoResumeToggle)
             if (state.credit.isNotBlank()) CreditLine(state.credit)
         }
