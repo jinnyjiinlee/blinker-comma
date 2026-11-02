@@ -2,6 +2,7 @@
 # 형식은 cut1_breath.tsv 머리말과 같다
 # at_s	hand	signal	value	memo
 0	vc	gear	PARK	준비
+0	app	auto_resume	ON	준비 · 숨은 조작 — 기본값이 끔(D6)이라 단독 실행이면 빠뜨리면 ⓓ에서 재개가 안 됨(컷 1 뒤 이어서면 이미 켬 — 상태 확인 후 탭이라 중복 탭 없음)
 0	app	play	SCREEN	준비 — P 화면 ▶
 0	vc	gear	DRIVE	준비
 0	vc	speed	0	준비 · 숨은 조작 — 빠뜨리면 속도 확인 안 됨이라 서 있어도 예약됨

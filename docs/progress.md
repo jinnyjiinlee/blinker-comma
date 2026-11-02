@@ -381,3 +381,29 @@
 ### 남은 일
 - 결함 1(자동 재개 기본값 「끔」 미전환) 수정 — 대표 확인 필요. 수정 시 11/10 촬영 대본(컷 1·2가 기본값에 의존)도 같이 점검.
 - 그 외는 docs/qa_M3.md 「안 한 것/범위 밖」과 동일(런처 아이콘·카메라 경계선 픽셀 검증·실차 카메라-레버 방향·42dot 문의 — 이번 단계 영향 없음).
+
+## D6 (2026-11-02 21:42)
+
+### 한 일
+- **qa_M3.md 결함 1 수정(유일한 결함)**: `app/.../data/ReaderSettings.kt` `prefs.getBoolean(AUTO_RESUME, true)` → `false`로 변경 — 새 설치 기본값 「자동 재개 끔」(M8 decision.json must_fix, 코드 추가 없이 설정값 전환만, 지시대로). `engine/.../CommaCardParams.kt`의 `isAutoResume = true`(엔진 자체 기본값, 앱은 `AppContainer.kt`에서 항상 `ReaderSettings` 값으로 override — 실제로 안 쓰임)는 그대로 둠. commit-msg 훅(`fix:`은 테스트 동반 필수)에 맞춰 기본값을 `ReaderSettings.DEFAULT_AUTO_RESUME` 상수로 뽑고 `ReaderSettingsTest`(테스트 1개 × debug·release 2변형 = app 112→114, D1 관례와 동일) 추가 — `ReaderSettings` 본체는 Context가 있어야 생성돼 Robolectric 없인 단위 테스트가 안 되므로(기존에도 없었음) 상수만 고정, 실제 동작은 아래 에뮬레이터 실측으로 확인(`CommaCardParamsTest`와 같은 「기본값 고정 테스트」 패턴).
+- 기본값이 꺼지면서 영향받는 두 시연 컷(「레버가 돌아오면 다음 문장」 = R5 자동 재개 흐름)에 숨은 조작 추가: `demo/script/cut1_breath.tsv`·`cut2_wait_go.tsv`에 각 `0 app auto_resume ON`(준비 줄, `play` 전에 배치해 D4가 고쳤던 "▶ 뒤 준비 줄 시간 압박" 구간과 안 겹침) — conductor의 `play_app`이 이미 화면 상태를 확인하고 필요할 때만 탭해(상태 확인 후 탭, D1부터 있던 로직) 중복 탭 없음. `cut3_key_resume.tsv`(핸들 키로만 재개하는 컷)는 이미 자체적으로 「자동 재개 끔」을 명시적으로 탭하므로 수정 불필요(기본값이 끔이 된 지금은 사실상 같은 상태라 탭이 생략됨 — idempotent).
+- `docs/SPEC.md` R8 행·컷 1·2·3 「준비」 절을 새 기본값·새 숨은 조작에 맞게 갱신. `docs/qa_M3.md` 결함 1 절에 해결 메모 추가(히스토리는 그대로 두고 갱신 메모만 — M3가 94eb272에 했던 방식과 동일).
+- release APK 재빌드(`:app:assembleRelease`, 키스토어 `~/.blinker-comma/`) → `apk/CommaLane_깜빡이쉼표_release.apk` 교체. `docs/status_for_form.md` 갱신(R5·R8 행, 시연 대본·릴리스 APK 행 — D6 재실측 근거로).
+- `setup/build_shots/rehearsal_final_v2.mp4`(성공 2회차 원본 그대로, 저장소 밖) — 2026-11-02 M2·M3와 같은 관례(편집 없이 원본).
+
+### 실측 (에뮬레이터 2.1.0 · API 34 · `-no-audio -no-window`, 근거 `docs/logs/d6_*.txt`)
+- `scripts/check.sh .`(코드 변경 직후·문서 갱신 뒤·테스트 추가 뒤 총 3회) → `tests OK (app 114, engine 119)` · `check OK`. 커밋 시도 1차는 commit-msg 훅(「fix: 커밋인데 테스트 변경이 없음」)에 막혀 `ReaderSettingsTest` 추가 뒤 재시도, 블라인드 검사도 1차 걸림(`docs/progress.md` 초안에 로컬 절대경로가 그대로 남아 있었음 — 즉시 지우고 재확인).
+- release APK: `apksigner verify --verbose`(Android SDK build-tools 34.0.0) → v2 스킴 통과(`Verifies` · v1/v3/v3.1/v4 안 씀, 기존과 동일 설정).
+- **새 설치 기본값 직접 확인**: `adb uninstall` → `adb install` → 권한 허용 2단계 → P 화면 캡처 `setup/build_shots/D6_01_park_default_autoresume_off.png` — 「자동 재개: 끔」 토글이 꺼진 채로 기본 표시됨(결함 1 해소 확인), 잘림·겹침 0.
+- 시연 대본 리허설(디버그 APK) **2회 연속 성공**(새 설치 포함, `demo/rehearsal.py`) — `docs/logs/d6_rehearsal_01_logcat.txt`·`d6_rehearsal_02_logcat.txt`, 녹화 `setup/build_shots/d6_rehearsal_01.mp4`(86.9초)·`d6_rehearsal_02.mp4`(86.9초, 180초 상한 안).
+  - 컷 1: `Comma: OFF held 0.80s → play s=3`(1회차)·`0.80s → play s=4`(2회차 표기는 컷 2) — 레버로 재개가 **실제로** 작동함(기본값이 꺼진 상태에서 대본이 탭으로 켰다는 뜻).
+  - 컷 2: `Comma: OFF held 0.83s → play s=4`(1회차)·`0.80s → play s=4`(2회차) — 같은 흐름 재확인.
+  - 컷 3: `Comma: autoResume=off → keep hold`(두 회차 모두) — 기본값 그대로(끔) 유지, 핸들 키로만 재개(`mediaKey PLAY → play`) 정상.
+  - `demo/rehearsal_summary.py` 교차비교 → 컷 1·3 「같음」, **컷 2만 "줄 순서·글자가 다름"** — 실제 내용은 같고 `OFF held 0.83s` vs `0.80s`처럼 텍스트에 박힌 디바운스 측정값이 달라 비교 도구가 다르다고 판정한 것(두 회차 다른 줄의 시각차는 전부 ≤0.15s, `moving → comma armed`만 0.13s 차이로 허용치 안). qa_M2 결함4(컷 2 VC 신호 산발적 drift)와 같은 계열 — 이번 변경(auto_resume 숨은 조작 추가)이 새로 만든 문제가 아님, 기존에 열려 있던 간헐 결함 그대로.
+- 확인 안 됨: 결함 1 수정에 대한 단위 테스트(Robolectric 미도입, 엔진 레벨엔 이 로직이 없어 테스트 불가 — 위 실측으로 대체) · 42dot 문의·실차 카메라-레버 방향(기존 숙제, 이번 단계 영향 없음).
+
+### 남은 일
+- qa_M2 결함4(컷 2 VC 신호 산발적 drift) — 여전히 열려 있음(간헐 재현, 근본 원인 미확정). 11/10 실촬영에서 날 수 있다는 전제 그대로.
+- 94eb272 블라인드 히스토리 — M3에서 해소 확인됨(이번 단계 영향 없음, 재확인 안 함).
+- 42dot 문의 3건 — 대표 승인 대기, 이번 단계 영향 없음.
+- 제출 패키지(P1 산출물)는 D5 기준으로 만들어졌으므로 release APK·접수양식 재배포본 반영은 P2 담당 범위(이번 D6은 저장소 안 구현·검증만).

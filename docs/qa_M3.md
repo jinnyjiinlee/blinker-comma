@@ -24,6 +24,7 @@
 - **영향**: 접수양식 02·영상에 "레버 OFF 0.8초 자동 재개를 기본값에서 자동 재개 끔으로 전환해 제출"이라고 적으면(M8 must_fix 문구 그대로), 실제 심사위원이 받는 APK의 동작과 서류 문구가 어긋난다 — 블라인드 심사에서 재현성 문제로 지적받을 수 있다.
 - **제안(참고용, 적용은 개발 담당)**: `ReaderSettings.kt:11`의 `getBoolean(AUTO_RESUME, true)`를 `false`로 1줄 변경(M8 예상대로 코드 추가 없이 설정값 전환). 단, 시연 영상 핵심 장면(레버 복귀 → 다음 문장)은 지시대로 "자동 재개 켬" 상태로 찍어야 하므로, 기본값을 끔으로 바꾸면 **그 촬영 준비 절차에 "P에서 자동 재개 켬으로 탭" 1단계가 추가로 필요**하다(현재 `demo/script/cut1_breath.tsv`·`cut2_wait_go.tsv`는 토글 조작이 없어 설치 기본값에 의존 — 기본값이 끔으로 바뀌면 컷 1·2도 영향받는다는 뜻, 11/10 촬영 대본 점검 필요).
 - 코드는 고치지 않음 — 재현만 보고.
+- **(2026-11-02 D6 갱신)**: `ReaderSettings.kt:11`의 `getBoolean(AUTO_RESUME, true)` → `false`로 수정, 기본값 켬에 의존하던 `demo/script/cut1_breath.tsv`·`cut2_wait_go.tsv`에 「자동 재개 켬」 탭 숨은 조작 추가(상태 확인 후 탭이라 중복 없음). `CommaCardParams.DEFAULT.isAutoResume`(엔진 기본값, 앱은 항상 `AppContainer.kt`에서 `ReaderSettings` 값으로 override)는 M8 지시가 "코드 추가 없이 설정값 전환만"이라고 명시해 그대로 둠. 상세는 `docs/progress.md` D6.
 
 ## 시연 대본 리허설 2회 (회귀 확인)
 

@@ -4,6 +4,7 @@
 # 영상 0초 = 첫 anchor(문장 A 시작). 문장 A가 2.6초면 ⓐ2.0 ⓑ2.6 ⓒ3.7 ⓓ4.5 — A가 3.1초를 넘으면 ⓓ가 5초 밖
 # at_s	hand	signal	value	memo
 0	vc	gear	PARK	녹화 전 준비 — P 화면
+0	app	auto_resume	ON	녹화 전 준비 · 숨은 조작 — 기본값이 끔(D6)이라 빠뜨리면 ⓓ에서 핸들 키로만 재개되고 레버로는 안 됨
 0	app	play	SCREEN	녹화 전 준비 — P 화면 ▶(자동 재생 금지라 손으로)
 0	vc	gear	DRIVE	녹화 전 준비 · 숨은 조작 — 빠뜨리면 쉼표 예약이 안 돼 ⓑ가 안 찍힘
 0	vc	speed	40	녹화 전 준비 — VC 속도는 km/h

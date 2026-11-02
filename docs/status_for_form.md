@@ -1,6 +1,6 @@
-# 기능 구현 현황 (제출 서류용) — D5
+# 기능 구현 현황 (제출 서류용) — D6
 
-기준: 2026-11-02. 「구현 완료(에뮬레이터 실측)」는 Pleos Connect 에뮬레이터(2.1.0·API 34·`-no-audio`)에서 실제 신호 경로로 확인한 것만 표기한다. 근거 로그 경로는 각 행에 적는다.
+기준: 2026-11-02(D6 갱신). 「구현 완료(에뮬레이터 실측)」는 Pleos Connect 에뮬레이터(2.1.0·API 34·`-no-audio`)에서 실제 신호 경로로 확인한 것만 표기한다. 근거 로그 경로는 각 행에 적는다.
 
 ## 핵심 기능
 
@@ -10,10 +10,10 @@
 | 레버가 문장 끝 전에 내려오면 쉼표 취소(R2) | 구현 완료(에뮬레이터 실측) | `engine` 테스트 `EdgeScenarioTest` |
 | 속도 0에서 레버를 켜면 예약 안 함, 출발 시 예약(R3) | 구현 완료(에뮬레이터 실측) | `docs/logs/d5_rehearsal_logcat.txt`(컷 2) |
 | 예약 뒤 2.5초 안에 안 끝나면 문장 중간에서 멈춤, 재개 시 처음부터(R4) | 구현 완료(엔진 테스트) | `ReaderEndWaitTest` |
-| 레버 OFF 0.8초 유지 뒤 다음 문장 재개(R5) | 구현 완료(에뮬레이터 실측) | `docs/logs/d5_rehearsal_logcat.txt`(컷 1: OFF→0.80s→재생) |
+| 레버 OFF 0.8초 유지 뒤 다음 문장 재개(R5, 자동 재개 켬일 때) | 구현 완료(에뮬레이터 실측) | `docs/logs/d6_rehearsal_02_logcat.txt`(컷 1: OFF→0.80s→재생, D6부터 대본이 「자동 재개 켬」을 먼저 탭) |
 | 레버 한 번당 쉼표 최대 1회(R6) | 구현 완료(엔진 테스트) | `ReaderArmTest`, `ReadingTallyTest` |
 | 멈춘 동안 정차·기어 변경에도 멈춤 유지(R7) | 구현 완료(엔진 테스트) | `ReaderResumeTest` |
-| 「자동 재개 끔」 모드 — 핸들 키로만 재개(R8) | 구현 완료(에뮬레이터 실측) | `docs/logs/d5_rehearsal_logcat.txt`(컷 3) |
+| 「자동 재개 끔」 모드 — 핸들 키로만 재개(R8), **기본값 끔**(D6, M8 must_fix) | 구현 완료(에뮬레이터 실측) | `docs/logs/d6_rehearsal_02_logcat.txt`(컷 3) · 새 설치 기본값 「끔」 캡처 `setup/build_shots/D6_01_park_default_autoresume_off.png` |
 | 핸들 재생 버튼으로 즉시 재개(R9) | **시연 주입**(입력만) — 반응은 실측 | Virtual Console에 핸들 키 카드가 없어 `adb shell input keyevent 85`로 넣음(OS MediaSession 표준 경로, 앱은 실제 콜백 수신). `docs/signals_measured.md`, `docs/logs/d2_cut3_logcat.txt` |
 | 다른 앱이 오디오 포커스를 가져가면 멈추고 돌려주면 재개(R10) | 구현 완료(에뮬레이터 실측) | 다른 앱의 실제 포커스 요청으로 확인. `docs/signals_measured.md` 「오디오 포커스」 |
 | 팩 마지막 문장이 레버 ON인 채 끝나도 쉼표가 걸림(경계 케이스) | 구현 완료(엔진 테스트, D5 결함 수정) | `ReaderClipTest`, `docs/qa_M1.md` 결함 3 |
@@ -22,8 +22,8 @@
 | 첫 실행 속도 권한 안내(정차에서만, 1회) | 구현 완료(에뮬레이터 실측) | `docs/progress.md` D3 |
 | 오늘 문장 수·쉼표 수 실제 카운트 | 구현 완료(에뮬레이터 실측) | `setup/build_shots/d5_01_park_realpack.png`(16문장·3쉼표 — 전 세션 누적), `docs/qa_M1.md` 원칙 4 |
 | 콘텐츠 팩 — 퍼블릭 도메인 영어 낭독 38문장 | 구현 완료(D5) | LibriVox "The Aesop for Children"(Public Domain Mark 1.0). `app/src/main/assets/packs/en1/CREDITS.txt` |
-| 시연 대본 3컷 자동 재생(Virtual Console 연동) | 구현 완료(에뮬레이터 실측, 디버그 APK) | `docs/logs/d5_rehearsal_logcat.txt` |
-| 릴리스 서명 APK — 설치·실행·권한 흐름 | 구현 완료(D5, 에뮬레이터 실측) | `apk/CommaLane_깜빡이쉼표_release.apk` — `apksigner verify` v2 스킴 통과, 새 설치→권한→P 화면 크래시 0건(`setup/build_shots/d5_02_release_launch.png`·`d5_03_release_park.png`) |
+| 시연 대본 3컷 자동 재생(Virtual Console 연동) | 구현 완료(에뮬레이터 실측, 디버그 APK) | `docs/logs/d6_rehearsal_01_logcat.txt`·`d6_rehearsal_02_logcat.txt`(2회 연속 성공, 교차비교는 cut2 OFF debounce 표기 차이(0.80s/0.83s)만 — qa_M2 결함4 그대로, 기능 영향 없음) |
+| 릴리스 서명 APK — 설치·실행·권한 흐름 | 구현 완료(D6 재빌드, 에뮬레이터 실측) | `apk/CommaLane_깜빡이쉼표_release.apk`(자동 재개 기본값 끔 반영) — `apksigner verify` v2 스킴 통과(2026-11-02 D6 재확인) |
 
 ## 개발 계획 (MVP 범위 밖 — 기획서 「개발 계획」란)
 
