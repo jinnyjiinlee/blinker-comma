@@ -1,0 +1,22 @@
+낭독 1과 — 출처·라이선스 (D5)
+
+원작: The Aesop for Children (Aesop, Milo Winter 삽화본) — 수록 4편: The Travelers and the Sea /
+  The Wolf and the Lion / The Stag and His Reflection / The Peacock
+
+녹음: LibriVox 자원봉사자(이름 비공개 — 해당 장(섹션 13)은 LibriVox 페이지에 "A LibriVox Volunteer"로 표기)
+  Book: "The Aesop for Children" (LibriVox, https://librivox.org/the-aesop-for-children-by-aesop/)
+  Track: Section 13 — "Fables 49-52: The Travelers and the Sea; The Wolf and the Lion;
+    The Stag and His Reflection; The Peacock"
+  Archive.org item: https://archive.org/details/aesopforchildren_1308_librivox
+  원본 파일: theaesopforchildren_13_aesop_64kb.mp3 (sha256 9860d7130e0c7670fd7ff713b2b242ef0a8b5c02037c88cef468ec67f19dde3a)
+  Archive.org 확인 날짜: 2026-11-02
+
+라이선스: Public Domain Mark 1.0 (archive.org 메타데이터 licenseurl =
+  http://creativecommons.org/publicdomain/mark/1.0/). LibriVox 녹음은 미국 내 공공 도메인.
+
+자르기: tools/cut_pack.py — 원본의 인트로("Section 13 of...")·아웃트로("End of section 13")는 뺐다.
+  문장 경계는 사람 손 교정 없이 word-level STT(whisper, 모델 small) 타임스탬프의 문장 종결 부호(.!?)로 찾았다.
+  분명한 오인식 2곳만 교정(--fix, 뜻은 안 바꿈): "THE PECOCK." → "THE PEACOCK.",
+  "won, his evil lost." → "won, is evil lost."(원문 "ill-gotten gains" 류 교훈 — "his"는 오인식).
+  38개 문장, 총 176.7초(평균 4.65초/문장). 가장 긴 문장 2개(s14 11.38초·s37 13.00초)는 원문 자체가 쉼표로
+  이어진 긴 복문이라 SPEC 목표(2~6초)를 넘는다 — 실제로 그렇게 읽혔다는 사실 그대로(지어내지 않음).

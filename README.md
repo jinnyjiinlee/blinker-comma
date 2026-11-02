@@ -36,14 +36,14 @@ python3 demo/rehearsal_summary.py rehearsal_log_1.txt rehearsal_log_2.txt   # �
 | 최소 / 대상 | minSdk 28 · Kotlin 2.0.21 · Gradle 8.13 · JDK 21 |
 | 권한 | `pleos.car.permission.CAR_LIGHTS`(깜빡이) · `CAR_DRIVE`(기어) · `android.car.permission.CAR_SPEED`(런타임 — 에뮬레이터 수동 허용은 `adb shell pm grant --user 10 app.blinkercomma android.car.permission.CAR_SPEED`) · 포그라운드 서비스(미디어 재생) · 알림 |
 | 신호 실측 | `docs/signals_measured.md` — 이 앱 기준 에뮬레이터 실측(깜빡이·기어·속도·핸들 키·오디오 포커스) |
-| 검사 | `scripts/check.sh .` = ktlint · detekt(타입 분석) · 단위·시나리오 테스트 · 커버리지 · Lint · 파일 크기 · ruff → 현재 `tests OK (app 104, engine 116)` |
+| 검사 | `scripts/check.sh .` = ktlint · detekt(타입 분석) · 단위·시나리오 테스트 · 커버리지 · Lint · 파일 크기 · ruff → 현재 `tests OK (app 104, engine 119)` |
 | 리허설 | 새 설치 → 권한 → 3컷 자동 재생을 연속 2회 돌려 앱 로그 줄·시각이 같은지(차이 ≤ 0.15초) 확인 — `docs/progress.md` D4 |
 
 - 소리: 에뮬레이터를 `-no-audio`로 돌리므로 소리는 녹음되지 않는다. 문장 끝은 재생 완료 콜백이 아니라 콘텐츠 팩의 문장 길이 시계로 판정한다(콜백이 에뮬레이터에서 일찍·늦게 와서 — 실측 근거는 `docs/signals_measured.md`).
-- 콘텐츠: 지금 팩은 **측정용 합성음 8문장**(`tools/make_probe_pack.sh`). 퍼블릭 도메인 영어 낭독 팩으로 교체 예정(출처는 P 화면·팩의 CREDITS에 표기).
+- 콘텐츠: **퍼블릭 도메인 영어 낭독 38문장**(LibriVox, Public Domain Mark — `app/src/main/assets/packs/en1/CREDITS.txt`). `tools/cut_pack.py`로 원본 mp3를 word-level STT 타임스탬프 기준 문장 단위로 자름(D5).
 
 ## 4. APK 위치
-- 제출용 릴리스 APK: `apk/CommaLane_깜빡이쉼표_release.apk` — **아직 없음**(서명 릴리스 빌드는 다음 단계에서 이 위치에 둔다).
+- 제출용 릴리스 APK: **`apk/CommaLane_깜빡이쉼표_release.apk`**(서명 완료 — `apksigner verify` v2 스킴 통과, D5). 빌드: `./gradlew :app:assembleRelease`(서명은 저장소 밖 `~/.blinker-comma/keystore.properties`를 읽음 — 그 파일이 없으면 서명 없이 빌드됨).
 - 지금 빌드되는 디버그 APK: `./gradlew :app:assembleDebug` → `app/build/outputs/apk/debug/app-debug.apk`(저장소엔 올리지 않음).
 
 ## 개발자용

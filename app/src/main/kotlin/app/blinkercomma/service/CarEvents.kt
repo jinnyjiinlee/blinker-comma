@@ -3,7 +3,6 @@ package app.blinkercomma.service
 import ai.pleos.playground.vehicle.Vehicle
 import android.content.Context
 import android.util.Log
-import app.blinkercomma.BuildConfig
 import app.blinkercomma.data.SpeedPermission
 import app.blinkercomma.engine.reader.ReaderEvent
 import app.blinkercomma.monotonicNow
@@ -32,7 +31,8 @@ fun carEvents(context: Context, vehicle: Vehicle, speedPermission: StateFlow<Spe
         pleos.turnSignals().logFailures("turnSignal"),
         pleos.gears().logFailures("gear"),
         speedsOnceGranted(speed, speedPermission).logFailures("speed"),
-    ).onEach { if (BuildConfig.DEBUG) Log.i(TAG, "car $it") }
+        // 릴리스에서도 로그(D5 — conductor의 속도 확인·재시도가 이 줄로 VC 드롭을 가린다, 원칙 6과 무관 — logcat만, 화면 0)
+    ).onEach { Log.i(TAG, "car $it") }
         .map { ReaderEvent.Car(it) }
 }
 

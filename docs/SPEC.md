@@ -103,7 +103,7 @@ road-interpreter `engine/signal/*`·`output/Transition`·테스트 `support/Repl
 - **문장 1개 = 클립 1개** → 문장 경계 = 클립 끝(마킹 오류 0, 카드 「문장 경계」 절).
 - 분량: 30~40문장, 문장당 2~6초. 컷 1용으로 **길이가 정해진 문장 A·B**가 필요(앵커 방식이라 정확한 길이는 대본이 팩에서 읽음).
 - **출처 결정(S0)**: TTS 불가(T11 ❌)라 사람 낭독 녹음이 필요하다. 기본안 = **퍼블릭 도메인 영어 낭독(LibriVox 등 PD 공개 녹음)을 문장 단위로 잘라 쓰고 P 화면·README에 크레딧**. 녹음자 섭외가 필요 없고 저작권이 깨끗하다. 대안 = 직접 녹음(녹음자 [미확인]). → 카드·스토어의 「자체 녹음」 문구는 「퍼블릭 도메인 낭독」으로 바뀐다(아래 「기획과 달라진 점」).
-- 자르기: 오프라인 스크립트(`tools/cut_pack.py`, ffmpeg 무음 구간 검출) → `assets/packs/en1/pack.json` + `s01.ogg…`. 원본 출처 URL·라이선스는 `assets/packs/en1/CREDITS.txt`.
+- 자르기: 오프라인 스크립트(`tools/cut_pack.py`). D5: 무음 구간 검출 대신 word-level STT 타임스탬프(whisper)로 문장 끝(.!?)을 찾는다(자막이 실제 발화와 안 어긋남) → `assets/packs/en1/pack.json` + `s01.m4a…`. 원본 출처 URL·라이선스는 `assets/packs/en1/CREDITS.txt`.
 
 ## 시연 3컷 대본 (Virtual Console로 재생 — `demo/script/cutN_*.tsv`)
 형식: `at_s ⇥ hand ⇥ signal ⇥ value ⇥ memo` (road-interpreter 형식). D1 확정: `at_s`는 숫자(바로 위 anchor부터 초) · `end-X`(anchor 문장이 끝나기 X초 전, 길이는 pack.json) · `-`(anchor 줄) — 세부는 `docs/ARCHITECTURE.md` 6절. hand = `vc`(VC 웹 API) · `app`(P 화면 탭 — 녹화 전 준비만) · `adb`(키 주입 = 시연 주입) · **`anchor`(새로 추가: logcat에 해당 줄이 찍힐 때까지 기다린 뒤 그 시각을 0으로 다시 잡음)**. conductor는 road-interpreter `demo/conductor.py`를 복사해 `anchor` 행을 추가한다. 같은 TSV를 시나리오 테스트가 읽는다(anchor는 테스트에선 해당 이벤트 시각으로 치환).
@@ -179,4 +179,4 @@ road-interpreter `engine/signal/*`·`output/Transition`·테스트 `support/Repl
 - ⚠️ 컷 1 영상 시각: 측정용 팩의 문장 A(s=2)가 3.0초라 ⓓ = 4.9초(5.0초 안, 여유 0.1초). 낭독 팩에선 문장 A를 2.6초 근처로 골라야 대본 시각(ⓐ2.0 ⓑ2.6 ⓒ3.7 ⓓ4.5)과 맞는다.
 - ⚠️ 앱 실행 직후 메인 스레드 약 4초 늦음 1/4회(원인 확인 안 됨) → 녹화 전에 앱을 띄워 둔다.
 - 실차: 레버 자동 복귀 → OFF 이벤트 [짐작] · TURN_SIGNAL_STATE 램프/레버 모호(점멸 채터 → 디바운스로 방어 [가정]) · 레버 OFF 자동 재개의 Pleos 문언 해석 — 42dot 문의는 대표 승인 대기(발송 0).
-- 콘텐츠 라이선스: 고른 녹음의 PD 표기를 원문으로 확인하고 CREDITS에 URL 기록.
+- ✅(D5 닫힘) 콘텐츠 라이선스: LibriVox "The Aesop for Children" 섹션 13(archive.org `aesopforchildren_1308_librivox`) — archive.org 메타데이터 `licenseurl` = Public Domain Mark 1.0 확인, CREDITS.txt에 URL·sha256 기록.

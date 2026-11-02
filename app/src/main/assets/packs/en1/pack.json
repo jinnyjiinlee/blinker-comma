@@ -1,14 +1,196 @@
 {
-  "title": "측정 팩",
-  "credit": "측정용 합성음(낭독 팩 교체 전)",
+  "title": "낭독 1과",
+  "credit": "The Aesop for Children — LibriVox(CC0)",
   "clips": [
-    {"file": "s01.m4a", "text": "probe tone 1", "durationMs": 2600},
-    {"file": "s02.m4a", "text": "probe tone 2", "durationMs": 3000},
-    {"file": "s03.m4a", "text": "probe tone 3", "durationMs": 4000},
-    {"file": "s04.m4a", "text": "probe tone 4", "durationMs": 2200},
-    {"file": "s05.m4a", "text": "probe tone 5", "durationMs": 5000},
-    {"file": "s06.m4a", "text": "probe tone 6", "durationMs": 3500},
-    {"file": "s07.m4a", "text": "probe tone 7", "durationMs": 2800},
-    {"file": "s08.m4a", "text": "probe tone 8", "durationMs": 4500}
+    {
+      "file": "s01.m4a",
+      "text": "THE TRAVELERS AND THE SEA.",
+      "durationMs": 2070
+    },
+    {
+      "file": "s02.m4a",
+      "text": "Two travelers were walking along the seashore.",
+      "durationMs": 2630
+    },
+    {
+      "file": "s03.m4a",
+      "text": "Far out they saw something riding on the waves.",
+      "durationMs": 2510
+    },
+    {
+      "file": "s04.m4a",
+      "text": "Look, said one, a great ship rides in from distant lands bearing rich treasures.",
+      "durationMs": 5610
+    },
+    {
+      "file": "s05.m4a",
+      "text": "The object they saw came ever nearer the shore.",
+      "durationMs": 2960
+    },
+    {
+      "file": "s06.m4a",
+      "text": "No, said the other, that is not a treasure ship.",
+      "durationMs": 3080
+    },
+    {
+      "file": "s07.m4a",
+      "text": "That is some fisherman's skiff with the day's catch of savory fish.",
+      "durationMs": 3800
+    },
+    {
+      "file": "s08.m4a",
+      "text": "Still nearer came the object.",
+      "durationMs": 1920
+    },
+    {
+      "file": "s09.m4a",
+      "text": "The waves washed it up on shore.",
+      "durationMs": 1900
+    },
+    {
+      "file": "s10.m4a",
+      "text": "It is a chest of gold lost from some wreck, they cried.",
+      "durationMs": 3520
+    },
+    {
+      "file": "s11.m4a",
+      "text": "Both travelers rushed to the beach, but they found nothing, but a water-soaked log.",
+      "durationMs": 4980
+    },
+    {
+      "file": "s12.m4a",
+      "text": "Do not let your hopes carry you away from reality.",
+      "durationMs": 3300
+    },
+    {
+      "file": "s13.m4a",
+      "text": "THE WOLF AND THE LION.",
+      "durationMs": 1480
+    },
+    {
+      "file": "s14.m4a",
+      "text": "A wolf had stolen a lamb and was carrying it off to his lair to eat it, but his plans were very much changed when he met a lion, who, without making any excuses, took the lamb away from him.",
+      "durationMs": 11380
+    },
+    {
+      "file": "s15.m4a",
+      "text": "The wolf made off to a safe distance and then said in a much injured tone, you have no right to take my property like that.",
+      "durationMs": 7360
+    },
+    {
+      "file": "s16.m4a",
+      "text": "The lion looked back, but as the wolf was too far away to be taught a lesson without too much inconvenience, he said, your property?",
+      "durationMs": 7800
+    },
+    {
+      "file": "s17.m4a",
+      "text": "Did you buy it?",
+      "durationMs": 980
+    },
+    {
+      "file": "s18.m4a",
+      "text": "Or did the shepherd make you a gift of it?",
+      "durationMs": 2060
+    },
+    {
+      "file": "s19.m4a",
+      "text": "Pray tell me, how did you get it?",
+      "durationMs": 2200
+    },
+    {
+      "file": "s20.m4a",
+      "text": "What is evil won, is evil lost.",
+      "durationMs": 3000
+    },
+    {
+      "file": "s21.m4a",
+      "text": "THE STAG AND HIS REFLECTION.",
+      "durationMs": 2240
+    },
+    {
+      "file": "s22.m4a",
+      "text": "A stag, drinking from a crystal spring, saw himself mirrored in the clear water.",
+      "durationMs": 5080
+    },
+    {
+      "file": "s23.m4a",
+      "text": "He greatly admired the graceful arch of his antlers, but he was very much ashamed of his spindly legs.",
+      "durationMs": 5800
+    },
+    {
+      "file": "s24.m4a",
+      "text": "How can it be, he sighed, that I should be cursed with such legs when I have so magnificent a crown?",
+      "durationMs": 5860
+    },
+    {
+      "file": "s25.m4a",
+      "text": "At that moment he scented a panther, and in an instant was bounding away through the forest.",
+      "durationMs": 5660
+    },
+    {
+      "file": "s26.m4a",
+      "text": "But as he ran his wide-spreading antlers caught in the branches of the trees, and soon the panther overtook him.",
+      "durationMs": 6180
+    },
+    {
+      "file": "s27.m4a",
+      "text": "Then the stag perceived that the legs of which he was so ashamed would have saved him had it not been for the useless ornaments on his head.",
+      "durationMs": 7340
+    },
+    {
+      "file": "s28.m4a",
+      "text": "We often make much of the ornamental, and despise the useful.",
+      "durationMs": 4200
+    },
+    {
+      "file": "s29.m4a",
+      "text": "THE PEACOCK.",
+      "durationMs": 1340
+    },
+    {
+      "file": "s30.m4a",
+      "text": "The peacock, they say, did not at first have the beautiful feathers in which he now takes so much pride.",
+      "durationMs": 6160
+    },
+    {
+      "file": "s31.m4a",
+      "text": "These, Juno, whose favorite he was, granted to him one day when he begged her for a train of feathers to distinguish him from the other birds.",
+      "durationMs": 8460
+    },
+    {
+      "file": "s32.m4a",
+      "text": "Then, decked in his finery, gleaming with emerald, gold, purple, and azure, he strutted proudly among the birds.",
+      "durationMs": 7600
+    },
+    {
+      "file": "s33.m4a",
+      "text": "All regarded him with envy.",
+      "durationMs": 1640
+    },
+    {
+      "file": "s34.m4a",
+      "text": "Even the most beautiful pheasant could see that his beauty was surpassed.",
+      "durationMs": 3900
+    },
+    {
+      "file": "s35.m4a",
+      "text": "Presently the peacock saw an eagle soaring high up in the blue sky, and felt a desire to fly as he had been accustomed to do.",
+      "durationMs": 7820
+    },
+    {
+      "file": "s36.m4a",
+      "text": "Lifting his wings he tried to rise from the ground, but the weight of his magnificent train held him down.",
+      "durationMs": 5880
+    },
+    {
+      "file": "s37.m4a",
+      "text": "Instead of flying up to greet the first rays of the morning sun, or to bathe in the rosy light among the floating clouds at sunset, he would have to walk the ground more encumbered and oppressed than any common barnyard fowl.",
+      "durationMs": 13000
+    },
+    {
+      "file": "s38.m4a",
+      "text": "Do not sacrifice your freedom for the sake of pomp and show.",
+      "durationMs": 4020
+    }
   ]
 }

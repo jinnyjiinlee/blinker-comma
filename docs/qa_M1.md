@@ -51,7 +51,7 @@
 |---|---|---|---|
 | 1 | 주행 중 조작 0 | 기어 D·속도 40 상태에서 `uiautomator dump` | clickable 10개 전부 false, text/content-desc 전부 빈 문자열 — 터치·글자 0 확인 |
 | 2 | 차량 제어 0 | `app/src/main/kotlin` 전체에서 vehicle write 호출 grep | 쓰기 호출 0(읽기 리스너만) |
-| 3 | 실명 0·계정 0·네트워크 0 | `AndroidManifest.xml`에 INTERNET 권한 없음 · 코드 내 HTTP 호출 0 · 커밋 작성자·코드·strings.xml·CREDITS 전수 grep(저장소 밖 블라인드 단어 목록) | 전부 0건, 커밋 작성자 `CommaLane` 단일 |
+| 3 | 실명 0·계정 0·네트워크 0 | `AndroidManifest.xml`에 INTERNET 권한 없음 · 코드 내 HTTP 호출 0 · 커밋 작성자·코드·strings.xml·CREDITS에 `scripts/check.sh`의 블라인드 단어 목록으로 grep | 전부 0건, 커밋 작성자 `CommaLane` 단일 |
 | 4 | 지어내기 0 | 재생 진행하며 오늘 카운트 UI 관찰(0·0 → 1·0 …) · 속도 거부 시 「확인 안 됨」 문구 | 실제 카운트 증가 확인, 거부 시 고정 문구 아닌 표시 로직 확인 |
 | 5 | 자동 재생 금지 | 새 설치·권한 통과 후 P 화면 상태 | `phase_stopped`(멈춤), 재생 버튼 누르기 전까지 재생 0 |
 | 6 | 문장 본문 숨김 | `dumpsys media_session` | `metadata: description=측정 팩`(4자, 부제·본문 없음) — 팩 교체 후 제목 재확인 필요(결함 2와 연결) |

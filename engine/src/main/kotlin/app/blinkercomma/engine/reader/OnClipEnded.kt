@@ -5,22 +5,23 @@ import app.blinkercomma.engine.log.toWriteLog
 import app.blinkercomma.engine.output.Effect
 import app.blinkercomma.engine.output.Transition
 
-/** 문장 하나가 끝났다. 쉼표가 예약돼 있으면 다음 문장을 시작하지 않고 멈춘다(R1). */
+/** 문장 하나가 끝났다. 쉼표가 예약돼 있으면 팩 끝이어도 먼저 멈춘다(R1) — 재개할 다음 문장이 없으면 처음(0)으로. */
 internal fun onClipEnded(state: ReaderState, event: ReaderEvent.ClipEnded): Transition<ReaderState> {
     val phase = state.phase
     if (phase !is ReaderPhase.Reading || event.index != state.index) return Transition(state)
     val done = state.copy(tally = state.tally.addSentence())
     val next = state.index + 1
+    val isLastClip = next >= state.clipCount
+    val resumeIndex = if (isLastClip) 0 else next
     return when {
-        next >= state.clipCount -> finish(done)
-        phase.armedAt != null -> hold(
-            done.copy(index = next),
-            HoldReason.SENTENCE_END,
-            ReaderLog.HeldAtEnd(state.index),
-        )
+        phase.armedAt != null -> holdAtEnd(done, resumeIndex, state.index)
+        isLastClip -> finish(done)
         else -> readNext(done.copy(index = next))
     }
 }
+
+private fun holdAtEnd(done: ReaderState, resumeIndex: Int, endedIndex: Int): Transition<ReaderState> =
+    hold(done.copy(index = resumeIndex), HoldReason.SENTENCE_END, ReaderLog.HeldAtEnd(endedIndex))
 
 /** 쉼표 없이 다음 문장으로 — 문장 사이엔 틈을 두지 않는다. */
 private fun readNext(state: ReaderState): Transition<ReaderState> = Transition(

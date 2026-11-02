@@ -6,6 +6,7 @@
   anchor = 로그에 그 줄이 새로 찍힐 때까지 기다렸다가 그 시각을 0으로(문장 시작 = 실제 소리 시작 CommaPlayer start).
 """
 
+import re
 import subprocess
 import sys
 import threading
@@ -24,6 +25,11 @@ TOGGLE_TEXT = {"ON": "켬", "OFF": "끔"}  # 앱 strings.xml toggle_state_on·of
 # 끝나야 anchor(다음 문장 시작)가 늘 같은 문장에 걸린다(D4 리허설 1회차 — 1초×3이면 2.6초 문장을 넘겨 한 문장 밀림)
 PREP_GAP_S = 0.5
 VC = "http://127.0.0.1:8088"
+# M1 결함 1: VC 속도 PUT이 200을 받아도 차 속도가 끝까지 안 바뀌는 경우가 3회 중 1회 있었다(원인 미확인 —
+# VC 쪽 산발적 드롭으로 보임). 앱 로그의 SpeedChanged로 적용을 확인하고 짧게 기다려도 안 보이면 같은 PUT을 다시 보낸다.
+SPEED_LINE = re.compile(r"CommaSignal: car SpeedChanged\(.*speedMps=(-?\d+\.\d+)")
+SPEED_CONFIRM_S = 0.7
+SPEED_RETRY_MAX = 2
 
 
 def keep_vc_active(stop: threading.Event) -> None:
@@ -43,13 +49,50 @@ def mark(text: str) -> None:
     subprocess.Popen(["adb", "shell", "log", "-t", STAGE_TAG, f"'{text}'"])
 
 
-def play_vc(signal: str, value: str) -> None:
+def latest_speed_mps(watch: LogWatch) -> float | None:
+    """지금까지 찍힌 로그에서 가장 마지막 SpeedChanged 값(없으면 None)."""
+    found = [float(m[1]) for line in watch.lines if (m := SPEED_LINE.search(line.text))]
+    return found[-1] if found else None
+
+
+def set_speed(km_h: str, watch: LogWatch) -> None:
+    """차 속도가 이미 목표값이면(재등록 첫 값 등) 다시 PUT해도 값이 "안 바뀌어" SpeedChanged가 새로 안
+    온다 — 그건 결함 1이 아니라 정상이라 재시도 없이 한 번만 보낸다. 값이 다를 때만 확인·재시도한다."""
+    expected_mps = int(km_h) / 3.6
+    path = f"/vehicle/controls?speed={km_h}&accelerator=0&brake=0"  # 대본 값 = km/h
+    already = latest_speed_mps(watch)
+    if already is not None and abs(already - expected_mps) < 0.3:
+        vc_put(path)
+        return
+    for attempt in range(SPEED_RETRY_MAX + 1):
+        since = len(watch.lines)
+        vc_put(path)
+        if is_speed_confirmed(watch, since, expected_mps):
+            return
+        mark(
+            f"speed {km_h} PUT 재시도 {attempt + 1}/{SPEED_RETRY_MAX} — SpeedChanged 미확인"
+        )
+    raise RuntimeError(
+        f"speed {km_h}km/h PUT {SPEED_RETRY_MAX + 1}번 보냈는데도 SpeedChanged 미확인(M1 결함 1)"
+    )
+
+
+def is_speed_confirmed(watch: LogWatch, since: int, expected_mps: float) -> bool:
+    deadline = time.monotonic() + SPEED_CONFIRM_S
+    while time.monotonic() < deadline:
+        for line in watch.lines[since:]:
+            found = SPEED_LINE.search(line.text)
+            if found and abs(float(found[1]) - expected_mps) < 0.3:
+                return True
+        time.sleep(0.01)
+    return False
+
+
+def play_vc(signal: str, value: str, watch: LogWatch) -> None:
     actions = {
         "gear": lambda: gear(GEARS[value]),
         "turn_signal": lambda: lever(SIGNALS[value]),
-        "speed": lambda: vc_put(
-            f"/vehicle/controls?speed={int(value)}&accelerator=0&brake=0"
-        ),  # 대본 값 = km/h
+        "speed": lambda: set_speed(value, watch),
     }
     actions[signal]()
 
@@ -63,9 +106,9 @@ def play_app(signal: str, value: str) -> None:
         tap_text(TOGGLE_TEXT["OFF" if value == "ON" else "ON"], xml)
 
 
-def play_row(row: Row) -> None:
+def play_row(row: Row, watch: LogWatch) -> None:
     if row.hand == "vc":
-        play_vc(row.signal, row.value)
+        play_vc(row.signal, row.value, watch)
     elif row.hand == "app":
         play_app(row.signal, row.value)
     elif row.hand == "adb" and row.signal == "media_key":
@@ -80,7 +123,7 @@ def run_cut(script: Path, watch: LogWatch) -> None:
     mark(f"cut {script.stem} prep")
     for index, row in enumerate(prep):
         time.sleep(PREP_GAP_S if index else 0.0)
-        play_row(row)
+        play_row(row, watch)
     anchor_at, remaining_s, since = 0.0, None, len(watch.lines)
     for row in stage:
         if row.is_anchor:
@@ -94,14 +137,16 @@ def run_cut(script: Path, watch: LogWatch) -> None:
             mark(f"anchor {row.value.replace(' ', '_')} | {line.text}")
             print(f"anchor {row.value:10s} = {line.text}", flush=True)
         else:
-            wait_and_play(row, anchor_at + delay_after_anchor(row.at, remaining_s))
+            wait_and_play(
+                row, anchor_at + delay_after_anchor(row.at, remaining_s), watch
+            )
         since = len(watch.lines)
     mark(f"cut {script.stem} end")
 
 
-def wait_and_play(row: Row, due: float) -> None:
+def wait_and_play(row: Row, due: float, watch: LogWatch) -> None:
     time.sleep(max(0.0, due - time.time()))
-    play_row(row)
+    play_row(row, watch)
     late_ms = (time.time() - due) * 1000
     mark(f"row {row.at} {row.hand} {row.signal} {row.value} late={late_ms:.0f}ms")
     print(

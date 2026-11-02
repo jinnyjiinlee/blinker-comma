@@ -97,8 +97,8 @@ app/src/main/kotlin/app/blinkercomma/
   ui/component/ ✅ 화면 부품(아래 8절)
   ui/theme/ ✅ CommaColors · CommaType · CommaSpace · CommaSize · CommaShape · CommaTheme · calcContrastRatio
 app/src/debug/kotlin/app/blinkercomma/debug/  ✅ DemoInjectReceiver · toInjectedEvent (디버그 빌드 전용)
-app/src/main/assets/packs/en1/  ✅ 측정용 합성음 팩(`tools/make_probe_pack.sh`) · ○ 퍼블릭 도메인 낭독 팩
-tools/      ✅ measure_signals.py · measure_plans.py · device.py(실측) · make_probe_pack.sh
+app/src/main/assets/packs/en1/  ✅ 퍼블릭 도메인 낭독 팩(LibriVox, 38문장) + CREDITS.txt
+tools/      ✅ measure_signals.py · measure_plans.py · device.py(실측) · make_probe_pack.sh(측정용, 교체 전 썼음) · cut_pack.py(STT 타임스탬프로 문장 자르기)
 demo/script/ ✅ cut1_breath · cut2_wait_go · cut3_key_resume (TSV)
 demo/        ✅ conductor(한 컷 재생 · anchor = 실제 소리 시작) · rehearsal(새 설치→권한→3컷 + 녹화) · rehearsal_summary(두 번 같은지) · script_rows · log_watch
 ```
