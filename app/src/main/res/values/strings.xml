@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">깜빡이 쉼표</string>
+    <string name="action_play">▶</string>
+    <string name="action_pause">❙❙</string>
+    <string name="tally_today">오늘 %1$d문장 · 쉼표 %2$d번</string>
+    <string name="auto_resume_on">자동 재개 켬</string>
+    <string name="auto_resume_off">자동 재개 끔</string>
+    <string name="hold_glyph">⏸</string>
+    <string name="demo_injected">시연 주입</string>
 </resources>

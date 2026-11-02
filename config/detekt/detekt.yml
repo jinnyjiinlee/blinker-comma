@@ -20,6 +20,8 @@ naming:
   FunctionNaming:
     active: true
     functionPattern: '[a-z][a-zA-Z0-9]*'
+    # 기본 제외 목록 + testDebug(디버그 빌드 전용 시연 주입의 JVM 테스트 — 한국어 백틱 이름)
+    excludes: ['**/test/**', '**/testDebug/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**']
     ignoreAnnotated: ['Composable']
   BooleanPropertyNaming:
     active: true
@@ -48,7 +50,7 @@ style:
     active: true
     ignorePropertyDeclaration: true
     ignoreCompanionObjectPropertyDeclaration: true
-    excludes: ['**/test/**', '**/androidTest/**', '**/androidUnitTest/**', '**/*.kts']
+    excludes: ['**/test/**', '**/testDebug/**', '**/androidTest/**', '**/androidUnitTest/**', '**/*.kts']
   MaxLineLength:
     active: true
     maxLineLength: 120

@@ -5,7 +5,7 @@ import ai.pleos.playground.vehicle.constant.control.VehicleGear
 import app.blinkercomma.engine.signal.Gear
 import app.blinkercomma.engine.signal.TurnSignal
 
-// Pleos 값 → 엔진 값. 엔진은 Pleos 타입을 모른다(모듈 경계). 리스너 등록은 D2의 PleosVehicleSource
+// Pleos 값 → 엔진 값. 엔진은 Pleos 타입을 모른다(모듈 경계). 리스너 등록은 PleosVehicleSource
 
 fun TurnSignalValue.toTurnSignal(): TurnSignal = when (this) {
     TurnSignalValue.OFF -> TurnSignal.OFF
