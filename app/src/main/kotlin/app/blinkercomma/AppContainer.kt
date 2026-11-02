@@ -4,6 +4,7 @@ import android.content.Context
 import app.blinkercomma.data.LoadedPack
 import app.blinkercomma.data.PackRepository
 import app.blinkercomma.data.ReaderSettings
+import app.blinkercomma.data.SpeedPermissionStore
 import app.blinkercomma.data.TallyStore
 import app.blinkercomma.engine.comma.CommaCardParams
 import app.blinkercomma.engine.reader.ReaderState
@@ -16,6 +17,7 @@ class AppContainer(context: Context) {
     val tallyStore = TallyStore(context)
     val settings = ReaderSettings(context)
     val injection = DemoInjectionMarks()
+    val speedPermission = SpeedPermissionStore(context)
     val session = ReaderSession(
         initial = ReaderState(clipCount = pack.clips.size, tally = tallyStore.loadToday()),
         params = { CommaCardParams.DEFAULT.copy(isAutoResume = settings.isAutoResume.value) },

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 런처 아이콘 앞면: 호박색 쉼표 하나(앱 표지 ic_comma_mark와 같은 길). 108 격자, 가운데 66 안전 영역 안
+     (24 격자 쉼표 8~18 × 3.5~20.5를 3.6배 → 약 36~72 × 23~85). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group
+        android:scaleX="3.6"
+        android:scaleY="3.6"
+        android:translateX="7.2"
+        android:translateY="10.8">
+        <path
+            android:fillColor="#FFFFB74D"
+            android:pathData="M13,3.5 A5,5 0 0,0 13,13.5 Q13,17 9.5,20.5 C15.5,18.5 18,14 18,8.5 A5,5 0 0,0 13,3.5 Z" />
+    </group>
+</vector>

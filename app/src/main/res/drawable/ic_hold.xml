@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- D 화면 쉼표 표시 ⏸ — 정지 막대(ic_pause)와 같은 모양이지만 96dp 칸을 위아래로 꽉 채운다(흘끗 볼 때 크기 = 글자 0 화면의 유일한 정보) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M5.5,1.5 h3 a2,2 0 0 1 2,2 v17 a2,2 0 0 1 -2,2 h-3 a2,2 0 0 1 -2,-2 v-17 a2,2 0 0 1 2,-2 Z M15.5,1.5 h3 a2,2 0 0 1 2,2 v17 a2,2 0 0 1 -2,2 h-3 a2,2 0 0 1 -2,-2 v-17 a2,2 0 0 1 2,-2 Z" />
+</vector>

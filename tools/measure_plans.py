@@ -20,10 +20,11 @@ START = [
     ("launch app", launch_app, 4.0),
 ]
 
+# D3부터 D 화면엔 누를 것이 없다(설계서 원칙 1) — 화면 누르기는 전부 P(기어 Park)에서
 SIGNALS = START + [
+    ("tap play", lambda: tap_text("재생"), 4.0),
     ("vc gear Drive", lambda: gear("Drive"), 1.5),
     ("vc speed 40", lambda: vc_put(SPEED_40), 1.5),
-    ("tap play", lambda: tap_text("▶"), 7.0),
     ("vc turn-signal BlinkRight (comma)", lambda: lever("BlinkRight"), 6.0),
     ("vc turn-signal Off (resume)", lambda: lever("Off"), 3.0),
     ("vc toggle 1.7s: BlinkRight", lambda: lever("BlinkRight"), 1.7),
@@ -39,18 +40,19 @@ SIGNALS = START + [
     ("vc turn-signal BlinkRight at speed 0", lambda: lever("BlinkRight"), 2.0),
     ("vc turn-signal Off", lambda: lever("Off"), 1.0),
     ("vc gear Park", lambda: gear("Park"), 1.5),
-    ("tap pause (if still reading)", lambda: tap_if_shown("❙❙"), 1.5),
+    ("tap pause (if still reading)", lambda: tap_if_shown("정지"), 1.5),
 ]
 
 CUT3 = START + [
-    ("tap auto resume off", lambda: tap_text("자동 재개 켬"), 1.0),
+    ("tap auto resume off", lambda: tap_text("자동 재개"), 1.0),
+    ("tap play", lambda: tap_text("재생"), 1.5),
     ("vc gear Drive + speed 40", lambda: (gear("Drive"), vc_put(SPEED_40)), 1.5),
-    ("tap play", lambda: tap_text("▶"), 3.0),
     ("vc turn-signal BlinkRight", lambda: lever("BlinkRight"), 6.0),
     ("vc turn-signal Off (expect keep hold)", lambda: lever("Off"), 2.0),
     ("adb keyevent 85 while holding", media_key, 3.0),
-    ("tap auto resume on", lambda: tap_text("자동 재개 끔"), 1.0),
-    ("tap pause", lambda: tap_text("❙❙"), 1.0),
+    ("vc speed 0 + gear Park", lambda: (vc_put(SPEED_0), gear("Park")), 1.5),
+    ("tap auto resume on", lambda: tap_text("자동 재개"), 1.0),
+    ("tap pause", lambda: tap_text("정지"), 1.0),
 ]
 
 BARE = START + [
@@ -63,12 +65,13 @@ BARE = START + [
 
 # 컷 1 모양: 문장 2(3.0초)의 실제 소리 시작을 기다렸다가 끝 0.6초 전 레버 ON, 1.1초 뒤 OFF
 BREATH = START + [
-    ("vc gear Drive + speed 40", lambda: (gear("Drive"), vc_put(SPEED_40)), 1.5),
-    ("tap play", lambda: tap_text("▶"), 0.0),
+    ("tap play", lambda: tap_text("재생"), 0.0),
+    ("vc gear Drive + speed 40", lambda: (gear("Drive"), vc_put(SPEED_40)), 0.0),
     ("WAIT CommaPlayer.*start s=2 ", None, 2.4),
     ("vc turn-signal BlinkRight (end-0.6)", lambda: lever("BlinkRight"), 1.7),
     ("vc turn-signal Off (+1.1 after end)", lambda: lever("Off"), 3.0),
-    ("tap pause", lambda: tap_text("❙❙"), 1.0),
+    ("vc speed 0 + gear Park", lambda: (vc_put(SPEED_0), gear("Park")), 1.5),
+    ("tap pause", lambda: tap_text("정지"), 1.0),
 ]
 
 PLANS = {"signals": SIGNALS, "cut3": CUT3, "bare": BARE, "breath": BREATH}

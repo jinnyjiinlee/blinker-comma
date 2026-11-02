@@ -43,10 +43,19 @@ def screen_xml() -> str:
     return adb("shell", "cat", "/sdcard/ui.xml")
 
 
+def _label_at(text: str, xml: str) -> int:
+    """글자(text) 또는 그림 버튼 이름(content-desc — 재생·정지는 그림이라 이름만 있음) 위치."""
+    for key in ("text", "content-desc"):
+        found = xml.find(f'{key}="{text}"')
+        if found >= 0:
+            return found
+    raise ValueError(f"화면에 없음: {text}")
+
+
 def tap_text(text: str, xml: str | None = None) -> None:
     xml = xml or screen_xml()
     bounds = (
-        xml[xml.index(f'text="{text}"') :]
+        xml[_label_at(text, xml) :]
         .split('bounds="[', 1)[1]
         .split('"', 1)[0]
         .rstrip("]")
@@ -58,14 +67,15 @@ def tap_text(text: str, xml: str | None = None) -> None:
 
 
 def tap_if_shown(text: str) -> None:
-    """글자가 화면에 있을 때만 누른다(팩이 끝나 이미 멈췄으면 ❙❙가 없다). 덤프 한 번으로 보고 누른다."""
+    """글자가 화면에 있을 때만 누른다(팩이 끝나 이미 멈췄으면 「정지」가 없다). 덤프 한 번으로 보고 누른다."""
     xml = screen_xml()
-    if f'text="{text}"' in xml:
+    if screen_has(text, xml):
         tap_text(text, xml)
 
 
-def screen_has(text: str) -> bool:
-    return f'text="{text}"' in screen_xml()
+def screen_has(text: str, xml: str | None = None) -> bool:
+    xml = xml or screen_xml()
+    return f'text="{text}"' in xml or f'content-desc="{text}"' in xml
 
 
 def launch_app() -> None:

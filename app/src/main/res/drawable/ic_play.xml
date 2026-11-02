@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 재생 — 색은 화면이 입힌다(Icon tint) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M8.5,5.2 C8.5,4.4 9.4,3.9 10.1,4.3 L19.4,11.1 C20,11.5 20,12.5 19.4,12.9 L10.1,19.7 C9.4,20.1 8.5,19.6 8.5,18.8 Z" />
+</vector>

@@ -4,10 +4,10 @@
 
 ## 지금 상태
 - `:engine` 완료: 쉼표 예약 판정 · 낭독 상태 리듀서(쉼표 규칙 R1~R10) · 로그 줄 · 오늘 카운트 · 콘텐츠 팩 검사 · 시연 대본 3컷 리플레이
-- `:app`: 신호 어댑터 3종(깜빡이·기어·속도) · 플레이어 · 낭독 서비스(MediaBrowserService + MediaSession + 포그라운드) · 오디오 포커스 · 임시 P 화면 · 디버그 빌드 시연 주입. 정식 화면 3개는 다음 단계(D3)
+- `:app`: 신호 어댑터 3종(깜빡이·기어·속도) · 플레이어 · 낭독 서비스(MediaBrowserService + MediaSession + 포그라운드) · 오디오 포커스 · 화면 3개(P 정차 · D 주행 · 권한 안내 — 어두운 테마, 측후방 카메라 자리 피함) · 런처 아이콘 · 디버그 빌드 시연 주입
 - 콘텐츠: 지금 팩은 **측정용 합성음**(`tools/make_probe_pack.sh`) — 퍼블릭 도메인 낭독 팩으로 교체 예정
 - 신호 실측: `docs/signals_measured.md`(에뮬레이터, 이 앱 기준)
-- 테스트 수: `scripts/check.sh .`의 `tests OK (…)` 숫자 — 현재 `app 28, engine 116` (app = 공통 테스트 10개 × debug·release + 디버그 전용 8개)
+- 테스트 수: `scripts/check.sh .`의 `tests OK (…)` 숫자 — 현재 `app 92, engine 116` (app = 공통 테스트 42개 × debug·release + 디버그 전용 8개)
 
 ## 처음 실행
 ```

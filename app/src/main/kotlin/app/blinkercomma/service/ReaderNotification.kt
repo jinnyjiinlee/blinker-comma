@@ -16,7 +16,7 @@ fun buildReaderNotification(context: Context): Notification {
     )
     return Notification.Builder(context, CHANNEL_ID)
         .setContentTitle(context.getString(R.string.app_name))
-        .setSmallIcon(android.R.drawable.ic_media_play)
+        .setSmallIcon(R.drawable.ic_notification)
         .setOngoing(true)
         .build()
 }

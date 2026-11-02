@@ -1,11 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">깜빡이 쉼표</string>
-    <string name="action_play">▶</string>
-    <string name="action_pause">❙❙</string>
-    <string name="tally_today">오늘 %1$d문장 · 쉼표 %2$d번</string>
-    <string name="auto_resume_on">자동 재개 켬</string>
-    <string name="auto_resume_off">자동 재개 끔</string>
-    <string name="hold_glyph">⏸</string>
+    <!-- 스토어 한 줄(설계서 「한 줄」 24자) — P 화면 로고 아래 -->
+    <string name="tagline">깜빡이 켜면 낭독이 문장 끝에서 숨을 참아요</string>
+
+    <!-- P 화면 재생 판 -->
+    <string name="action_play">재생</string>
+    <string name="action_stop">정지</string>
+    <string name="phase_stopped">멈춤</string>
+    <string name="phase_reading">읽는 중</string>
+    <string name="phase_holding">쉼표 중</string>
+    <string name="phase_focus_paused">다른 소리 대기 중</string>
+    <string name="sentence_progress">%1$d / %2$d 문장</string>
+
+    <!-- 사용법 세 줄 — P 화면 왼쪽(처음 본 사람이 앱이 하는 일을 바로 알게) -->
+    <string name="step_lever_title">깜빡이를 켜면</string>
+    <string name="step_lever_detail">차로를 바꾸는 몇 초 동안</string>
+    <string name="step_hold_title">문장 끝에서 쉬고</string>
+    <string name="step_hold_detail">듣던 문장은 끝까지 읽어요</string>
+    <string name="step_resume_title">레버가 돌아오면</string>
+    <string name="step_resume_detail">다음 문장부터 이어 읽어요</string>
+    <string name="now_reading">지금 낭독</string>
+
+    <!-- 오늘 카운트 — 설계서 「오늘 N문장 · 쉼표 M번」을 숫자 둘로 -->
+    <string name="tally_title">오늘</string>
+    <string name="tally_sentences">문장</string>
+    <string name="tally_commas">쉼표</string>
+    <string name="tally_sentences_description">오늘 %1$d문장</string>
+    <string name="tally_commas_description">쉼표 %1$d번</string>
+
+    <!-- 자동 재개 토글(R8) -->
+    <string name="auto_resume_title">자동 재개</string>
+    <string name="auto_resume_on_detail">레버가 돌아오면 다음 문장을 읽어요</string>
+    <string name="auto_resume_off_detail">핸들 재생 버튼을 눌러야 이어 읽어요</string>
+    <!-- 이름 주의: state_on/off는 Compose 라이브러리 이름과 겹쳐 한국어 기기에서 「사용」으로 바뀌었다(D3 캡처) -->
+    <string name="toggle_state_on">켬</string>
+    <string name="toggle_state_off">끔</string>
+
+    <!-- 신호 상태 — 못 받은 신호만 한 줄씩(원칙 4) -->
+    <string name="signal_missing_speed">속도 신호 확인 안 됨</string>
+    <string name="signal_missing_gear">기어 신호 확인 안 됨</string>
+    <string name="credit_label">낭독 출처 · %1$s</string>
+
+    <!-- 권한 안내(첫 실행, P에서만) -->
+    <string name="permission_line">신호 대기 중엔 멈추지 않도록 차 속도를 읽어요</string>
+    <string name="permission_detail">허용하지 않아도 깜빡이와 기어만으로 동작해요</string>
+    <!-- AAOS는 CAR_SPEED를 위치 권한 묶음으로 묻는다(D3 캡처 D3_02 — 시스템 창 문구가 「위치 정보」) -->
+    <string name="permission_system_note">시스템 창에는 「위치 정보」 권한으로 보여요</string>
+    <string name="permission_allow">허용</string>
+
+    <!-- D 화면 — 글자는 보이지 않고 화면 낭독기만 읽음 -->
+    <string name="hold_glyph_description">쉼표 중</string>
     <string name="demo_injected">시연 주입</string>
 </resources>

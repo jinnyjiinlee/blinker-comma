@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 알림 작은 아이콘(단색) — 앱 표지 쉼표와 같은 모양 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M13,3.5 A5,5 0 0,0 13,13.5 Q13,17 9.5,20.5 C15.5,18.5 18,14 18,8.5 A5,5 0 0,0 13,3.5 Z" />
+</vector>

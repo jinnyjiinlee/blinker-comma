@@ -45,7 +45,9 @@ class ReaderService : MediaBrowserServiceCompat(), LifecycleOwner {
         focus = AudioFocusGate(this, session::onEvent, ::monotonicNow)
         session.attach(EffectRunner(player, focus, container.tallyStore, ::startForegroundOnce)::run)
         lifecycleScope.launch { session.state.distinctUntilChangedBy { it.phase }.collect { onPhase(it.phase) } }
-        lifecycleScope.launch { carEvents(this@ReaderService, vehicle).collect(session::onEvent) }
+        lifecycleScope.launch {
+            carEvents(this@ReaderService, vehicle, container.speedPermission.status).collect(session::onEvent)
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

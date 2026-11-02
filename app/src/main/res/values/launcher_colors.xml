@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 런처 타일 바탕 = 앱 바탕(CommaColors.BACKGROUND) — 호박색 쉼표와 대비 약 11 -->
+    <color name="launcher_background">#FF0D0F12</color>
+</resources>

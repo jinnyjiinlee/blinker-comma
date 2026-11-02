@@ -1,0 +1,12 @@
+11-02 00:10:24.173 17256 17256 I Comma   : screen PLAY → play s=1
+11-02 00:10:24.220 17256 17256 I Comma   : clipStart s=1
+11-02 00:10:24.872 17256 17256 I Comma   : gear=DRIVE
+11-02 00:10:26.314 17256 17256 I Comma   : turnSignal=RIGHT
+11-02 00:10:26.314 17256 17256 I Comma   : moving → comma armed
+11-02 00:10:26.985 17256 17256 I Comma   : clipEnd s=1 lever=ON → hold
+11-02 00:10:27.509 17256 17256 I Comma   : turnSignal=OFF
+11-02 00:10:27.509 17256 17256 I Comma   : autoResume=off → keep hold
+11-02 00:10:28.096 17256 17256 I Comma   : gear=PARK
+11-02 00:10:31.417 17256 17256 I Comma   : screen PLAY → play s=2
+11-02 00:10:31.418 17256 17256 I Comma   : clipStart s=2
+11-02 00:10:33.140 17256 17256 I Comma   : screen PAUSE → stop s=2

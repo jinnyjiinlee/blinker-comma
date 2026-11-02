@@ -49,6 +49,10 @@
 | 시연 주입 | `DemoInjectReceiver`·`DemoInjectionMarks`·`toInjectedEvent` | VC로 못 넣는 신호를 디버그 빌드에서 adb 브로드캐스트로 넣음 — 화면 「시연 주입」·로그 `CommaInject` | fake, mock |
 | 미리 준비 | `preload`·`standby` | 다음에 쓸 클립의 플레이어를 소리 없이 준비해 둠(재개 = 시작만) | prefetch, cache |
 | 소리 시작 | `onSoundStarted`·`CommaPlayer start` | 플레이어가 실제로 소리를 낸 순간 — ⏸ 끄기·대본 anchor 기준. 엔진 `clipStart`(명령 순간)와 다름 | — |
+| P 화면 | `ParkScreen`·`ScreenUiState.Park` | 정차(기어 P, 기어 확인 안 됨 + 멈춤) 화면 — 조작은 여기서만 | home, main |
+| D 화면 | `DriveScreen`·`ScreenUiState.Drive` | 주행(D·R·N 또는 이동 중) 화면 — 글자·터치 0, 쉼표 중 ⏸ 하나 | driving mode |
+| 권한 안내 | `PermissionScreen`·`AskSpeedPermission`·`SpeedPermission` | 첫 실행 정차 중 속도 권한을 한 번만 묻는 화면 | onboarding |
+| 사용법 | `HowItWorks`·`StepRow` | P 화면 왼쪽 세 줄(레버 → 쉼표 → 재개) | tutorial |
 | 표 | `ticket`·`ClipRequest` | 재생 요청 번호 — 늦게 끝난 준비·콜백이 지금 요청 것인지 가림 | token, id |
 
 ## 4. 설계서 이름 ↔ 코드 이름
@@ -84,7 +88,12 @@ app/src/main/kotlin/app/blinkercomma/
   player/   ✅ ClipPlayer(문장 끝 = 팩 길이 시계) · ClipDeck(MediaPlayer 전용 스레드·미리 준비) · PlayingClip
   service/  ✅ ReaderService(MBS + MediaSession + 포그라운드) · carEvents · ReaderMediaSession · AudioFocusGate · EffectRunner · ReaderNotification
   data/     ✅ PackRepository · TallyStore · ReaderSettings(자동 재개)
-  ui/       ✅ 임시 P 화면(ReaderScreen — D2 실측용) · ○ 정식 P 화면 · D 화면 · 권한 안내 · 테마(D3)
+  ui/       ✅ ScreenUiState · ScreenInputs(toUiState — 어느 화면인가) · collectScreenUiState · AppScreen
+  ui/park/  ✅ ParkScreen(P 화면) · PlaybackPanel(오른쪽 판) · TodayTally · HowItWorks(사용법 세 줄)
+  ui/drive/ ✅ DriveScreen(D 화면 — 쉼표 중 ⏸ 하나)
+  ui/permission/ ✅ PermissionScreen(첫 실행 속도 권한 안내)
+  ui/component/ ✅ 화면 부품(아래 8절)
+  ui/theme/ ✅ CommaColors · CommaType · CommaSpace · CommaSize · CommaShape · CommaTheme · calcContrastRatio
 app/src/debug/kotlin/app/blinkercomma/debug/  ✅ DemoInjectReceiver · toInjectedEvent (디버그 빌드 전용)
 app/src/main/assets/packs/en1/  ✅ 측정용 합성음 팩(`tools/make_probe_pack.sh`) · ○ 퍼블릭 도메인 낭독 팩
 tools/      ✅ measure_signals.py · measure_plans.py · device.py(실측) · make_probe_pack.sh
@@ -107,3 +116,20 @@ demo/script/ ✅ cut1_breath · cut2_wait_go · cut3_key_resume (TSV)  ○ condu
 | T9·T11·T1 | 저장소 밖 에뮬레이터 실측 표(setup T_results 2026-10-25) — T9 깜빡이 값=레버 값, T11 TTS 불가, T1 기어 서비스 수신 |
 | R1~R10 | `docs/SPEC.md` 「쉼표 규칙」 표 |
 | 원칙 1~11 | `docs/SPEC.md` 「반드시 지킬 원칙」 |
+
+## 8. 화면 부품 (`ui/component` — 화면 파일은 이것만 조립한다)
+
+| 부품 | 하는 일 |
+|---|---|
+| `BrandHeader` | 호박색 쉼표 + 앱 이름 + 스토어 한 줄(런처 아이콘과 같은 쉼표) |
+| `RoundPlayButton` | P 화면 재생·정지 원 버튼(232dp, 그림 + 낭독기 이름) |
+| `HoldGlyph` | D 화면 ⏸ 96dp(칸을 꽉 채운 `ic_hold`) |
+| `TallyNumber` | 오늘 카운트 숫자 하나 + 라벨(낭독기는 한 줄) |
+| `SettingToggleRow`·`ToggleRowText` | 켬·끔 설정 한 줄 — 줄 전체가 누르는 곳(120dp), 스위치 + 「켬/끔」 글자 |
+| `StatusLine` | 「확인 안 됨」 신호 한 줄(빈 원 + 흐린 글자) |
+| `StepRow` | 사용법 한 줄(원 안 그림 + 굵은 말 + 덧말) |
+| `BigButton` | 글자 버튼(120dp, 호박색) |
+| `DemoInjectedTag` | 「시연 주입」 레몬색 테두리 표시(디버그 빌드에서 주입한 뒤만) |
+
+- 화면 크기 기준: 앱 창 1682×1210dp(2560×1440·160dpi 화면에서 시스템 막대·왼쪽 운전 화면을 뺀 자리 — D3 `dumpsys window` 실측). 측후방 카메라는 앱 창 왼쪽 위 754×424dp(D3 캡처 실측) → `CommaSize.cameraOverlayWidth` 780dp.
+- 색은 호박색(깜빡이 색) 한 가지 강조 + 어두운 바탕. 대비 하한은 `CommaThemeFloorTest`.
