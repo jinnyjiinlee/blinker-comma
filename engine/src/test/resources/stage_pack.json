@@ -1,0 +1,12 @@
+{
+  "title": "낭독 1과",
+  "credit": "시나리오 테스트용 합성 팩 — 실제 낭독 아님",
+  "clips": [
+    {"file": "s01.ogg", "text": "The morning road was quiet.", "durationMs": 3000},
+    {"file": "s02.ogg", "text": "She kept her eyes ahead.", "durationMs": 2600},
+    {"file": "s03.ogg", "text": "A small bird crossed the field and vanished.", "durationMs": 4000},
+    {"file": "s04.ogg", "text": "The bridge came into view.", "durationMs": 3500},
+    {"file": "s05.ogg", "text": "Every lane had its own slow rhythm that day.", "durationMs": 5000},
+    {"file": "s06.ogg", "text": "Then the city began.", "durationMs": 2800}
+  ]
+}

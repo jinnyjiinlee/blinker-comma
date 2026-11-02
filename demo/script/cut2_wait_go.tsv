@@ -1,0 +1,13 @@
+# 컷 2 — 신호 대기 → 출발(12초). 서 있을 때 켠 깜빡이는 쉼표를 안 만들고, 켠 채 출발하면 그 문장 끝에서 쉰다
+# 형식은 cut1_breath.tsv 머리말과 같다
+# at_s	hand	signal	value	memo
+0	vc	gear	PARK	준비
+0	app	play	SCREEN	준비 — P 화면 ▶
+0	vc	gear	DRIVE	준비
+0	vc	speed	0	준비 · 숨은 조작 — 빠뜨리면 속도 확인 안 됨이라 서 있어도 예약됨
+-	anchor	log	clipStart	아무 문장
+1.0	vc	turn_signal	RIGHT	lever=ON speed=0 → no comma · 낭독 계속
+-	anchor	log	clipStart	다음 문장 — 깜빡이는 켠 채
+end-1.0	vc	speed	30	출발 — moving → comma armed
+-	anchor	log	→ hold	ⓑ 그 문장 끝 · ⏸ 켜짐
+0.5	vc	turn_signal	OFF	ⓒ · 0.8초 뒤 ⓓ 다음 문장 · ⏸ 꺼짐

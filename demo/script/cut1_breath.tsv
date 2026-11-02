@@ -1,0 +1,13 @@
+# 컷 1 — 첫 5초 「숨 참기」(영상 0.0~5.0초). conductor·시나리오 테스트·종이 순서표가 같이 읽는다
+# at_s: 숫자 = 바로 위 anchor부터 초(첫 anchor 전은 준비) · end-X = anchor 문장이 끝나기 X초 전(길이는 pack.json) · - = anchor 줄
+# anchor 줄: 앱 로그(태그 Comma)에 value 글자가 새로 찍힐 때까지 기다렸다가 그 시각을 0으로 다시 잡는다
+# 영상 0초 = 첫 anchor(문장 A 시작). 문장 A가 2.6초면 ⓐ2.0 ⓑ2.6 ⓒ3.7 ⓓ4.5 — A가 3.1초를 넘으면 ⓓ가 5초 밖
+# at_s	hand	signal	value	memo
+0	vc	gear	PARK	녹화 전 준비 — P 화면
+0	app	play	SCREEN	녹화 전 준비 — P 화면 ▶(자동 재생 금지라 손으로)
+0	vc	gear	DRIVE	녹화 전 준비 · 숨은 조작 — 빠뜨리면 쉼표 예약이 안 돼 ⓑ가 안 찍힘
+0	vc	speed	40	녹화 전 준비 — VC 속도는 km/h
+-	anchor	log	clipStart	영상 0.0 — 문장 A 시작
+end-0.6	vc	turn_signal	RIGHT	ⓐ 영상 2.0 — 왼쪽 위 측후방 카메라는 Pleos 기본 화면(앱 아님)
+-	anchor	log	→ hold	ⓑ 영상 2.6 — 문장 A 끝에서 멈춤 · ⏸ 켜짐
+1.1	vc	turn_signal	OFF	ⓒ 영상 3.7 — ⏸ 유지 · 0.8초 뒤 ⓓ 영상 4.5 문장 B · ⏸ 꺼짐

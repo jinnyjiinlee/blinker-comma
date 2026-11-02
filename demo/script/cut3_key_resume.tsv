@@ -1,0 +1,15 @@
+# 컷 3 — 「자동 재개 끔」 + 핸들 키(2차 PT 15초 시연, 영상 밖). 레버를 내려도 기다리고 엄지 한 번에 다음 문장
+# 형식은 cut1_breath.tsv 머리말과 같다. adb 줄은 시연 주입(핸들 키를 VC로 못 넣음) — README·자막에 밝힌다
+# at_s	hand	signal	value	memo
+0	vc	gear	PARK	준비
+0	app	auto_resume	OFF	준비 · 숨은 조작 — P 화면 「자동 재개 끔」 탭. 빠뜨리면 레버 OFF 0.8초 뒤 재개되고 핸들 키가 정지로 바뀜
+0	app	play	SCREEN	준비 — P 화면 ▶
+0	vc	gear	DRIVE	준비
+0	vc	speed	40	준비
+-	anchor	log	clipStart	아무 문장
+end-1.0	vc	turn_signal	RIGHT	moving → comma armed
+-	anchor	log	→ hold	문장 끝 · ⏸ 켜짐
+1.0	vc	turn_signal	OFF	autoResume=off → keep hold · ⏸ 유지(글자 안내 0)
+3.0	adb	media_key	PLAY_PAUSE	시연 주입 — adb shell input keyevent 85(핸들 ▶❙❙ 대역) · mediaKey PLAY → play · ⏸ 꺼짐
+5.0	vc	speed	0	
+5.5	vc	gear	PARK	P 화면 「오늘 N문장 · 쉼표 M번」(실제 카운트)
