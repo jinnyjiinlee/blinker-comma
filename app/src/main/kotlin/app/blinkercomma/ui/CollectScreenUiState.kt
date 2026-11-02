@@ -19,6 +19,7 @@ fun collectScreenUiState(container: AppContainer): ScreenUiState {
     val reader by container.session.state.collectAsStateWithLifecycle()
     val isAutoResume by container.settings.isAutoResume.collectAsStateWithLifecycle()
     val isHoldGlyphOn by container.session.isHoldGlyphOn.collectAsStateWithLifecycle()
+    val holdSide by container.session.holdSide.collectAsStateWithLifecycle()
     val injected by container.injection.kinds.collectAsStateWithLifecycle()
     val speedPermission by container.speedPermission.status.collectAsStateWithLifecycle()
     val isAwaitingFirstSignals by produceState(initialValue = true) {
@@ -27,6 +28,14 @@ fun collectScreenUiState(container: AppContainer): ScreenUiState {
     }
     val pack = (container.pack as? LoadedPack.Ready)?.pack
     val label = PackLabel(title = pack?.title.orEmpty(), credit = pack?.credit.orEmpty())
-    val inputs = ScreenInputs(reader, isAutoResume, isHoldGlyphOn, injected.isNotEmpty(), speedPermission, label)
+    val inputs = ScreenInputs(
+        reader = reader,
+        isAutoResume = isAutoResume,
+        isHoldGlyphOn = isHoldGlyphOn,
+        holdSide = holdSide,
+        isDemoInjected = injected.isNotEmpty(),
+        speedPermission = speedPermission,
+        pack = label,
+    )
     return inputs.copy(isAwaitingFirstSignals = isAwaitingFirstSignals).toUiState()
 }

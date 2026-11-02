@@ -20,7 +20,7 @@ sealed interface ScreenUiState {
     ) : ScreenUiState
 
     /** 주행(D·R·N 또는 이동 중) — 글자 0 · 터치 0, 쉼표 중에만 ⏸ 하나(원칙 1). */
-    data class Drive(val isHoldGlyphOn: Boolean, val isDemoInjected: Boolean) : ScreenUiState
+    data class Drive(val isHoldGlyphOn: Boolean, val holdSide: HoldSide, val isDemoInjected: Boolean) : ScreenUiState
 
     /** 첫 실행 속도 권한 안내 — 정차에서만, 한 번만. */
     data object AskSpeedPermission : ScreenUiState
@@ -31,3 +31,6 @@ enum class Playback { STOPPED, READING, HOLDING, FOCUS_PAUSED }
 
 /** 「확인 안 됨」으로 보일 수 있는 신호. 깜빡이는 첫 콜백 전엔 OFF와 구별이 안 돼 넣지 않는다. */
 enum class MissingSignal { GEAR, SPEED }
+
+/** D 화면 ⏸가 들어오는 쪽 — 레버 방향과 같은 쪽 가장자리에서 진입한다(ui_plan.md P0-1). */
+enum class HoldSide { LEFT, RIGHT }

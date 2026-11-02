@@ -53,6 +53,14 @@ class CommaThemeFloorTest {
     }
 
     @Test
+    fun `쉼표 진입 애니메이션은 카메라 자리를 넘지 않는다`() {
+        val contentWidthDp = APP_WIDTH_DP - CommaSize.cameraOverlayWidth.value
+        val worstCaseLeftDp = contentWidthDp / 2 -
+            CommaSize.holdGlyphEnterOffset.value - CommaSize.HOLD_GLYPH_DP / 2
+        assertEquals(true, worstCaseLeftDp >= 0f)
+    }
+
+    @Test
     fun `흰 글자와 검은 바탕의 대비는 21이다`() {
         assertEquals(21.0, calcContrastRatio(0xFFFFFFFF, 0xFF000000), absoluteTolerance = 0.01)
     }
@@ -67,6 +75,9 @@ class CommaThemeFloorTest {
         const val MIN_SUNLIGHT_CONTRAST = 3.0
         const val MIN_TEXT_SP = 24f
         const val MIN_TOUCH_DP = 76f
+
+        // 앱 창 폭 — D3 dumpsys window 실측(ARCHITECTURE.md 8절), 코드엔 토큰 없어 여기서만 상수로.
+        const val APP_WIDTH_DP = 1682f
         val TEXT_SIZES_SP = CommaType.allSizesSp
     }
 }

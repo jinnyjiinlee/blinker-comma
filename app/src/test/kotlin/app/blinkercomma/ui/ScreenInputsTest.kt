@@ -6,6 +6,7 @@ import app.blinkercomma.engine.reader.HoldReason
 import app.blinkercomma.engine.reader.ReaderPhase
 import app.blinkercomma.engine.reader.ReaderState
 import app.blinkercomma.engine.signal.Gear
+import app.blinkercomma.engine.signal.TurnSignal
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
@@ -19,6 +20,7 @@ class ScreenInputsTest {
         reader = ReaderState(clipCount = 8, gear = Gear.PARK, speedMps = 0.0),
         isAutoResume = true,
         isHoldGlyphOn = false,
+        holdSide = TurnSignal.OFF,
         isDemoInjected = false,
         speedPermission = SpeedPermission.GRANTED,
         pack = PackLabel(title = "낭독 1과", credit = "퍼블릭 도메인 낭독"),
@@ -109,8 +111,24 @@ class ScreenInputsTest {
 
     @Test
     fun `쉼표 중이면 D 화면에 쉼표 표시를 넘긴다`() {
-        val holding = parked.copy(isHoldGlyphOn = true).withReader { copy(gear = Gear.DRIVE) }
-        assertEquals(ScreenUiState.Drive(isHoldGlyphOn = true, isDemoInjected = false), holding.toUiState())
+        val holding = parked.copy(isHoldGlyphOn = true, holdSide = TurnSignal.RIGHT)
+            .withReader { copy(gear = Gear.DRIVE) }
+        val expected = ScreenUiState.Drive(isHoldGlyphOn = true, holdSide = HoldSide.RIGHT, isDemoInjected = false)
+        assertEquals(expected, holding.toUiState())
+    }
+
+    @Test
+    fun `레버 LEFT로 쉼표에 들어가면 D 화면도 LEFT에서 들어온다`() {
+        val holding = parked.copy(isHoldGlyphOn = true, holdSide = TurnSignal.LEFT)
+            .withReader { copy(gear = Gear.DRIVE) }
+        assertEquals(HoldSide.LEFT, (holding.toUiState() as ScreenUiState.Drive).holdSide)
+    }
+
+    @Test
+    fun `레버 RIGHT로 쉼표에 들어가면 D 화면도 RIGHT에서 들어온다`() {
+        val holding = parked.copy(isHoldGlyphOn = true, holdSide = TurnSignal.RIGHT)
+            .withReader { copy(gear = Gear.DRIVE) }
+        assertEquals(HoldSide.RIGHT, (holding.toUiState() as ScreenUiState.Drive).holdSide)
     }
 
     @Test

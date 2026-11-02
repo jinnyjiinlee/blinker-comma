@@ -6,6 +6,7 @@ import app.blinkercomma.engine.output.Effect
 import app.blinkercomma.engine.reader.ReaderEvent
 import app.blinkercomma.engine.reader.ReaderState
 import app.blinkercomma.engine.reader.reduce
+import app.blinkercomma.engine.signal.TurnSignal
 import kotlin.time.Duration
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,6 +28,10 @@ class ReaderSession(
 
     /** D 화면 ⏸ — 상태가 아니라 효과로 켜고 끈다(소리가 멎는 순간 켜고 다시 날 때 끔). */
     val isHoldGlyphOn: StateFlow<Boolean> = _isHoldGlyphOn.asStateFlow()
+    private val _holdSide = MutableStateFlow(TurnSignal.OFF)
+
+    /** ⏸가 켜질 때의 레버 방향(같은 쪽에서 진입하는 1회성 전환용, ui_plan.md P0-1 — 대표 승인 11/2 20시). */
+    val holdSide: StateFlow<TurnSignal> = _holdSide.asStateFlow()
     private val ticker = DeadlineTicker(now)
     private var runEffect: (Effect) -> Unit = {}
 
@@ -43,7 +48,11 @@ class ReaderSession(
         _state.value = transition.state
         val isPlaying = transition.effects.any { it is Effect.PlayClip }
         transition.effects.forEach { effect ->
-            if (effect is Effect.ShowHoldGlyph) showGlyph(effect.isOn, isPlaying) else runEffect(effect)
+            if (effect is Effect.ShowHoldGlyph) {
+                showGlyph(effect.isOn, isPlaying, transition.state.lever)
+            } else {
+                runEffect(effect)
+            }
         }
         ticker.schedule(transition.state.nextDeadline(params())) { onEvent(ReaderEvent.Tick(now())) }
     }
@@ -55,7 +64,8 @@ class ReaderSession(
         setGlyph(false)
     }
 
-    private fun showGlyph(isOn: Boolean, isWaitingForSound: Boolean) {
+    private fun showGlyph(isOn: Boolean, isWaitingForSound: Boolean, lever: TurnSignal) {
+        if (isOn) _holdSide.value = lever
         isGlyphOffPending = !isOn && isWaitingForSound
         if (!isGlyphOffPending) setGlyph(isOn)
     }

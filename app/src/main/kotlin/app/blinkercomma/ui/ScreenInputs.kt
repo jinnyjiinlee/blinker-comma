@@ -5,15 +5,18 @@ import app.blinkercomma.engine.comma.CommaCardParams
 import app.blinkercomma.engine.reader.ReaderPhase
 import app.blinkercomma.engine.reader.ReaderState
 import app.blinkercomma.engine.signal.Gear
+import app.blinkercomma.engine.signal.TurnSignal
 
 /**
  * [toUiState] 입력 묶음 — 엔진 상태 + 앱 쪽 상태(설정·⏸·시연 주입·권한·팩 글자).
  * [isAwaitingFirstSignals]: 화면을 막 띄워 첫 콜백을 기다리는 중 — 이때 null은 「못 받음」이 아니라 「아직 모름」이다.
+ * [holdSide]: ⏸가 켜질 때의 레버 방향 — D 화면 진입 쪽(ui_plan.md P0-1).
  */
 data class ScreenInputs(
     val reader: ReaderState,
     val isAutoResume: Boolean,
     val isHoldGlyphOn: Boolean,
+    val holdSide: TurnSignal,
     val isDemoInjected: Boolean,
     val speedPermission: SpeedPermission,
     val pack: PackLabel,
@@ -28,9 +31,15 @@ data class PackLabel(val title: String, val credit: String)
  * 기어도 속도도 모르면 P 화면 + 「확인 안 됨」 줄(쉼표 예약은 어차피 D가 확인돼야 걸린다).
  */
 fun ScreenInputs.toUiState(movingMinMps: Double = CommaCardParams.DEFAULT.movingMinMps): ScreenUiState = when {
-    reader.isDriving(movingMinMps) -> ScreenUiState.Drive(isHoldGlyphOn, isDemoInjected)
+    reader.isDriving(movingMinMps) -> ScreenUiState.Drive(isHoldGlyphOn, holdSide.toHoldSide(), isDemoInjected)
     speedPermission == SpeedPermission.NOT_ASKED -> ScreenUiState.AskSpeedPermission
     else -> toPark()
+}
+
+/** OFF는 ⏸가 꺼진 동안의 기본값일 뿐(그 사이엔 화면에 안 쓰인다) — 아무 쪽이나 되게 RIGHT로. */
+private fun TurnSignal.toHoldSide(): HoldSide = when (this) {
+    TurnSignal.LEFT -> HoldSide.LEFT
+    TurnSignal.RIGHT, TurnSignal.OFF -> HoldSide.RIGHT
 }
 
 private fun ReaderState.isDriving(movingMinMps: Double): Boolean =

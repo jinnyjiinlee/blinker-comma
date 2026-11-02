@@ -34,4 +34,10 @@ object CommaSize {
      */
     val cameraOverlayWidth = 780.dp
     val cameraOverlayHeight = 440.dp
+
+    /** ⏸가 레버 방향 쪽에서 슬라이드 진입하는 거리 — 카메라 자리 밖에서 소화됨(ui_plan.md 4·7절, 경계는 CommaThemeFloorTest). */
+    val holdGlyphEnterOffset = 120.dp
+
+    /** D 화면 「읽는 중」 정적 워터마크(쉼표 심볼) 지름 — 애니메이션 없음(ui_plan.md P0-3). */
+    val watermarkCommaSize = 560.dp
 }
