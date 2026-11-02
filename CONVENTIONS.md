@@ -22,6 +22,7 @@
 | `carEvents(context, vehicle)` | app/service/CarEvents.kt | 차 신호 3종 → 엔진 이벤트(실패한 신호는 「확인 안 됨」 로그) |
 | `monotonicNow()` | app/Clock.kt | 이벤트 시각(단조) |
 | `ClipPlayer.play`·`pause` | app/player/ClipPlayer.kt | 문장 재생·멈춤 — MediaPlayer는 직접 부르지 말고 이것만 |
+| `demo/conductor.py`(`run_cut`)·`rehearsal.py`·`rehearsal_summary.py` | demo/ | 대본 한 컷 재생(anchor = 실제 소리 시작) · 새 설치→권한→3컷 녹화 · 두 리허설 비교 — 시연 순서를 바꾸면 TSV만 고친다 |
 | `tools/device.py`·`measure_plans.py` | tools/ | 에뮬레이터 손(VC·adb·화면 누르기·주입) · 실측 순서표 — 화면 누르기는 P에서만(D 화면엔 누를 것 0) |
 | `ScreenInputs.toUiState` | app/ui/ScreenInputs.kt | 어느 화면(P·D·권한 안내)을 무엇으로 그리나 — 화면은 판정 없이 그리기만 |
 | 화면 부품 | app/ui/component/ | 목록은 `docs/ARCHITECTURE.md` 8절 — 화면 파일에서 `Text`·`Button`을 직접 꾸미지 않는다 |
@@ -49,8 +50,10 @@
 | R2 취소·R4 중간 멈춤·R10 내비 안내 장면 | scenario/EdgeScenarioTest | 완료 |
 | 시연 주입 해석 | app/testDebug ToInjectedEventTest | 완료 |
 | 재생 위치(단조 시계) | app/test PlayingClipTest | 완료 |
+| 놓기 순서(끝난 문장은 다음 준비 뒤 · 멈춤은 바로) | app/test PlayerHandoffTest | 완료 |
+| 리허설 2회 동일(로그 줄·시각 ≤ 0.15초) | demo/rehearsal_summary.py — 기기 리허설 | 기기 리허설 2/2(D4 5·6회차) |
 | 화면 하한(글자 24sp·대비 4.5·햇빛 3·터치 76dp·⏸ 96dp) | app/test CommaThemeFloorTest | 완료 |
-| 화면 고르기(P·D·권한 안내)·이동 문턱 경계 3점·확인 안 됨 줄 | app/test ScreenInputsTest | 완료 |
+| 화면 고르기(P·D·권한 안내)·이동 문턱 경계 3점·확인 안 됨 줄·첫 신호 대기 | app/test ScreenInputsTest | 완료 |
 | P 원 버튼(쉼표 중·포커스 멈춤 = ▶, R8) | app/test ScreenPressTest | 완료 |
 | 화면 잘림·겹침 | 에뮬레이터 캡처(저장소 밖 build_shots 폴더 D3_*.png — JVM 테스트 아님) | 완료(D3 캡처 11장) |
 | 어댑터·플레이어·서비스 | 에뮬레이터 실측 `docs/signals_measured.md`(기기 리허설 — JVM 테스트 아님) | 완료(D2 실측) |

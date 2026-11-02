@@ -47,7 +47,9 @@
 | 확인 안 됨 | `null`(`gear`·`speedMps`) | 신호를 못 받음 — 지어내지 않는다(원칙 4) | default, 0 |
 | 대본 | `demo/script` 폴더의 TSV · `StageLine` · `anchor` | conductor·시나리오 테스트·종이 순서표가 같이 읽는 시연 순서 | scenario file |
 | 시연 주입 | `DemoInjectReceiver`·`DemoInjectionMarks`·`toInjectedEvent` | VC로 못 넣는 신호를 디버그 빌드에서 adb 브로드캐스트로 넣음 — 화면 「시연 주입」·로그 `CommaInject` | fake, mock |
-| 미리 준비 | `preload`·`standby` | 다음에 쓸 클립의 플레이어를 소리 없이 준비해 둠(재개 = 시작만) | prefetch, cache |
+| 미리 준비 | `preload`·`standby` | 다음에 쓸 클립(두 문장 앞까지)의 플레이어를 소리 없이 준비해 둠(재개 = 시작만) | prefetch, cache |
+| 놓기 | `retire`·`release`·`PlayerHandoff` | 다 쓴 플레이어를 다른 스레드에서 release — 시계로 끝난 문장의 것은 다음 준비 뒤에 | dispose, free |
+| 리허설 | `demo/rehearsal.py` · `CommaStage` 로그 표지 | 새 설치부터 대본 3컷까지 자동으로 돌리고 녹화 — 두 번 돌려 같은지 본다 | dry run |
 | 소리 시작 | `onSoundStarted`·`CommaPlayer start` | 플레이어가 실제로 소리를 낸 순간 — ⏸ 끄기·대본 anchor 기준. 엔진 `clipStart`(명령 순간)와 다름 | — |
 | P 화면 | `ParkScreen`·`ScreenUiState.Park` | 정차(기어 P, 기어 확인 안 됨 + 멈춤) 화면 — 조작은 여기서만 | home, main |
 | D 화면 | `DriveScreen`·`ScreenUiState.Drive` | 주행(D·R·N 또는 이동 중) 화면 — 글자·터치 0, 쉼표 중 ⏸ 하나 | driving mode |
@@ -85,7 +87,7 @@ app/src/main/kotlin/app/blinkercomma/
   (루트)    ✅ BlinkerApp · AppContainer(수동 DI) · Clock(monotonicNow) · MainActivity
   vehicle/  ✅ VehicleMapping · PleosVehicleSource(깜빡이·기어, 해제 안 함) · CarSpeedSource(권한 먼저 확인)
   session/  ✅ ReaderSession(엔진 상태·효과·⏸) · DeadlineTicker(nextDeadline 1회 깨우기) · DemoInjectionMarks
-  player/   ✅ ClipPlayer(문장 끝 = 팩 길이 시계) · ClipDeck(MediaPlayer 전용 스레드·미리 준비) · PlayingClip
+  player/   ✅ ClipPlayer(문장 끝 = 팩 길이 시계) · ClipDeck(열기·시작·멈춤 전용 스레드) · ClipStandby(미리 준비 — 자기 스레드, 두 문장 앞까지) · PlayerHandoff(놓기 순서) · PlayingClip
   service/  ✅ ReaderService(MBS + MediaSession + 포그라운드) · carEvents · ReaderMediaSession · AudioFocusGate · EffectRunner · ReaderNotification
   data/     ✅ PackRepository · TallyStore · ReaderSettings(자동 재개)
   ui/       ✅ ScreenUiState · ScreenInputs(toUiState — 어느 화면인가) · collectScreenUiState · AppScreen
@@ -97,7 +99,8 @@ app/src/main/kotlin/app/blinkercomma/
 app/src/debug/kotlin/app/blinkercomma/debug/  ✅ DemoInjectReceiver · toInjectedEvent (디버그 빌드 전용)
 app/src/main/assets/packs/en1/  ✅ 측정용 합성음 팩(`tools/make_probe_pack.sh`) · ○ 퍼블릭 도메인 낭독 팩
 tools/      ✅ measure_signals.py · measure_plans.py · device.py(실측) · make_probe_pack.sh
-demo/script/ ✅ cut1_breath · cut2_wait_go · cut3_key_resume (TSV)  ○ conductor(anchor 확장 — D4)
+demo/script/ ✅ cut1_breath · cut2_wait_go · cut3_key_resume (TSV)
+demo/        ✅ conductor(한 컷 재생 · anchor = 실제 소리 시작) · rehearsal(새 설치→권한→3컷 + 녹화) · rehearsal_summary(두 번 같은지) · script_rows · log_watch
 ```
 
 ## 6. 대본 형식 (`demo/script` 폴더의 TSV)

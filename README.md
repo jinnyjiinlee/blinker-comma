@@ -1,33 +1,52 @@
 # 깜빡이 쉼표 (Blinker Comma)
 
-깜빡이를 올리면 낭독이 그 문장 끝에서 숨을 참고, 레버가 돌아오면 다음 문장 — 화면도 손도 없이. Pleos Connect 차량용 앱.
+## 1. 앱 이름 · 한 줄 소개
+- **앱 이름**: 깜빡이 쉼표 (패키지 `app.blinkercomma`, 팀 CommaLane)
+- **한 줄 소개**: 깜빡이를 켜면 낭독이 문장 끝에서 숨을 참고, 레버가 돌아오면 다음 문장부터 — 화면도 손도 없이.
+- 차로를 바꾸려고 깜빡이를 올리는 몇 초 동안 듣던 영어 낭독이 문장 중간에서 흘러가 버리지 않게, 앱이 그 문장 끝에서 멈추고(⏸ 하나) 레버가 0.8초 내려가 있으면 다음 문장을 읽는다. 차량 제어 0 · 주행 중 조작 0 · 네트워크·계정 0.
 
-## 지금 상태
-- `:engine` 완료: 쉼표 예약 판정 · 낭독 상태 리듀서(쉼표 규칙 R1~R10) · 로그 줄 · 오늘 카운트 · 콘텐츠 팩 검사 · 시연 대본 3컷 리플레이
-- `:app`: 신호 어댑터 3종(깜빡이·기어·속도) · 플레이어 · 낭독 서비스(MediaBrowserService + MediaSession + 포그라운드) · 오디오 포커스 · 화면 3개(P 정차 · D 주행 · 권한 안내 — 어두운 테마, 측후방 카메라 자리 피함) · 런처 아이콘 · 디버그 빌드 시연 주입
-- 콘텐츠: 지금 팩은 **측정용 합성음**(`tools/make_probe_pack.sh`) — 퍼블릭 도메인 낭독 팩으로 교체 예정
-- 신호 실측: `docs/signals_measured.md`(에뮬레이터, 이 앱 기준)
-- 테스트 수: `scripts/check.sh .`의 `tests OK (…)` 숫자 — 현재 `app 92, engine 116` (app = 공통 테스트 42개 × debug·release + 디버그 전용 8개)
-
-## 처음 실행
+## 2. 실행 방법
 ```
 export JAVA_HOME=$(/usr/libexec/java_home -v 21)   # JDK 21 (25는 Gradle 8.13과 안 맞음)
-git config core.hooksPath config/git-hooks          # 클론 후 1회 — fix: 커밋은 테스트와 같이
-./gradlew check                                       # ktlint·detekt(타입 분석)·테스트·커버리지·Lint
-scripts/check.sh .                                    # + 파일 크기·블라인드·테스트 실행 수
-./gradlew :app:assembleDebug
+./gradlew :app:assembleDebug                          # app/build/outputs/apk/debug/app-debug.apk
+adb install app/build/outputs/apk/debug/app-debug.apk
+adb shell am start --user 10 -n app.blinkercomma/.MainActivity   # 에뮬레이터는 사용자 10에서 앱이 돈다
 ```
+1. 첫 실행(정차 중)에 권한 안내가 한 번 뜬다 → [허용] → 시스템 창 「허용」(차 속도 권한이 「위치 정보」로 보인다). 거부해도 깜빡이·기어만으로 동작한다.
+2. P 화면에서 ▶ → 낭독 시작(앱이 스스로 재생을 시작하지 않는다).
+3. Virtual Console에서 기어 D · 속도 40 → 화면이 어두운 빈 화면(D)으로 바뀐다.
+4. 깜빡이 BlinkRight → 그 문장이 끝나는 순간 멈추고 ⏸ → 깜빡이 Off → 0.8초 뒤 다음 문장.
 
-## 먼저 읽을 것
-1. docs/SPEC.md — 원칙 11개 · 쉼표 규칙 R1~R10
-2. docs/ARCHITECTURE.md — 구조·용어 사전(이 단어만 씀)·대본 형식
-3. CONVENTIONS.md — 숫자 상한·공통 부품·테스트 대장
+**시연 대본 자동 재생**(Virtual Console 웹 API + adb):
+```
+adb forward tcp:8088 tcp:8088
+python3 demo/conductor.py demo/script/cut1_breath.tsv cut1_log.txt          # 한 컷(앱이 P 화면에 떠 있을 때)
+python3 demo/rehearsal.py <APK> rehearsal.mp4 rehearsal_log.txt             # 새 설치 → 권한 → 3컷 + 화면 녹화
+python3 demo/rehearsal_summary.py rehearsal_log_1.txt rehearsal_log_2.txt   # 두 번 돌린 결과가 같은지
+```
+대본(`demo/script`의 TSV, 형식은 `docs/ARCHITECTURE.md` 6절): 컷 1 「숨 참기」 · 컷 2 「신호 대기 → 출발」 · 컷 3 「자동 재개 끔 + 핸들 키」.
 
-## 시연 주입 신호
-- 핸들 미디어 키: Virtual Console에 카드가 없어 `adb shell input keyevent 85`로 넣는다(컷 3, 영상 밖). 대본 `demo/script/cut3_key_resume.tsv`의 `adb` 줄.
-- 그 밖에 VC로 못 넣는 신호(오디오 포커스 등): 디버그 빌드에서만 `adb shell am broadcast --user 10 -a app.blinkercomma.debug.INJECT -p app.blinkercomma --es signal focus --es value LOSS_TRANSIENT` — 화면에 「시연 주입」이 뜬다. 값 목록은 `docs/signals_measured.md` 끝.
-- 에뮬레이터 권한: 앱은 사용자 10에서 돈다 — 속도는 `adb shell pm grant --user 10 app.blinkercomma android.car.permission.CAR_SPEED`.
+**시연 주입(정직 표기)**: 핸들 미디어 키는 Virtual Console에 카드가 없어 `adb shell input keyevent 85`로 넣는다(컷 3). 그 밖에 VC로 못 넣는 신호(오디오 포커스 등)는 디버그 빌드에서만 `adb shell am broadcast --user 10 -a app.blinkercomma.debug.INJECT -p app.blinkercomma --es signal focus --es value LOSS_TRANSIENT`로 넣고, 그동안 화면에 노란 「시연 주입」이 뜬다(릴리스 APK엔 수신기 없음).
 
-## 꼭 지킬 것
-- 블라인드 심사: 커밋 작성자·코드·주석·문서에 실명·회사명·로컬 경로·전화번호 금지
-- 키스토어·비밀값은 저장소 밖
+## 3. 테스트 환경 · 설정
+| 항목 | 값 |
+|---|---|
+| 에뮬레이터 | Pleos Connect 에뮬레이터 2.1.0 · Android API 34 · 화면 2560×1440(앱 창 1682×1210dp) · `-no-audio`로 실행 |
+| SDK | Pleos Vehicle SDK 2.3.2(깜빡이·기어) + AAOS `CarPropertyManager`(차속) · MediaBrowserService + MediaSession |
+| 최소 / 대상 | minSdk 28 · Kotlin 2.0.21 · Gradle 8.13 · JDK 21 |
+| 권한 | `pleos.car.permission.CAR_LIGHTS`(깜빡이) · `CAR_DRIVE`(기어) · `android.car.permission.CAR_SPEED`(런타임 — 에뮬레이터 수동 허용은 `adb shell pm grant --user 10 app.blinkercomma android.car.permission.CAR_SPEED`) · 포그라운드 서비스(미디어 재생) · 알림 |
+| 신호 실측 | `docs/signals_measured.md` — 이 앱 기준 에뮬레이터 실측(깜빡이·기어·속도·핸들 키·오디오 포커스) |
+| 검사 | `scripts/check.sh .` = ktlint · detekt(타입 분석) · 단위·시나리오 테스트 · 커버리지 · Lint · 파일 크기 · ruff → 현재 `tests OK (app 104, engine 116)` |
+| 리허설 | 새 설치 → 권한 → 3컷 자동 재생을 연속 2회 돌려 앱 로그 줄·시각이 같은지(차이 ≤ 0.15초) 확인 — `docs/progress.md` D4 |
+
+- 소리: 에뮬레이터를 `-no-audio`로 돌리므로 소리는 녹음되지 않는다. 문장 끝은 재생 완료 콜백이 아니라 콘텐츠 팩의 문장 길이 시계로 판정한다(콜백이 에뮬레이터에서 일찍·늦게 와서 — 실측 근거는 `docs/signals_measured.md`).
+- 콘텐츠: 지금 팩은 **측정용 합성음 8문장**(`tools/make_probe_pack.sh`). 퍼블릭 도메인 영어 낭독 팩으로 교체 예정(출처는 P 화면·팩의 CREDITS에 표기).
+
+## 4. APK 위치
+- 제출용 릴리스 APK: `apk/CommaLane_깜빡이쉼표_release.apk` — **아직 없음**(서명 릴리스 빌드는 다음 단계에서 이 위치에 둔다).
+- 지금 빌드되는 디버그 APK: `./gradlew :app:assembleDebug` → `app/build/outputs/apk/debug/app-debug.apk`(저장소엔 올리지 않음).
+
+## 개발자용
+- 먼저 읽을 것: `docs/SPEC.md`(원칙 11개 · 쉼표 규칙 R1~R10) → `docs/ARCHITECTURE.md`(구조 · 용어 사전 · 대본 형식) → `CONVENTIONS.md`(숫자 상한 · 공통 부품 · 테스트 대장).
+- 클론 후 1회: `git config core.hooksPath config/git-hooks`(`fix:` 커밋은 테스트와 같이).
+- 블라인드 심사: 커밋 작성자·코드·주석·문서에 실명·회사명·로컬 경로·연락처 금지. 키스토어·비밀값은 저장소 밖.

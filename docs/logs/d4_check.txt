@@ -1,0 +1,6 @@
+size OK
+All checks passed!
+8 files already formatted
+Wrote HTML report to <저장소>/app/build/reports/lint-results-debug.html
+tests OK (app 104, engine 116)
+check OK
