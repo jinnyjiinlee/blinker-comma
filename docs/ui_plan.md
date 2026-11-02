@@ -184,3 +184,32 @@ Pleos 다른 앱 아이콘들(모노크롬·2색 이하)과 톤이 맞고 식별
 6. 범위는 여전히 `ui/`(앱 레이어) 안 — `:engine`·신호 어댑터·대본은 불변. 컷 1·2·3 시각 재확인 불필요(이유는
    위 8절-4와 동일 — 화면 전환은 로그·오디오 타이밍에 관여하지 않음).
 7. 실측·캡처는 `docs/progress.md` U2 절 참고(상태 7장, `setup/build_shots/U2_*.png`).
+
+## 10. U3 — UJ 블라인드 심사 공통 지적 반영 + M8 4-1·4-2(구현 완료)
+
+대표 지시(11/2 20시 연장, 「최우수·대상, 공식 기준으로」)에 따라 `docs/ui_judge.md`의 공통 지적 5개와
+`ideas/v3/meeting/M8/upgrade_plan.md` 4절(차량특화성)의 Mia 담당 항목 2개를 반영했다.
+
+1. **M8 4-1(P 자동 재개 보조 문구)**: `strings.xml`의 `auto_resume_on_detail`·`auto_resume_off_detail`을
+   M8이 정한 문구 그대로 교체 — 켬: 「레버가 돌아오지 않아도 핸들 재생 버튼으로 바로 이어 들을 수 있어요」,
+   끔: 「쉼표에서 멈추면 핸들 재생 버튼으로 다음 문장을 시작해요」. 핸들 키 폴백 경로를 명시.
+2. **M8 4-2 + UJ 3순위(쉼표 중 상태 식별성 낮음)**: `HoldCountBadge`(신규) — D 화면 ⏸ 옆 「쉼표 N」,
+   P 화면과 같은 호박색. `HoldCountBadgeTransition`(⏸의 260ms보다 느린 500ms 페이드, M8 명세대로)을
+   `ui/theme/HoldGlyphTransition.kt`에 추가. ⏸는 SPEC이 못박은 좌표(1197~1263dp)를 그대로 유지해야 해서
+   배지를 Row로 묶어 같이 슬라이드시키지 않고, 콘텐츠 박스의 `CenterEnd`에 독립 배치 — ⏸의 위치·기존
+   `CommaThemeFloorTest` 경계 테스트에 영향 0. `ScreenUiState.Drive`에 `todayCommas` 필드 추가.
+3. **UJ 1순위(워터마크가 너무 옅거나 우측 끝에서 잘려 보임)**: `CommaColors.WATERMARK_ALPHA` 12%→20%.
+   클리핑은 DriveScreen의 콘텐츠 박스에 `end = CommaSpace.large`(32dp) 패딩을 추가해 중심점을 왼쪽으로
+   살짝 당겨 재발 방지(⏸ 좌표도 1215dp로 여전히 SPEC 범위 안). 재실측(`U3_04`)으로 잘림 0 확인.
+4. **UJ 2순위(카메라와 ⏸가 겹쳐 보인다는 인상)**: `CameraBoundaryLine`(신규, DriveScreen.kt 내부) —
+   카메라 폭(780dp) 경계에 아주 옅은 정적 세로선(`CommaColors.ringTrack`, 기존 토큰 재사용). 카메라
+   자리·⏸ 좌표는 그대로 두고 "여기부터 우리 영역"이라는 시각적 경계만 추가(지속 애니메이션 0 유지).
+5. **UJ 4순위(「확인 안 됨」 톤이 메인 디자인과 어긋남)**: `StatusLine`에 `DemoInjectedTag`와 같은 테두리
+   칩 스타일(`border` + `padding`) 추가 — 경고색은 그대로 안 씀(StatusLine 코멘트 그대로, 신호 없이도
+   동작하므로 심각도를 올리지 않는다), 완성도만 맞춤.
+6. **UJ 5순위(캡처 전체에 브랜드 식별 요소 없음) — 코드로 반영하지 않음**: D 화면에 로고·글자를 넣으면
+   원칙 1(글자 0)의 재해석 범위를 벗어나고(지금까지는 「숫자+짧은 단어 하나」까지만 승인됨), 11/8 시연
+   동결 일정상 추가 승인 사이클을 돌릴 여유가 없다. 대신 **운영적으로 해결 권장**: 스토어 제출용 캡처는
+   로고가 있는 P 화면(`BrandHeader`)을 포함해 고르면 된다 — `docs/ui_judge.md`에 결정 기록.
+7. 범위는 여전히 `ui/`(앱 레이어) 안 — `:engine`·신호 어댑터·대본 불변, 시연 3컷 시각과 무관(U1·U2와 같은 이유).
+8. 실측·캡처는 `docs/progress.md` U3 절 참고(상태 8장, `setup/build_shots/U3_*.png`).

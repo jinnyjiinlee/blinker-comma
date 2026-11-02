@@ -333,3 +333,33 @@
 - 공통 지적 1~5순위 적용 여부·우선순위는 대표 승인 필요 — 특히 2·3순위는 M8/upgrade_plan.md 4-1·4-2(Mia 설계 → UI 개선 실행기)와 겹치므로 합쳐서 검토 권장.
 - 94eb272 블라인드 히스토리 정리 — 대표 승인 대기, 11/15 제출 전 필수(기존 숙제, 이번 단계 영향 없음).
 - 42dot 문의 3건(M8 upgrade_plan 2-3) — 대표 승인 대기, 이번 단계 영향 없음.
+
+## U3 (2026-11-02 21:15)
+
+### 한 일
+- 대표 지시(11/2 20시 연장) 「허전한 부분은 ui ux 최대한 개선해서 이쁘게 해」 + 11/2 21시 「최우수·대상, 공식 기준으로」 대응 — UJ 블라인드 심사 공통 지적 5개(`docs/ui_judge.md`)와 `ideas/v3/meeting/M8/upgrade_plan.md` 4절(차량특화성)의 Mia 담당 항목 2개(4-1·4-2)를 합쳐서 반영했다(M8 decision.json `keep: true` 확인 후 착수). 상세 설계·근거는 `docs/ui_plan.md` 10절.
+- **M8 4-1**: `strings.xml`의 `auto_resume_on_detail`·`auto_resume_off_detail`을 M8이 정한 문구로 교체(핸들 키 폴백 경로 명시).
+- **M8 4-2 + UJ 3순위**: `HoldCountBadge`(신규, `ui/component/`) — D 화면 ⏸ 옆 「쉼표 N」, P 화면과 같은 호박색. `HoldCountBadgeTransition`(500ms 페이드, `ui/theme/HoldGlyphTransition.kt`)을 추가해 ⏸(260ms)보다 한 박 늦게 들어오게 했다. ⏸의 SPEC 고정 좌표(1197~1263dp)를 건드리지 않으려고 배지를 ⏸와 묶어 슬라이드시키지 않고 콘텐츠 박스 `CenterEnd`에 독립 배치. `ScreenUiState.Drive`에 `todayCommas` 필드 추가(`ScreenInputs.toUiState`가 `reader.tally.commas` 그대로 넘김 — 지어낸 숫자 아님).
+- **UJ 1순위(워터마크 너무 옅음·우측 끝 잘림)**: `CommaColors.WATERMARK_ALPHA` 12%→20%. DriveScreen 콘텐츠 박스에 `end = CommaSpace.large`(32dp) 패딩을 더해 중심점을 왼쪽으로 당김(⏸ 좌표는 1215dp로 SPEC 범위 안 유지) — 재실측으로 잘림 0 확인.
+- **UJ 2순위(카메라·⏸가 겹쳐 보인다는 인상)**: `CameraBoundaryLine`(신규, DriveScreen.kt 내부 private) — 카메라 폭 경계(780dp)에 아주 옅은 정적 세로선(기존 토큰 `CommaColors.ringTrack`·`CommaSize.panelBorder` 재사용, 새 토큰 0개). 카메라·⏸ 좌표는 그대로.
+- **UJ 4순위(「확인 안 됨」 톤 어긋남)**: `StatusLine`에 `DemoInjectedTag`와 같은 테두리 칩 스타일 추가. 경고색은 여전히 안 씀(신호 없이도 동작하므로).
+- **UJ 5순위(브랜드 식별 요소 없음) — 코드 반영 안 함**: D 화면에 로고·글자를 넣으려면 원칙 1 재해석 범위를 더 넓혀야 해 별도 승인 사이클이 필요하고 11/8 동결까지 여유가 없다. `docs/ui_judge.md`·`ui_plan.md`에 「스토어 캡처는 로고가 있는 P 화면을 포함해서 고른다」는 운영적 해결로 기록.
+- 테스트: `ScreenInputsTest`에 Drive의 `todayCommas` 전달 테스트 1개 추가(app 110→112). 문서: `ARCHITECTURE.md`(8절 부품·패키지 지도·용어 사전) · `CONVENTIONS.md`(공통 부품·테스트 대장) · `ui_plan.md` 10절(신규) · `ui_judge.md`(반영 결과 절 추가).
+- 범위는 `ui/`(앱 레이어) 안 — `:engine`·신호 어댑터·대본 불변, 시연 3컷 시각과 무관(U1·U2와 같은 이유).
+
+### 실측 (에뮬레이터 2.1.0 · API 34 · `-no-audio -no-window`, 디버그 APK, 실제 낭독 팩 — `setup/build_shots/U3_01~08_*.png` 8장, 저장소 밖)
+- `scripts/check.sh .` → `tests OK (app 112, engine 119)` · `check OK`(코드 변경 직후·문서 추가 후 재확인 2회).
+- 캡처 8장 전부 눈으로 확인 — 잘림·겹침·고아 단어 0:
+  - 권한 안내(`U3_01`, 새 설치 직후 우리 앱 화면만 — 시스템 다이얼로그는 아직 안 뜬 상태) · P 대기(`U3_02`) · P 낭독(`U3_03`): 새 자동 재개 문구("레버가 돌아오지 않아도 핸들 재생 버튼으로...") 잘림·겹침 없이 정상 렌더.
+  - D 읽는 중 워터마크(`U3_04`): 20%로 또렷해짐, 화면 우측 끝까지 여유(잘림 0) 재확인 — 이전 12%·클리핑 지적(UJ 1순위) 해소.
+  - D 쉼표 RIGHT(`U3_05`, 「쉼표 1」)·LEFT(`U3_06`, 「쉼표 2」): ⏸ 정착 위치·크기 RIGHT/LEFT 동일(U0 발견 1 그대로 유지), 배지가 카메라와 충분히 떨어진 자리에 또렷하게 표시, 숫자는 실제 조작 결과(지어낸 값 아님).
+  - D 재개 직후(`U3_07`): ⏸·배지 꺼지고 워터마크 복귀, 하드 컷 없이 자연스러움(육안).
+  - 속도 신호 확인 안 됨(`U3_08`, `pm revoke --user 10` 재현): 테두리 칩 스타일로 바뀐 「○ 속도 신호 확인 안 됨」 확인, 오늘 카운트 13문장·2쉼표(이번 단계 실제 조작 결과) + `TodayTimeline` 점 2개 정상.
+- VC 신호 조작은 이번에도 `/browser/session` 하트비트 필요(U2 숙제 그대로, `rehearsal.py` 안 쓰고 직접 조작할 때는 매번 필요) — 내가 만든 캡처 스크립트에 하트비트 스레드 포함해 처리, 작업 끝에 종료 확인.
+- 권한 다이얼로그 자동 확인 함정: 첫 시도에서 `adb shell input keyevent ENTER`로 시스템 권한 다이얼로그를 닫으려 했으나 반응 없었다(화면에 "허용" 텍스트가 우리 앱 버튼과 시스템 다이얼로그 두 곳에 동시에 있어 `tap_text`가 모호했던 게 원인으로 보임) — `uiautomator dump`로 정확한 bounds를 찾아 좌표 탭으로 바꿔 해결. 이 함정은 향후 재현용으로만 기록(코드 영향 없음).
+
+### 남은 일
+- UJ 공통 지적 5순위는 코드 미반영(운영적 해결로 기록, 위 참고) — 다음에 D 화면 글자 허용 범위를 넓히는 논의가 생기면 재검토.
+- 94eb272 블라인드 히스토리 정리 — 대표 승인 대기, 11/15 제출 전 필수(기존 숙제, 이번 단계 영향 없음).
+- M8 upgrade_plan의 나머지 항목(1-1·1-2·2-1·2-2·2-3·3·5)은 Mia 담당 밖(James·Mason·Ryan) — 이번 단계 영향 없음.
+- 실차 카메라-레버 방향 무관 여부(U0부터 이어짐) — 여전히 미확인.

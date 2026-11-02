@@ -39,6 +39,8 @@
 | 워터마크 | `CommaWatermark` | D 화면이 쉼표가 아닐 때 보이는 정적 쉼표 심볼(12% 알파) — 애니메이션 없음(ui_plan.md P0-3) | ambient, idle animation |
 | 진행 링 | `ProgressRing` | P 화면 재생 버튼 둘레의 정적 세그먼트 링 — 지금 문장/전체 문장. 문장 전환 때만 값이 바뀐다(ui_plan.md P1) | progress bar, spinner |
 | 오늘 쉼표 타임라인 | `TodayTimeline` | P 화면의 오늘 쉼표 횟수만큼 점(장식) — 숫자(`TallyNumber`)의 보조 그래픽(ui_plan.md P0-4) | dots, indicator |
+| 쉼표 배지 | `HoldCountBadge`·`HoldCountBadgeTransition` | D 화면 ⏸ 옆 「쉼표 N」 — 오늘 쉼표 수, 500ms 페이드(M8 upgrade_plan 4-2) | counter, pill |
+| 카메라 경계선 | `CameraBoundaryLine`(DriveScreen.kt 내부) | 측후방 카메라 자리와 앱 요소 사이의 정적 경계선(U3, UJ 공통 지적 2) | divider |
 | 문장 | `index`·`SentenceClip` | 클립 1개 = 문장 1개. 로그 번호는 1부터(`s=2` = index 1) | track, segment |
 | 디바운스 | `offDebounce`·`offSince` | 쉼표 중 레버 OFF가 이만큼 유지돼야 재개(R5) | delay, grace |
 | 상한 | `endWaitLimit` | 예약 뒤 문장이 이 안에 안 끝나면 중간에서 멈춤(R4) | timeout |
@@ -96,13 +98,15 @@ app/src/main/kotlin/app/blinkercomma/
   data/     ✅ PackRepository · TallyStore · ReaderSettings(자동 재개)
   ui/       ✅ ScreenUiState · ScreenInputs(toUiState — 어느 화면인가) · collectScreenUiState · AppScreen
   ui/park/  ✅ ParkScreen(P 화면) · PlaybackPanel(오른쪽 판) · TodayTally · HowItWorks(사용법 세 줄)
-  ui/drive/ ✅ DriveScreen(D 화면 — 쉼표 중 ⏸ 하나 + 방향 전환, 아닐 때 워터마크가 같은 시간으로 교차 페이드)
+  ui/drive/ ✅ DriveScreen(D 화면 — 쉼표 중 ⏸ 하나 + 「쉼표 N」 배지 + 방향 전환, 아닐 때 워터마크가 같은 시간으로
+            교차 페이드, 카메라 경계선은 정적 장식 — U3)
   ui/permission/ ✅ PermissionScreen(첫 실행 속도 권한 안내)
   ui/park/  ✅ ParkScreen · PlaybackPanel(팩 제목·재생 버튼+진행 링·단계·신호 상태 — 각 묶음 private 조립 함수) ·
             TodayTally · TodayTimeline(오늘 쉼표만큼 점, 장식) · HowItWorks
   ui/component/ ✅ 화면 부품(아래 8절) + CommaWatermark · ProgressRing(정적 세그먼트)
   ui/theme/ ✅ CommaColors · CommaType · CommaSpace · CommaSize · CommaShape · CommaTheme · calcContrastRatio ·
-            HoldGlyphTransition(⏸ 1회성 전환) · WatermarkFadeTransition(워터마크 교차 페이드)
+            HoldGlyphTransition(⏸ 1회성 전환) · WatermarkFadeTransition(워터마크 교차 페이드) ·
+            HoldCountBadgeTransition(「쉼표 N」 500ms 페이드 — U3)
 app/src/debug/kotlin/app/blinkercomma/debug/  ✅ DemoInjectReceiver · toInjectedEvent (디버그 빌드 전용)
 app/src/main/assets/packs/en1/  ✅ 퍼블릭 도메인 낭독 팩(LibriVox, 38문장) + CREDITS.txt
 tools/      ✅ measure_signals.py · measure_plans.py · device.py(실측) · make_probe_pack.sh(측정용, 교체 전 썼음) · cut_pack.py(STT 타임스탬프로 문장 자르기)
@@ -137,6 +141,7 @@ demo/        ✅ conductor(한 컷 재생 · anchor = 실제 소리 시작) · r
 | `CommaWatermark` | D 화면이 쉼표가 아닐 때의 정적 쉼표 심볼(560dp, 12% 알파) — 애니메이션 없음, `WatermarkFadeTransition`(ui/theme)이 감싼다 |
 | `ProgressRing` | P 화면 재생 버튼 둘레의 정적 진행 링(280dp) — 지금 문장/전체 문장을 세그먼트로, 문장 전환 때만 갱신(ui_plan.md P1) |
 | `TodayTimeline`(ui/park) | 오늘 쉼표 횟수만큼 점(장식, 접근성 트리 제외) — `TallyNumber`가 이미 숫자로 전달하는 값의 보조 그래픽(ui_plan.md P0-4) |
+| `HoldCountBadge` | D 화면 ⏸ 옆 「쉼표 N」 — 오늘 쉼표 수, 호박색(M8 upgrade_plan 4-2 · UJ 공통 지적 3). 원칙 1(글자 0)의 유일한 의도적 예외 |
 | `TallyNumber` | 오늘 카운트 숫자 하나 + 라벨(낭독기는 한 줄) |
 | `SettingToggleRow`·`ToggleRowText` | 켬·끔 설정 한 줄 — 줄 전체가 누르는 곳(120dp), 스위치 + 「켬/끔」 글자 |
 | `StatusLine` | 「확인 안 됨」 신호 한 줄(빈 원 + 흐린 글자) |
