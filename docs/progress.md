@@ -173,7 +173,7 @@
 - **결함 1 대응**(demo 도구, `feat:` — 앱 코드 버그가 아니라 VC 쪽 산발적 드롭이라 앱을 못 고침): `demo/conductor.py`에 속도 PUT 확인·재시도(`set_speed`) 추가 — PUT 뒤 앱 로그의 `SpeedChanged`를 0.7초 기다렸다가 안 보이면 같은 PUT을 최대 2번 더 보낸다. 1차 구현은 "이미 목표 속도라 새 이벤트가 안 오는" 정상 케이스(컷 사이 `reset_car()` 직후)를 결함으로 오판해 리허설이 멈췄다 → `latest_speed_mps`로 전체 로그에서 마지막 값을 먼저 보고, 이미 같으면 재시도 없이 한 번만 보내도록 고침.
 - **결함 2 수정**(콘텐츠 팩 교체): LibriVox "The Aesop for Children" 섹션 13(archive.org `aesopforchildren_1308_librivox`, Public Domain Mark 1.0 — 메타데이터 `licenseurl` 확인)을 원본으로 받아(`tools/raw/`, 커밋 안 함) `tools/cut_pack.py`(신규)로 잘랐다. 설계서는 ffmpeg 무음 구간 검출을 적었지만 실제로는 word-level STT(whisper, 모델 small, `--word_timestamps`) 타임스탬프로 문장 끝(.!?)을 찾는 쪽으로 바꿨다 — 무음 검출보다 자막이 실제 발화와 안 어긋난다(SPEC 반영). 인트로·아웃트로 문장은 빼고(`--skip-start 1 --skip-end 1`) 오인식 2곳만 교정(`--fix`, 뜻은 안 바꿈: 「PECOCK」→「PEACOCK」, 「his evil lost」→「is evil lost」). 38문장·176.7초. `app/src/main/assets/packs/en1/pack.json`·`s01~s38.m4a`(기존 포맷과 동일 mono 22050Hz AAC 64k)·`CREDITS.txt`(출처 URL·sha256·라이선스·자르기 절차) 교체. `tools/README.md`(원본 데이터셋 1줄) 신규.
 - **릴리스 서명**: `app/build.gradle.kts`에 `signingConfigs`/`buildTypes.release` 추가 — 저장소 밖 `~/.blinker-comma/keystore.properties`가 있을 때만 서명(없으면 미서명 빌드, 커밋 0). 키스토어(`~/.blinker-comma/release.keystore`, PKCS12, DN에 실명 0)도 이번에 새로 만듦.
-- **릴리스에서도 차 신호 로그**(`app/.../service/CarEvents.kt`, `fix:` 아님 — 버그 아니라 D5 결함1 확인에 필요해서 뺀 것): `Log.i(TAG, "car $it")`를 감싸던 `BuildConfig.DEBUG`를 걷어냄. 이 줄이 없으면 릴리스 APK로 돌리는 conductor가 결함1 확인에 쓰는 `SpeedChanged` 로그를 못 봐 모든 속도 PUT이 거짓으로 실패 처리됨. logcat 전용 줄이라 화면 글자 0 원칙(원칙 6)과 무관.
+- **(되돌림) 릴리스 로그 상시 켜기**: `CarEvents.kt`의 `BuildConfig.DEBUG` 가드를 처음엔 걷어냈다(릴리스 APK로도 conductor 결함1 확인이 되게) → 보안 검토에서 "릴리스에서 속도·기어를 logcat에 상시 남기면 ADB 접근자에게 주행 행태가 샐 수 있다" 지적을 받고 즉시 되돌림. 결과: conductor의 속도 확인·재시도는 **디버그 APK에서만** 동작(원래부터 디버그 전용 도구이고 11/10 실촬영도 디버그 APK로 한다 — 문제 없음). 릴리스 APK는 리허설 대본 대신 설치→실행→권한 흐름만 손으로 확인.
 - `status_for_form.md` 신규 — 기능별 구현 완료(에뮬레이터 실측)/시연 주입/개발 계획 표.
 - README·SPEC·ARCHITECTURE 갱신(콘텐츠 팩 상태·APK 위치·테스트 수 119·cut_pack 방식).
 - **블라인드 위반 발견·조치**: `docs/qa_M1.md`의 결함 3번 줄이 블라인드 단어 목록(이름·회사명·이메일)을 grep 대상으로 그대로 타이핑해 놔서 `scripts/check.sh`의 블라인드 검사가 걸렸다. 작업 트리는 고쳤지만 **이미 커밋된 과거 커밋(94eb272, M1) 안에는 그 줄이 그대로 남아 있다** — push는 안 했지만(원칙상 금지), 제출 전 이 커밋을 포함한 히스토리 정리(스쿼시 또는 재작성)가 필요하다. 되돌리기 쉽지 않은 작업이라 이번엔 건드리지 않고 여기 기록만 한다.
@@ -181,8 +181,8 @@
 ### 실측 (에뮬레이터 2.1.0 · API 34 · `-no-audio`, 근거 `docs/logs/d5_*.txt`)
 - `scripts/check.sh .` → `tests OK (app 104, engine 119)` · `check OK`(블라인드 검사 포함 통과).
 - `./gradlew :app:assembleRelease` 성공 → `apksigner verify` v2 스킴 통과(v1/v3/v3.1/v4는 안 씀 — 기본 AGP 설정).
-- 디버그 APK로 리허설 1회(새 설치→권한→3컷) 전부 성공, 속도 PUT 재시도 0회 — `docs/logs/d5_rehearsal_logcat.txt`.
-- **릴리스 APK로도 리허설 1회** 전부 성공(CarEvents 로그 수정 뒤) — `docs/logs/d5_release_rehearsal_logcat.txt`, 녹화 저장소 밖 `../setup/build_shots/d5_release_rehearsal.mp4`.
+- 디버그 APK로 리허설 1회(새 설치→권한→3컷) 전부 성공, 속도 PUT 재시도 0회 — `docs/logs/d5_rehearsal_logcat.txt`, 녹화 저장소 밖 `../setup/build_shots/d5_rehearsal.mp4`.
+- 릴리스 APK: 새 설치 → 권한 안내 → [허용] → 시스템 창 허용 → P 화면까지 수동 확인, 크래시 로그(FATAL/AndroidRuntime) 0건 — `../setup/build_shots/d5_02_release_launch.png`(권한 안내) · `d5_03_release_park.png`(P 화면, 새 콘텐츠 팩 제목·출처 표시).
 - P 화면 캡처(`../setup/build_shots/d5_01_park_realpack.png`): 「낭독 1과」· 「1 / 38 문장」· 「낭독 출처 · The Aesop for Children — LibriVox(CC0)」 한 줄, 잘림·겹침 없음(A6 검사).
 - 콘텐츠 팩 38클립 durationMs가 실제 파일 길이(ffprobe)와 일치 확인(샘플 s01·s14·s37·s38).
 

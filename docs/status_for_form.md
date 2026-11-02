@@ -22,8 +22,8 @@
 | 첫 실행 속도 권한 안내(정차에서만, 1회) | 구현 완료(에뮬레이터 실측) | `docs/progress.md` D3 |
 | 오늘 문장 수·쉼표 수 실제 카운트 | 구현 완료(에뮬레이터 실측) | `setup/build_shots/d5_01_park_realpack.png`(16문장·3쉼표 — 전 세션 누적), `docs/qa_M1.md` 원칙 4 |
 | 콘텐츠 팩 — 퍼블릭 도메인 영어 낭독 38문장 | 구현 완료(D5) | LibriVox "The Aesop for Children"(Public Domain Mark 1.0). `app/src/main/assets/packs/en1/CREDITS.txt` |
-| 시연 대본 3컷 자동 재생(Virtual Console 연동) | 구현 완료(에뮬레이터 실측, 디버그·릴리스 APK 둘 다 확인) | `docs/logs/d5_rehearsal_logcat.txt`, `docs/logs/d5_release_rehearsal_logcat.txt` |
-| 릴리스 서명 APK | 구현 완료(D5) | `apk/CommaLane_깜빡이쉼표_release.apk` — `apksigner verify` v2 스킴 통과 |
+| 시연 대본 3컷 자동 재생(Virtual Console 연동) | 구현 완료(에뮬레이터 실측, 디버그 APK) | `docs/logs/d5_rehearsal_logcat.txt` |
+| 릴리스 서명 APK — 설치·실행·권한 흐름 | 구현 완료(D5, 에뮬레이터 실측) | `apk/CommaLane_깜빡이쉼표_release.apk` — `apksigner verify` v2 스킴 통과, 새 설치→권한→P 화면 크래시 0건(`setup/build_shots/d5_02_release_launch.png`·`d5_03_release_park.png`) |
 
 ## 개발 계획 (MVP 범위 밖 — 기획서 「개발 계획」란)
 
