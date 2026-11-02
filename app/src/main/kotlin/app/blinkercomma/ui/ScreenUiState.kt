@@ -19,8 +19,16 @@ sealed interface ScreenUiState {
         val isDemoInjected: Boolean,
     ) : ScreenUiState
 
-    /** 주행(D·R·N 또는 이동 중) — 글자 0 · 터치 0, 쉼표 중에만 ⏸ 하나(원칙 1). */
-    data class Drive(val isHoldGlyphOn: Boolean, val holdSide: HoldSide, val isDemoInjected: Boolean) : ScreenUiState
+    /**
+     * 주행(D·R·N 또는 이동 중) — 글자 0 · 터치 0, 쉼표 중에만 ⏸ 하나(원칙 1).
+     * [todayCommas]는 쉼표 중에만 「쉼표 N」 배지로 쓰인다(M8 upgrade_plan 4-2, 원칙 1의 유일한 의도적 예외).
+     */
+    data class Drive(
+        val isHoldGlyphOn: Boolean,
+        val holdSide: HoldSide,
+        val todayCommas: Int,
+        val isDemoInjected: Boolean,
+    ) : ScreenUiState
 
     /** 첫 실행 속도 권한 안내 — 정차에서만, 한 번만. */
     data object AskSpeedPermission : ScreenUiState

@@ -27,7 +27,7 @@
 | `ScreenInputs.toUiState` | app/ui/ScreenInputs.kt | 어느 화면(P·D·권한 안내)을 무엇으로 그리나 — 화면은 판정 없이 그리기만 |
 | 화면 부품 | app/ui/component/ | 목록은 `docs/ARCHITECTURE.md` 8절 — 화면 파일에서 `Text`·`Button`을 직접 꾸미지 않는다 |
 | `CommaColors`·`CommaType`·`CommaSpace`·`CommaSize`·`CommaShape` | app/ui/theme/ | 화면 값은 여기만(밖에서 `dp`·`sp`·`Color` import 금지 — detekt) |
-| `HoldGlyphTransition`·`WatermarkFadeTransition` | app/ui/theme/HoldGlyphTransition.kt | ⏸·워터마크 1회성 전환(같은 260ms/180ms로 교차) — 애니메이션은 여기만(밖에서 `androidx.compose.animation.*` import 금지) |
+| `HoldGlyphTransition`·`WatermarkFadeTransition`·`HoldCountBadgeTransition` | app/ui/theme/HoldGlyphTransition.kt | ⏸·워터마크 1회성 전환(260ms/180ms) · 「쉼표 N」 배지 페이드(500ms, U3) — 애니메이션은 여기만(밖에서 `androidx.compose.animation.*` import 금지) |
 | `replay`·`logs` | test/support/Replay.kt | 리듀서 리플레이(마지막 상태 + 효과 전부) |
 | `ReaderScene` | test/support/ReaderScene.kt | 기본 장면(D·40km/h·2번째 문장 읽는 중) + 이벤트 도우미 + `holding` |
 | `StageRun`·`readStageScript`·`parseStage` | test/support/ | 대본 TSV를 앱 흉내(클립 길이·마감 Tick)로 돌림 |
@@ -57,6 +57,7 @@
 | 화면 고르기(P·D·권한 안내)·이동 문턱 경계 3점·확인 안 됨 줄·첫 신호 대기·쉼표 방향(LEFT·RIGHT) | app/test ScreenInputsTest | 완료 |
 | ⏸ 진입 오프셋이 카메라 자리를 안 넘음(경계) | app/test CommaThemeFloorTest | 완료 |
 | P 원 버튼(쉼표 중·포커스 멈춤 = ▶, R8) | app/test ScreenPressTest | 완료 |
-| 화면 잘림·겹침 | 에뮬레이터 캡처(저장소 밖 build_shots 폴더 D3_*.png — JVM 테스트 아님) | 완료(D3 11장·U0 10장·U1 8장·U2 7장 — 상태 바뀔 때마다 갱신) |
+| 화면 잘림·겹침 | 에뮬레이터 캡처(저장소 밖 build_shots 폴더 D3_*.png — JVM 테스트 아님) | 완료(D3 11장·U0 10장·U1 8장·U2 7장·U3 8장 — 상태 바뀔 때마다 갱신) |
+| D 화면도 오늘 쉼표 카운트를 받는다 | app/test ScreenInputsTest | 완료(U3) |
 | 어댑터·플레이어·서비스 | 에뮬레이터 실측 `docs/signals_measured.md`(기기 리허설 — JVM 테스트 아님) | 완료(D2 실측) |
 | 시나리오 테스트를 실제 낭독 팩 길이로 | — | 미작성(낭독 팩 들어온 뒤) |

@@ -29,10 +29,10 @@
     <string name="tally_sentences_description">오늘 %1$d문장</string>
     <string name="tally_commas_description">쉼표 %1$d번</string>
 
-    <!-- 자동 재개 토글(R8) -->
+    <!-- 자동 재개 토글(R8) — 보조 문구는 핸들 키 폴백 경로를 명시(M8 upgrade_plan 4-1) -->
     <string name="auto_resume_title">자동 재개</string>
-    <string name="auto_resume_on_detail">레버가 돌아오면 다음 문장을 읽어요</string>
-    <string name="auto_resume_off_detail">핸들 재생 버튼을 눌러야 이어 읽어요</string>
+    <string name="auto_resume_on_detail">레버가 돌아오지 않아도 핸들 재생 버튼으로 바로 이어 들을 수 있어요</string>
+    <string name="auto_resume_off_detail">쉼표에서 멈추면 핸들 재생 버튼으로 다음 문장을 시작해요</string>
     <!-- 이름 주의: state_on/off는 Compose 라이브러리 이름과 겹쳐 한국어 기기에서 「사용」으로 바뀌었다(D3 캡처) -->
     <string name="toggle_state_on">켬</string>
     <string name="toggle_state_off">끔</string>
@@ -52,4 +52,6 @@
     <!-- D 화면 — 글자는 보이지 않고 화면 낭독기만 읽음 -->
     <string name="hold_glyph_description">쉼표 중</string>
     <string name="demo_injected">시연 주입</string>
+    <!-- D 화면 ⏸ 옆 쉼표 횟수 배지(M8 upgrade_plan 4-2) — P 화면 tally_commas와 같은 말, 원칙 1의 유일한 의도적 예외 -->
+    <string name="hold_count_badge">쉼표 %1$d</string>
 </resources>

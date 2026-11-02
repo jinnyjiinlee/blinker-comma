@@ -21,8 +21,8 @@ object CommaColors {
     /** 시연 주입 표시(디버그 빌드) — 호박색과 헷갈리지 않게 레몬색 + 테두리. */
     const val DEMO_INJECTED: Long = 0xFFFFEB66
 
-    /** 워터마크 불투명도 — ui_plan.md P0-3 「아주 옅게 12%」. */
-    const val WATERMARK_ALPHA: Float = 0.12f
+    /** 워터마크 불투명도 — U3: UJ 블라인드 심사 공통 지적 1(「거의 안 보일 정도로 옅다」) 반영, 12%→20%. */
+    const val WATERMARK_ALPHA: Float = 0.20f
 
     /** 진행 링의 못 채운 세그먼트 불투명도 — 워터마크보다 또렷하되 숫자·글자보다는 약하게. */
     const val RING_TRACK_ALPHA: Float = 0.22f

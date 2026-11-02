@@ -113,8 +113,20 @@ class ScreenInputsTest {
     fun `쉼표 중이면 D 화면에 쉼표 표시를 넘긴다`() {
         val holding = parked.copy(isHoldGlyphOn = true, holdSide = TurnSignal.RIGHT)
             .withReader { copy(gear = Gear.DRIVE) }
-        val expected = ScreenUiState.Drive(isHoldGlyphOn = true, holdSide = HoldSide.RIGHT, isDemoInjected = false)
+        val expected = ScreenUiState.Drive(
+            isHoldGlyphOn = true,
+            holdSide = HoldSide.RIGHT,
+            todayCommas = 0,
+            isDemoInjected = false,
+        )
         assertEquals(expected, holding.toUiState())
+    }
+
+    @Test
+    fun `D 화면도 오늘 쉼표 카운트를 엔진 카운트 그대로 받는다`() {
+        val holding = parked.copy(isHoldGlyphOn = true, holdSide = TurnSignal.RIGHT)
+            .withReader { copy(gear = Gear.DRIVE, tally = tally.copy(commas = 3)) }
+        assertEquals(3, (holding.toUiState() as ScreenUiState.Drive).todayCommas)
     }
 
     @Test

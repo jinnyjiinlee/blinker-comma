@@ -31,7 +31,8 @@ data class PackLabel(val title: String, val credit: String)
  * 기어도 속도도 모르면 P 화면 + 「확인 안 됨」 줄(쉼표 예약은 어차피 D가 확인돼야 걸린다).
  */
 fun ScreenInputs.toUiState(movingMinMps: Double = CommaCardParams.DEFAULT.movingMinMps): ScreenUiState = when {
-    reader.isDriving(movingMinMps) -> ScreenUiState.Drive(isHoldGlyphOn, holdSide.toHoldSide(), isDemoInjected)
+    reader.isDriving(movingMinMps) ->
+        ScreenUiState.Drive(isHoldGlyphOn, holdSide.toHoldSide(), reader.tally.commas, isDemoInjected)
     speedPermission == SpeedPermission.NOT_ASKED -> ScreenUiState.AskSpeedPermission
     else -> toPark()
 }
