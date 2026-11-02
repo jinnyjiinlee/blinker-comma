@@ -156,3 +156,31 @@ Pleos 다른 앱 아이콘들(모노크롬·2색 이하)과 톤이 맞고 식별
    - **다음 할 일(남음)**: 우선순위 4(P 화면 Spacer→고정 간격·오늘 쉼표 타임라인)와 P1 진행 링(5번)은 이번 라운드에 안 함 — ui_plan 3절 그대로 다음 라운드 후보.
 3. 변경 범위가 `ui/`·`session/`(앱 레이어) 안에 머물러 `:engine`(R1~R10)·신호 어댑터·대본(`demo/script`)은 건드리지 않았다 — 쉼표 판정 로직과 시연 3컷 시각(ⓐ~ⓓ)은 영향 없음(아래 4 참고).
 4. 컷 1·2·3 영상 시각 재확인 — **불필요로 판단**: 새 전환(260ms+180ms)은 `isHoldGlyphOn`이 이미 바뀐 뒤의 순수 시각 효과(Compose `AnimatedVisibility`)라 `WriteLog`·`PlayClip`·오디오 타이밍엔 관여하지 않는다(ⓐ~ⓓ는 로그·소리 시각 기준, 화면 전환과 무관). D4식 리허설 재녹화는 생략.
+
+## 9. U2 — 남은 우선순위 + 전환 다듬기 + P 화면 완성도 (구현 완료)
+
+대표 지시(11/2 20시 연장) 「허전한 부분은 ui ux 최대한 개선해서 이쁘게 해」에 이어, U1 「다음 할 일」에 남아 있던 두 항목(3절 P0-4·P1)을 마저 구현했다.
+
+1. ✓ **P0-4(P 화면 Spacer 정리 + 타임라인)**: `ParkScreen`의 `Spacer(Modifier.weight(1f))` 제거 → 왼쪽 컬럼 전체를
+   `Arrangement.spacedBy(CommaSpace.large, Alignment.CenterVertically)`로 바꿔 콘텐츠 묶음을 패널 높이에 맞춰
+   가운데로 모은다(기존엔 Spacer 하나가 흡수한 여백이 중간에 1/3 가까이 비어 보였음 — 2절 비평 재확인).
+   `TodayTimeline`(신규, `ui/park/`) — 오늘 쉼표 횟수만큼 점을 `TodayTally` 바로 위에 묶어(작은 간격) 큰 숫자의
+   보조 그래픽으로 둔다. 0이면 아무것도 안 그린다(원칙 4). 접근성 트리에선 뺀다(숫자 쪽에 이미 같은 값이 있어
+   중복 안내 방지).
+2. ✓ **P1(진행 링)**: `ProgressRing`(신규, `ui/component/`) — `PlaybackPanel`의 재생 버튼 둘레에 지금 문장/전체
+   문장을 정적 세그먼트로(Canvas `drawArc`, 세그먼트마다 작은 gap). Tick마다 다시 그리지 않고 Compose가
+   `sentenceNumber`/`sentenceCount`를 보고 문장 전환 시점에만 재구성 — 연속 회전 없음(원래 명세 그대로).
+   `PlaybackPanel`은 묶음별 private 조립 함수(`PackTitle`·`PlayButtonWithRing`·`PhaseStatus`·`SignalFooter`)로
+   나눠 함수 15줄 상한을 지켰다(기존 함수 하나에 전부 있던 걸 쪼갠 것 — 로직 변경 없음).
+3. ✓ **쉼표·재개 전환 다듬기(이번 라운드 추가 발견)**: U1의 `HoldGlyphTransition` 퇴장(fadeOut)이 명세(4절
+   표 「FastOutLinearIn」)와 달리 `tween()` 기본 이징(FastOutSlowIn)을 그대로 쓰고 있었다 — 등장·퇴장이 똑같은
+   커브라 "급가속 없이 들어와 매끄럽게 사라진다"는 설계 의도가 코드에 없었다. 등장 `FastOutSlowInEasing`·퇴장
+   `FastOutLinearInEasing`을 명시로 바꿔 수정. 또한 D 워터마크가 `if`로 즉시 사라지고 나타나 ⏸ 전환과 따로
+   놀았다(하드 컷) — `WatermarkFadeTransition`(신규, `ui/theme/HoldGlyphTransition.kt`)을 추가해 같은 260ms/180ms로
+   ⏸와 교차 페이드하게 해 "하나의 화면"처럼 보이게 했다.
+4. 색 토큰 1개 추가: `CommaColors.ringTrack`(진행 링의 못 채운 세그먼트, 22% 알파) — 숫자로 이미 전달되는 정보의
+   보조 그래픽이라 `signalDim`과 같은 근거로 대비 하한 대상 제외.
+5. 크기 토큰 3개 추가: `progressRingSize`(280dp)·`progressRingStroke`(14dp)·`timelineDot`(20dp).
+6. 범위는 여전히 `ui/`(앱 레이어) 안 — `:engine`·신호 어댑터·대본은 불변. 컷 1·2·3 시각 재확인 불필요(이유는
+   위 8절-4와 동일 — 화면 전환은 로그·오디오 타이밍에 관여하지 않음).
+7. 실측·캡처는 `docs/progress.md` U2 절 참고(상태 7장, `setup/build_shots/U2_*.png`).

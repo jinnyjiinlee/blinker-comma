@@ -281,3 +281,33 @@
 - ui_plan P0-4(P 화면 `Spacer(weight=1f)` → `CommaSpace.xlarge` 고정 + 오늘 쉼표 타임라인)·P1 진행 링(5번) — 다음 라운드.
 - 실차에서 측후방 카메라가 레버 방향과 무관하게 항상 왼쪽에 뜨는지는 여전히 미확인(U0부터 이어짐) — 이번 전환 방향(레버 쪽에서 진입)이 실차 카메라 위치와 시각적으로 안 겹치는지도 같이 확인 필요.
 - 94eb272 블라인드 히스토리 정리 — 대표 승인 대기, 11/15 제출 전 필수(기존 숙제, 이번 단계 영향 없음).
+
+## U2 (2026-11-02 20:46)
+
+### 한 일
+- 대표 지시(11/2 20시 연장) 「허전한 부분은 ui ux 최대한 개선해서 이쁘게 해」 대응 2라운드 — U1이 남긴 `ui_plan.md` P0-4(P 화면 Spacer 정리·오늘 쉼표 타임라인)·P1(진행 링)을 구현 + 전환 애니메이션을 명세대로 다듬었다.
+- `ProgressRing`(신규, `ui/component/`): P 화면 재생 버튼 둘레 정적 세그먼트 링(`Canvas.drawArc`) — 지금 문장/전체 문장만큼 채움, Tick마다 안 다시 그리고 Compose가 `sentenceNumber`/`sentenceCount` 바뀔 때만 재구성(설계 그대로 — 연속 회전 없음).
+- `TodayTimeline`(신규, `ui/park/`): 오늘 쉼표 횟수만큼 점 — `TallyNumber` 숫자의 보조 그래픽. 0이면 아무것도 안 그림(원칙 4), 같은 값이 숫자로 이미 있어 접근성 트리에선 뺌(중복 안내 방지).
+- `ParkScreen` 왼쪽 컬럼·`PlaybackPanel`의 `Spacer(Modifier.weight(1f))` 전부 제거 → `Arrangement.spacedBy(간격, Alignment.CenterVertically)`로 교체 — 콘텐츠 묶음이 패널 높이에 맞춰 가운데로 모여 U0가 지적한 "섹션 간 1/3 화면 높이 빈 공간"이 사라짐. `PlaybackPanel`은 묶음별 private 함수(`PackTitle`·`PlayButtonWithRing`·`PhaseStatus`·`SignalFooter`)로 쪼개 함수 15줄 상한(LongMethod threshold 16)을 지켰다 — 로직 변경 없이 분리만.
+- 전환 다듬기(이번 단계에서 새로 발견): U1의 `HoldGlyphTransition` 퇴장이 `tween()` 기본 이징(FastOutSlowIn)을 썼는데 ui_plan.md 4절 명세는 퇴장을 FastOutLinearIn으로 못박아 뒀었다 — 등장 `FastOutSlowInEasing`·퇴장 `FastOutLinearInEasing`을 명시해 고침. D 워터마크도 `if`로 즉시 나타나고 사라져 ⏸ 전환과 따로 놀았는데(하드 컷), `WatermarkFadeTransition`(신규, 같은 파일)을 추가해 같은 260ms/180ms로 ⏸와 교차 페이드하게 했다.
+- 신규 토큰: `CommaColors.ringTrack`(22% 알파, `signalDim`과 같은 근거로 대비 하한 제외) · `CommaSize.progressRingSize`(280dp)·`progressRingStroke`(14dp)·`timelineDot`(20dp).
+- `docs/ui_plan.md` 9절 신규(이번 구현 요약) · `docs/ARCHITECTURE.md`(패키지 지도·용어 사전·8절 부품 표) · `CONVENTIONS.md`(공통 부품·캡처 집계) 갱신.
+- 범위는 `ui/`(앱 레이어) 안에만 머물렀다 — `:engine`·신호 어댑터·대본(`demo/script`) 불변, 시연 3컷 시각(ⓐ~ⓓ)과 무관(U1과 같은 이유 — 화면 전환은 로그·오디오 타이밍에 관여 안 함).
+
+### 실측 (에뮬레이터 2.1.0 · API 34 · `-no-audio -no-window`, 디버그 APK, 실제 낭독 팩 — `setup/build_shots/U2_01~07_*.png` 7장, 저장소 밖)
+- `scripts/check.sh .` → `tests OK (app 110, engine 119)` · `check OK`(코드 변경 직후, 캡처 전) — 커밋 a410d8c.
+- **VC 신호 조작 전면 무응답 발견·해결**: 이번 단계 시작 시 `curl PUT .../vehicle/gear` 등이 전부 `{"error":"emulator_inactive"}`를 반환(기존에 알려진 "속도 PUT 산발적 무반응"과 달리 기어까지 포함한 전면 무응답). 원인은 `setup/T_results_1025.md` 5행에 이미 적혀 있던 「`/browser/session` 1초 심장박동 필요」 — 이번 세션엔 그 하트비트를 보내는 프로세스가 없어 VC가 "브라우저 없음"으로 판단해 쓰기를 막고 있었다. `demo/conductor.py`/`tools/measure_signals.py`의 `keep_vc_active`와 같은 방식으로 `POST /browser/session` 1초 간격 백그라운드 루프를 띄우자 즉시 해결(이후 기어·속도·레버 PUT 전부 정상). 작업 끝에 그 백그라운드 프로세스는 종료 확인(`ps` 재확인). 코드 영향 없음, 다음 라운드를 위한 기록.
+- 캡처 7장 전부 눈으로 확인 — 잘림·겹침·고아 단어 0:
+  - P 대기(`U2_01`) · P 낭독(`U2_02`): 진행 링이 1/38에서 아주 얇은 호 하나만 밝게(의도대로 거의 안 보임), 왼쪽 컬럼이 가운데로 모여 예전 1/3 공백이 사라짐, 오늘 쉼표 점(타임라인)이 큰 숫자 바로 위에 붙어 보임.
+  - D 읽는 중 워터마크(`U2_03`): 변화 없음(회귀 없음, U1과 동일 위치).
+  - D 쉼표 RIGHT(`U2_04`)·LEFT(`U2_06`): ⏸ 정착 위치·크기 동일(U0 발견 1 유지), 카메라와 안 겹침.
+  - D 재개 직후(`U2_05`, 핸들 키 시연 주입으로 재개): ⏸ 꺼지고 워터마크로 복귀, 끊기지 않고 자연스러움(육안).
+  - 속도 신호 확인 안 됨(`U2_07`, `pm revoke --user 10` 재현): **신규 관찰** — 포그라운드 앱의 런타임 권한을 `pm revoke`하면 시스템이 그 앱 프로세스를 강제 종료해 다른 화면(`ai.umos.drivingview`)으로 튕겨 나갔다(U1 때는 기록에 없던 동작 — 이번에 처음 명시적으로 확인). 앱을 다시 띄우고 3초 유예(D4 수정) 지난 뒤 「○ 속도 신호 확인 안 됨」 줄이 제자리(왼쪽 정렬, `SignalFooter`의 `fillMaxWidth()`로 패널 가운데 쏠림 없이)에 뜨는 것 확인. 끝나고 `pm grant --user 10`으로 원복.
+  - 권한 안내·시스템 다이얼로그·런처 아이콘·야간 테마: 이번 단계도 코드 불변(권한 안내)·미구현(야간, U0 5절 결론 유지)이라 재캡처 생략, 「확인 안 됨」으로 남김.
+- `TodayTally`가 이번 단계 중 실제 상호작용으로 7→9쉼표·58→84문장까지 늘어 `TodayTimeline` 점이 누적되는 걸 그대로 캡처로 확인(지어낸 숫자 아님, 세션 내 실제 조작 결과).
+
+### 남은 일
+- 진행 링을 바라보며 "38개 세그먼트가 실제 낭독 팩(38문장)보다 더 긴 팩으로 바뀌면 촘촘해 보이는지"는 다음 팩 교체 시 재확인.
+- 실차 카메라-레버 방향 무관 여부(U0부터 이어짐) — 여전히 미확인.
+- VC `/browser/session` 하트비트가 필요하다는 사실은 `T_results_1025.md`에 이미 있었지만 `tools/device.py`(수동 조작용 — `tap_text` 등)엔 하트비트 로직이 없다 — 다음에 VC로 수동 조작할 일이 있으면 먼저 하트비트부터 띄울 것(이번처럼 매번 원인 재탐색하지 않도록, 코드 변경은 이번 범위 밖으로 남김).
+- 94eb272 블라인드 히스토리 정리 — 대표 승인 대기, 11/15 제출 전 필수(기존 숙제, 이번 단계 영향 없음).
