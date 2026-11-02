@@ -256,3 +256,28 @@
 ### 남은 일
 - 대표 승인 대기: ui_plan.md 4절(애니메이션 재해석), 제안 전체(P0~P2 중 어디까지 이번 라운드에 넣을지).
 - 승인되면 U1: 토큰 추가 → `HoldGlyph` 방향성 전환 → `CommaWatermark`·`TodayTimeline`·`ProgressRing` 신규 부품 → 전 상태 재캡처·잘림 검사 → `CommaThemeFloorTest`류 좌표·대비 재검증 → 컷 1·2·3 영상 시각이 새 전환(260+180ms) 포함해도 5초 상한 안인지 D4식 리허설 2회 재확인 → `check.sh`.
+
+## U1 (2026-11-02 20:55)
+
+### 한 일
+- 대표 지시(11/2 20시, U1 착수 지시 자체가 ui_plan.md 4절 재해석 승인 — "쉼표·재개 순간의 부드러운 전환"·"깜빡이 방향과 같은 쪽에서 들어오는 쉼표 애니메이션" 명시) 대응: ui_plan.md 우선순위 1~3(전부 D 화면)을 구현 — 4번(P 화면 Spacer 정리)·P1 진행 링은 범위 밖으로 남김.
+- `app/blinkercomma/session/ReaderSession.kt`에 `holdSide: StateFlow<TurnSignal>` 추가 — `showGlyph`가 ⏸를 켜는 바로 그 순간의 `transition.state.lever`를 latch(레버가 ON일 때만 Holding 진입이 가능해 이 시점의 lever는 항상 LEFT/RIGHT). `:engine`은 건드리지 않음(Effect.ShowHoldGlyph 그대로).
+- `ui/ScreenUiState.kt`에 `HoldSide { LEFT, RIGHT }` 신규, `Drive`에 `holdSide` 필드 추가. `ui/ScreenInputs.kt`가 `TurnSignal → HoldSide`로 변환(OFF는 RIGHT 기본값 — ⏸가 꺼진 동안엔 화면에 안 쓰임). `CollectScreenUiState.kt`가 `session.holdSide` 수집해 배선.
+- `ui/theme/HoldGlyphTransition.kt`(신규) — ⏸의 1회성 전환을 감싸는 Composable. 등장 260ms(fadeIn + 레버 방향 쪽에서 `slideInHorizontally`, 오프셋 `CommaSize.holdGlyphEnterOffset` 120dp) · 퇴장 180ms(fadeOut만, 이동 없음). `androidx.compose.animation.*` import는 detekt 규칙상 `ui/theme/`에서만 허용 — 이 파일이 그 유일한 지점.
+- `ui/component/CommaWatermark.kt`(신규) — D 화면이 쉼표가 아닐 때(`!isHoldGlyphOn`)만 보이는 정적 쉼표 심볼(`ic_comma_mark` 재사용, 560dp, `CommaColors.signalDim` = SIGNAL 12% 알파). 장식이라 `contentDescription = null`, 대비 하한(`contrastPairs`/`indicatorPairs`) 대상에서 의도적으로 제외(ui_plan.md 7절).
+- `ui/drive/DriveScreen.kt`를 둘을 조립하도록 교체: `!isHoldGlyphOn`이면 워터마크, `HoldGlyphTransition(visible, enterFromLeft = holdSide == LEFT) { HoldGlyph() }`를 항상 배치해 Compose가 enter/exit을 관리.
+- 테스트: `ScreenInputsTest`에 레버 LEFT/RIGHT별 `holdSide` 매핑 테스트 2개 추가, 기존 쉼표 테스트에 `holdSide` 반영. `CommaThemeFloorTest`에 "⏸ 진입 애니메이션은 카메라 자리를 넘지 않는다" 경계 테스트 추가(앱 창 폭 1682dp는 D3 실측값을 테스트 상수로 — 코드에 토큰 없음).
+- 문서: ARCHITECTURE.md(용어 사전 2줄·패키지 지도·8절 화면 부품), CONVENTIONS.md(공통 부품·테스트 대장), ui_plan.md 8절에 ✓ + 다음 할 일 갱신.
+- 커밋 2개(`feat:` 코드, `docs:` 문서) — be7fd05 · 01b104a.
+
+### 실측 (에뮬레이터 2.1.0 · API 34 · `-no-audio -no-window`, 디버그 APK, 실제 낭독 팩 — `setup/build_shots/U1_*.png` 8장, 저장소 밖)
+- `scripts/check.sh .` → `tests OK (app 110, engine 119)` · `check OK`(코드 변경 직후, 캡처 전).
+- 캡처로 확인: P 대기(`U1_03`)·P 낭독(`U1_04`) 그대로(이번 범위 밖, 회귀 없음) · D 읽는 중 워터마크(`U1_05`, 옅은 쉼표 심볼이 카메라 자리 밖 오른쪽에 떠 있음, 잘림·겹침 없음) · D 쉼표 RIGHT(`U1_06`)·LEFT(`U1_07`) — **정착 위치·크기 완전히 동일**(발견 1 그대로 유지, 설계대로 — 궤적만 다르고 최종 모양은 같다) · D 재개 직후(`U1_08`, 핸들 키로 강제 재개 — ⏸ 꺼지고 워터마크 재등장, 카메라는 레버가 아직 물리적으로 ON이라 시스템이 계속 띄움, 앱 동작과 무관) · 속도 신호 확인 안 됨(`U1_09`, `pm revoke --user 10`로 재현 — 앱은 `--user 10`에서 실행되므로 `--user 10`을 꼭 줘야 함, 처음 `--user 0`으로 revoke했을 땐 반영 안 됨 — 끝나고 `pm grant --user 10`으로 원복).
+- 권한 안내·시스템 권한 다이얼로그·런처 아이콘은 이번 단계에서 코드를 안 건드려 재캡처 생략(U0 캡처 재사용 — D3→U0 때와 같은 판단).
+- 야간 테마는 여전히 미구현(U0 5절 결론 유지, NIGHT_MODE는 SPEC 신호 목록 밖) — 캡처 대상 없음, 「확인 안 됨」으로 남김.
+- 컷 1·2·3 리허설 재녹화는 생략 — 이번 변경은 `isHoldGlyphOn`이 이미 바뀐 뒤의 순수 Compose 시각 효과라 `WriteLog`·`PlayClip`·오디오 타이밍에 관여하지 않는다(엔진 레벨에서 동일 입력·동일 로그를 내는 것은 테스트 110/119 그대로 통과로 확인).
+
+### 남은 일
+- ui_plan P0-4(P 화면 `Spacer(weight=1f)` → `CommaSpace.xlarge` 고정 + 오늘 쉼표 타임라인)·P1 진행 링(5번) — 다음 라운드.
+- 실차에서 측후방 카메라가 레버 방향과 무관하게 항상 왼쪽에 뜨는지는 여전히 미확인(U0부터 이어짐) — 이번 전환 방향(레버 쪽에서 진입)이 실차 카메라 위치와 시각적으로 안 겹치는지도 같이 확인 필요.
+- 94eb272 블라인드 히스토리 정리 — 대표 승인 대기, 11/15 제출 전 필수(기존 숙제, 이번 단계 영향 없음).
