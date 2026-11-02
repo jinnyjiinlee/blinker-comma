@@ -6,7 +6,10 @@ import app.blinkercomma.engine.reader.ReaderPhase
 import app.blinkercomma.engine.reader.ReaderState
 import app.blinkercomma.engine.signal.Gear
 
-/** [toUiState] 입력 묶음 — 엔진 상태 + 앱 쪽 상태(설정·⏸·시연 주입·권한·팩 글자). */
+/**
+ * [toUiState] 입력 묶음 — 엔진 상태 + 앱 쪽 상태(설정·⏸·시연 주입·권한·팩 글자).
+ * [isAwaitingFirstSignals]: 화면을 막 띄워 첫 콜백을 기다리는 중 — 이때 null은 「못 받음」이 아니라 「아직 모름」이다.
+ */
 data class ScreenInputs(
     val reader: ReaderState,
     val isAutoResume: Boolean,
@@ -14,6 +17,7 @@ data class ScreenInputs(
     val isDemoInjected: Boolean,
     val speedPermission: SpeedPermission,
     val pack: PackLabel,
+    val isAwaitingFirstSignals: Boolean = false,
 )
 
 /** 팩에서 화면이 보여 주는 글자 둘 — 깨진 팩이면 빈 글자(줄이 숨는다). */
@@ -41,13 +45,15 @@ private fun ScreenInputs.toPark() = ScreenUiState.Park(
     todaySentences = reader.tally.sentences,
     todayCommas = reader.tally.commas,
     isAutoResume = isAutoResume,
-    missingSignals = listOfNotNull(
-        MissingSignal.GEAR.takeIf { reader.gear == null },
-        MissingSignal.SPEED.takeIf { reader.speedMps == null },
-    ),
+    missingSignals = if (isAwaitingFirstSignals) emptyList() else reader.missingSignals(),
     packTitle = pack.title,
     credit = pack.credit,
     isDemoInjected = isDemoInjected,
+)
+
+private fun ReaderState.missingSignals() = listOfNotNull(
+    MissingSignal.GEAR.takeIf { gear == null },
+    MissingSignal.SPEED.takeIf { speedMps == null },
 )
 
 private fun ReaderPhase.toPlayback(): Playback = when (this) {

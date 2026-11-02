@@ -97,6 +97,12 @@ class ScreenInputsTest {
     }
 
     @Test
+    fun `앱을 막 띄워 첫 신호를 기다리는 동안엔 기어를 몰라도 확인 안 됨 줄이 없다`() {
+        val justLaunched = parked.copy(isAwaitingFirstSignals = true).withReader { copy(gear = null) }
+        assertEquals(emptyList(), justLaunched.park().missingSignals)
+    }
+
+    @Test
     fun `신호를 다 받으면 확인 안 됨 줄이 없다`() {
         assertEquals(emptyList(), parked.park().missingSignals)
     }
