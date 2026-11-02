@@ -191,3 +191,24 @@
 - 콘텐츠 팩 교체로 컷 1 영상 시각(⏸ ⓐ~ⓓ)이 바뀜(문장 A=s02, 2.63초) — 11/10 실촬영 대본 재검토.
 - 시나리오 테스트(`engine/src/test/resources/stage_pack.json`)는 여전히 합성 길이 — 실제 팩 길이로 바꾸는 건 CONVENTIONS 테스트 대장에 미작성으로 남아 있음(이번 범위 밖).
 - 42dot 문의(레버 자동 복귀·자동 재개 해석) 여전히 대표 승인 대기.
+
+## M2 (2026-11-02 19:02)
+
+### 한 일
+- 최종 검수 담당(Mason): qa_M1 결함 3건 재현 절차로 전부 재확인(코드 수정 0, 문서만 커밋) · release APK(`apk/`) 새 설치 검증 · 시연 대본 리허설 3회(요구 2회 + 컷2 재현성 확인용 1회, 디버그 APK) · `status_for_form.md` 19행 전수 대조. 결과 `docs/qa_M2.md`.
+
+### 실측
+- `scripts/check.sh .` → `tests OK (app 104, engine 119)` · `check OK`.
+- 결함 1(VC 속도 무반응): 리허설 3연속 재현 절차 — 3/3 성공, 재발 0(스크래치패드 `qa_m2_defect1_run1~3_logcat.txt`, 세션 종료로 사라짐).
+- 결함 2(콘텐츠 팩): `pack.json`·`CREDITS.txt`·release APK 화면 캡처로 실제 낭독 38문장 팩 확인, probe 문자열 0건.
+- 결함 3(팩 끝+레버 ON 경계): **실제 38문장 팩으로 재현** — s=38 재생 중 BlinkRight ON → `clipEnd s=38 lever=ON → hold` 정상 발생(qa_M1 때의 "pack end → stop" 재발 0) → OFF 0.8초 뒤 `play s=1`로 재개 확인.
+- **새 발견(결함 4, 중)**: 리허설 3회 교차비교(`rehearsal_summary.py`, 1v2·2v3·1v3)에서 컷 2(cut2_wait_go)의 `turnSignal=OFF` 도착 시각이 매회 0.3~0.5초씩 어긋남(D4 동일성 기준 ≤0.15초 초과, 3비교 전부). conductor 자체 `late=`는 정상(4~11ms) — VC 신호 전달 쪽 문제로 보임, 결함 1과 같은 계열이나 turn-signal PUT엔 재시도 로직이 없음. 코드 수정 안 함, `docs/qa_M2.md`에 재현 절차·근거 기록.
+- release APK: `apksigner verify` v2 통과·DN 실명 0, `application-debuggable` 없음 확인. 새 설치→권한→P 화면 크래시 0, `CommaSignal` 태그에 신호 값 로그 0건(정적 대기 문구 1줄만) — e71b2b8 되돌림이 release 빌드에 실제 반영됨을 재확인.
+- 시연 리허설 최종본: `setup/build_shots/rehearsal_final.mp4`(84.45초, 저장소 밖). 컷 1 영상 시각(ⓐ2.0·ⓑ2.64·ⓒ3.7~3.8·ⓓ4.5~4.6초, 3회 평균)이 SPEC 목표와 거의 일치 — D5가 남긴 "컷 1 시각 재검토" 숙제는 이 결과로 닫아도 됨.
+- 블라인드 히스토리 위반(94eb272): `git show 94eb272 -- docs/qa_M1.md`로 재확인 — **여전히 미해결**, 이번에도 손대지 않음(대표 확인 필요, 되돌리기 어려운 작업).
+- `status_for_form.md` 19행 대조 — 18행 실제와 일치, 1행(시연 대본 자동 재생)은 기능상 맞지만 결함 4 캐치업 참고 필요(표 자체는 수정 불필요로 판단).
+
+### 남은 일
+- 결함 4(컷 2 VC 신호 drift) — conductor `play_vc`에도 확인·재시도 추가 검토(적용은 개발 담당, 11/10 전).
+- 94eb272 블라인드 히스토리 정리 — 대표 승인 대기, 11/15 제출 전 필수.
+- 그 외는 progress.md D5 「남은 일」과 동일(42dot 문의, stage_pack.json 실제 길이 전환 등 — 이번 범위 밖).
