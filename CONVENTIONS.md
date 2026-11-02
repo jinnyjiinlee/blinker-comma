@@ -18,7 +18,7 @@
 | `toWriteLog(ReaderLog)` | engine/log/LogFormat.kt | 로그 줄 효과 — 글자는 `ReaderLog.line` |
 | `toPackFile`·`classifyPackProblems` | engine/pack/ | 팩 JSON 읽기·검사 |
 | `toTurnSignal`·`toGear` | app/vehicle/VehicleMapping.kt | Pleos 값 → 엔진 값 |
-| `ReaderSession.onEvent`·`onSoundStarted` | app/session/ReaderSession.kt | 엔진에 이벤트 넣기(메인 스레드) · 실제 소리 시작 알림 |
+| `ReaderSession.onEvent`·`onSoundStarted`·`holdSide` | app/session/ReaderSession.kt | 엔진에 이벤트 넣기(메인 스레드) · 실제 소리 시작 알림 · ⏸ 켜질 때 레버 방향 latch |
 | `carEvents(context, vehicle)` | app/service/CarEvents.kt | 차 신호 3종 → 엔진 이벤트(실패한 신호는 「확인 안 됨」 로그) |
 | `monotonicNow()` | app/Clock.kt | 이벤트 시각(단조) |
 | `ClipPlayer.play`·`pause` | app/player/ClipPlayer.kt | 문장 재생·멈춤 — MediaPlayer는 직접 부르지 말고 이것만 |
@@ -27,6 +27,7 @@
 | `ScreenInputs.toUiState` | app/ui/ScreenInputs.kt | 어느 화면(P·D·권한 안내)을 무엇으로 그리나 — 화면은 판정 없이 그리기만 |
 | 화면 부품 | app/ui/component/ | 목록은 `docs/ARCHITECTURE.md` 8절 — 화면 파일에서 `Text`·`Button`을 직접 꾸미지 않는다 |
 | `CommaColors`·`CommaType`·`CommaSpace`·`CommaSize`·`CommaShape` | app/ui/theme/ | 화면 값은 여기만(밖에서 `dp`·`sp`·`Color` import 금지 — detekt) |
+| `HoldGlyphTransition` | app/ui/theme/HoldGlyphTransition.kt | ⏸ 1회성 전환(애니메이션은 여기만 — 밖에서 `androidx.compose.animation.*` import 금지) |
 | `replay`·`logs` | test/support/Replay.kt | 리듀서 리플레이(마지막 상태 + 효과 전부) |
 | `ReaderScene` | test/support/ReaderScene.kt | 기본 장면(D·40km/h·2번째 문장 읽는 중) + 이벤트 도우미 + `holding` |
 | `StageRun`·`readStageScript`·`parseStage` | test/support/ | 대본 TSV를 앱 흉내(클립 길이·마감 Tick)로 돌림 |
@@ -53,7 +54,8 @@
 | 놓기 순서(끝난 문장은 다음 준비 뒤 · 멈춤은 바로) | app/test PlayerHandoffTest | 완료 |
 | 리허설 2회 동일(로그 줄·시각 ≤ 0.15초) | demo/rehearsal_summary.py — 기기 리허설 | 기기 리허설 2/2(D4 5·6회차) |
 | 화면 하한(글자 24sp·대비 4.5·햇빛 3·터치 76dp·⏸ 96dp) | app/test CommaThemeFloorTest | 완료 |
-| 화면 고르기(P·D·권한 안내)·이동 문턱 경계 3점·확인 안 됨 줄·첫 신호 대기 | app/test ScreenInputsTest | 완료 |
+| 화면 고르기(P·D·권한 안내)·이동 문턱 경계 3점·확인 안 됨 줄·첫 신호 대기·쉼표 방향(LEFT·RIGHT) | app/test ScreenInputsTest | 완료 |
+| ⏸ 진입 오프셋이 카메라 자리를 안 넘음(경계) | app/test CommaThemeFloorTest | 완료 |
 | P 원 버튼(쉼표 중·포커스 멈춤 = ▶, R8) | app/test ScreenPressTest | 완료 |
 | 화면 잘림·겹침 | 에뮬레이터 캡처(저장소 밖 build_shots 폴더 D3_*.png — JVM 테스트 아님) | 완료(D3 캡처 11장) |
 | 어댑터·플레이어·서비스 | 에뮬레이터 실측 `docs/signals_measured.md`(기기 리허설 — JVM 테스트 아님) | 완료(D2 실측) |

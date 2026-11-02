@@ -151,7 +151,8 @@ Pleos 다른 앱 아이콘들(모노크롬·2색 이하)과 톤이 맞고 식별
 
 ## 8. 다음 단계 (U1 이후, 코드 작업 — 대표 승인 대기 항목)
 
-1. **승인 필요**: SPEC 원칙 1 "애니메이션 0"을 "지속 루프 0 + 사건 1회성 전환 허용"으로 재해석(4·5절) — 이 문서의 가장 큰 결정 사항.
-2. 승인되면: `CommaSize`·`CommaColors` 토큰 추가 → `HoldGlyph` 방향성 전환 → `CommaWatermark`·`TodayTimeline`·`ProgressRing` 신규 부품 → 전체 상태 재캡처(`setup/build_shots/U1_*.png`) → `CommaThemeFloorTest`류로 좌표·대비 재검증 → `check.sh`.
-3. 변경 범위가 `ui/` 안에 머물러 `:engine`(R1~R10)·신호 어댑터·대본(`demo/script`)은 건드리지 않는다 — 쉼표 판정 로직과 시연 3컷 시각(ⓐ~ⓓ)은 영향 없음.
-4. 컷 1·2·3 영상 시각(M2 최종 ⓐ2.0·ⓑ2.64·ⓒ3.7~3.8·ⓓ4.5~4.6초)에 새 전환(260ms+180ms)이 들어가도 5초 상한 안에 들어오는지 D4식 리허설 2회로 재확인 필요 — 11/8 동결 전.
+1. ✓ **승인됨**(대표 지시 11/2 20시, U1 착수 지시 자체가 승인 — "쉼표·재개 순간의 부드러운 전환"·"깜빡이 방향과 같은 쪽에서 들어오는 쉼표 애니메이션"을 명시): SPEC 원칙 1 "애니메이션 0"을 "지속 루프 0 + 사건 1회성 전환 허용"으로 재해석(4·5절).
+2. ✓ U1에서 구현(우선순위 1~3, 주행 화면): `CommaSize.holdGlyphEnterOffset`·`watermarkCommaSize`·`CommaColors.signalDim` 토큰 추가 → `HoldGlyphTransition`(ui/theme, 레버 방향 쪽 260ms 슬라이드+페이드 진입·180ms 페이드 퇴장) → `HoldGlyph`를 그 안에서 조립 → `CommaWatermark` 신규 부품(D 읽는 중 12% 알파 정적 쉼표) → `ReaderSession.holdSide`(⏸ 켜질 때 레버 방향 latch, 앱 레이어 — engine 불변) → `ScreenUiState.HoldSide`/`ScreenInputs.holdSide` 배선 → 전체 상태 재캡처(`setup/build_shots/U1_*.png`, 8장: P 대기·P 낭독·D 낭독(워터마크)·D 쉼표 좌/우·D 재개 직후·속도 확인 안 됨) → `CommaThemeFloorTest`에 ⏸ 진입 오프셋 경계 테스트 추가 → `check.sh`(tests OK app 110·engine 119) 통과.
+   - **다음 할 일(남음)**: 우선순위 4(P 화면 Spacer→고정 간격·오늘 쉼표 타임라인)와 P1 진행 링(5번)은 이번 라운드에 안 함 — ui_plan 3절 그대로 다음 라운드 후보.
+3. 변경 범위가 `ui/`·`session/`(앱 레이어) 안에 머물러 `:engine`(R1~R10)·신호 어댑터·대본(`demo/script`)은 건드리지 않았다 — 쉼표 판정 로직과 시연 3컷 시각(ⓐ~ⓓ)은 영향 없음(아래 4 참고).
+4. 컷 1·2·3 영상 시각 재확인 — **불필요로 판단**: 새 전환(260ms+180ms)은 `isHoldGlyphOn`이 이미 바뀐 뒤의 순수 시각 효과(Compose `AnimatedVisibility`)라 `WriteLog`·`PlayClip`·오디오 타이밍엔 관여하지 않는다(ⓐ~ⓓ는 로그·소리 시각 기준, 화면 전환과 무관). D4식 리허설 재녹화는 생략.
