@@ -74,7 +74,7 @@ road-interpreter `engine/signal/*`·`output/Transition`·테스트 `support/Repl
 | `output/Effect.kt` · `Transition.kt` | `PlayClip(index, fromStart)` · `PauseClip` · `ShowHoldGlyph(isOn)` · `WriteLog(line)` · `SaveTally` | — |
 | `tally/ReadingTally.kt` | `ReadingTally(sentences, commas)` — 문장 완료·쉼표 카운트. 날짜 키는 app이 넘김(엔진은 날짜를 모름) | 쉼표 수 ≤ 레버 ON 구간 수 |
 | `pack/SentencePack.kt` · `PackFile.kt` · `ClassifyPackProblems.kt` | 콘텐츠 팩 JSON(kotlinx.serialization): `title`(≤6자) · `credit` · `clips[{file, text, durationMs}]` → 문제 목록(제목 6자 초과·클립 0개·길이 0·파일 중복) | 정상 `validJson` + 한 칸씩 깨기 |
-| `log/ToLogLine.kt` | 이벤트·효과 → 위 로그 줄 문자열 | ⓐ~ⓓ 문자열 그대로 |
+| `log/ReaderLog.kt` · `LogFormat.kt` (D1: ToLogLine → 줄 종류마다 `line`) | 이벤트·효과 → 위 로그 줄 문자열 | ⓐ~ⓓ 문자열 그대로 |
 | 테스트 `scenario/Cut1…Cut3Test.kt` + `CancelBeforeEndTest` · `MidSentenceHoldTest` · `FocusLossTest` | `demo/script/cut*.tsv`를 그대로 읽어 엔진 리플레이 → 효과·로그 줄·카운트 비교 | 매 커밋 |
 
 ## app 부품 (`:app`)
@@ -83,7 +83,7 @@ road-interpreter `engine/signal/*`·`output/Transition`·테스트 `support/Repl
 | `vehicle/PleosVehicleSource.kt` · `VehicleMapping.kt` | 깜빡이·기어 콜백 → `Flow<CarEvent>` (조향·문·좌석 제거) | road-interpreter 복사·축소 |
 | `vehicle/CarSpeedSource.kt` | AAOS 속도 → `SpeedChanged` | road-interpreter 복사 |
 | `player/ClipPlayer.kt` | `MediaPlayer` 1개로 클립 재생·pause·완료 → `ClipEnded`. 완료 콜백이 안 오면 길이 타이머(방식은 로그에) | road-interpreter `VoiceOut.playRecording` 참고 |
-| `service/ReaderService.kt` | `MediaBrowserServiceCompat` + `MediaSessionCompat`(Pleos Music/Audio 필수 MBS). 신호·플레이어·키 이벤트 → `reduce` → 효과 실행. 재생 시작 때 `startForeground`. `Tick` 100ms(재생/멈춤 중에만) | road-interpreter `RoadWatchService` 구조 참고 |
+| `service/ReaderService.kt` | `MediaBrowserServiceCompat` + `MediaSessionCompat`(Pleos Music/Audio 필수 MBS). 신호·플레이어·키 이벤트 → `reduce` → 효과 실행. 재생 시작 때 `startForeground`. `Tick`은 `ReaderState.nextDeadline(params)` 시각에 1회(D1 변경 — 100ms 폴링이면 로그 `OFF held`가 0.80~0.89로 흔들림) | road-interpreter `RoadWatchService` 구조 참고 |
 | `service/AudioFocusGate.kt` | 재생 시 GAIN 요청, 변화 → `FocusChanged` | — |
 | `data/PackRepository.kt` · `TallyStore.kt` | 에셋 팩 로드 · 오늘 카운트 저장(SharedPreferences, 날짜 키) | — |
 | `ui/` (Compose) | 아래 화면 3개 + 테마. `distractionOptimized` 메타 | road-interpreter `ui/component`·`theme` 참고 |
@@ -101,7 +101,7 @@ road-interpreter `engine/signal/*`·`output/Transition`·테스트 `support/Repl
 - 자르기: 오프라인 스크립트(`tools/cut_pack.py`, ffmpeg 무음 구간 검출) → `assets/packs/en1/pack.json` + `s01.ogg…`. 원본 출처 URL·라이선스는 `assets/packs/en1/CREDITS.txt`.
 
 ## 시연 3컷 대본 (Virtual Console로 재생 — `demo/script/cutN_*.tsv`)
-형식: `at_s ⇥ hand ⇥ signal ⇥ value ⇥ memo` (road-interpreter 형식). hand = `vc`(VC 웹 API) · `app`(P 화면 탭 — 녹화 전 준비만) · `adb`(키 주입 = 시연 주입) · **`anchor`(새로 추가: logcat에 해당 줄이 찍힐 때까지 기다린 뒤 그 시각을 0으로 다시 잡음)**. conductor는 road-interpreter `demo/conductor.py`를 복사해 `anchor` 행을 추가한다. 같은 TSV를 시나리오 테스트가 읽는다(anchor는 테스트에선 해당 이벤트 시각으로 치환).
+형식: `at_s ⇥ hand ⇥ signal ⇥ value ⇥ memo` (road-interpreter 형식). D1 확정: `at_s`는 숫자(바로 위 anchor부터 초) · `end-X`(anchor 문장이 끝나기 X초 전, 길이는 pack.json) · `-`(anchor 줄) — 세부는 `docs/ARCHITECTURE.md` 6절. hand = `vc`(VC 웹 API) · `app`(P 화면 탭 — 녹화 전 준비만) · `adb`(키 주입 = 시연 주입) · **`anchor`(새로 추가: logcat에 해당 줄이 찍힐 때까지 기다린 뒤 그 시각을 0으로 다시 잡음)**. conductor는 road-interpreter `demo/conductor.py`를 복사해 `anchor` 행을 추가한다. 같은 TSV를 시나리오 테스트가 읽는다(anchor는 테스트에선 해당 이벤트 시각으로 치환).
 컷 1·2 = 1분 영상, 컷 3 = 2차 PT 15초 시연(영상 밖 — M6 사회 결정).
 
 ### 컷 1 — 첫 5초 「숨 참기」 (영상 0.0~5.0초)
@@ -128,6 +128,7 @@ road-interpreter `engine/signal/*`·`output/Transition`·테스트 `support/Repl
 | 4.5 | vc | turn-signal Off | ⓒ |
 | 5.3 | — | — | ⓓ 다음 문장 · ⏸ 꺼짐 |
 - 근거: 같은 순서(속도 0 → RIGHT → 8.33m/s)가 run2 108→109→112행에 이미 있다.
+- D1 대본(`demo/script/cut2_wait_go.tsv`): 출발은 「다음 문장 시작」 anchor + `end-1.0`으로 넣는다 — 고정 4.0초면 문장 길이에 따라 예약 뒤 2.5초 상한에 걸려 문장 중간에서 멈출 수 있다. OFF는 hold anchor + 0.5초, ⓓ는 +1.3초.
 
 ### 컷 3 — 「자동 재개 끔」 + 핸들 키 (2차 PT 15초, 영상 밖)
 준비: P에서 「자동 재개 끔」 탭 → ▶ → VC 기어 D · 속도 40.
@@ -136,8 +137,9 @@ road-interpreter `engine/signal/*`·`output/Transition`·테스트 `support/Repl
 | anchor | — | `clipStart` | — |
 | 1.0 | vc | turn-signal BlinkRight | armed → 문장 끝 hold · ⏸ |
 | 4.0 | vc | turn-signal Off | `autoResume=off → keep hold` · ⏸ 유지(글자 안내 0) |
-| 6.0 | adb | `input keyevent 85` (**시연 주입** — 핸들 ▶❙❙ 대역) | `mediaKey PLAY_PAUSE → play s=…` · ⏸ 꺼짐 |
+| 6.0 | adb | `input keyevent 85` (**시연 주입** — 핸들 ▶❙❙ 대역) | `mediaKey PLAY → play s=…` · ⏸ 꺼짐 (D1: PLAY_PAUSE 키는 MediaSession이 멈춤 중이면 onPlay로 바꿔 줘서 엔진엔 PLAY로 들어옴) |
 | 8.0 | vc | speed 0 → gear P | P 화면 「오늘 N문장 · 쉼표 M번」(실제 카운트) |
+- D1 대본(`demo/script/cut3_key_resume.tsv`): BlinkRight는 `end-1.0`, OFF·키·정차는 hold anchor + 1.0·3.0·5.0/5.5초.
 - 키 수신이 ❌이면(D2 실측) 컷 3은 접고 PT 답을 「MediaSession 표준 미디어 키 경로(문서)」로만 한다 — 그때 「자동 재개 끔」 모드의 재개 수단은 P의 ▶뿐이라 컷 3 영상화 불가.
 
 ## 11/8까지 범위 (MVP — 1인+AI 약 20시간)
