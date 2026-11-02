@@ -23,9 +23,9 @@ if git ls-files -co --exclude-standard -- '*.kt' | grep -v '/ui/' | xargs grep -
     echo '✗ km/h는 화면(ui/)에서만 — 엔진·카드는 m/s'; exit 1
 fi
 # set -e는 && 목록 안 실패로 멈추지 않는다 — ruff 실패가 「check OK」로 지나가던 구멍(10/25)
-if [ -d tools ]; then
-    uvx ruff@0.17.2 check tools/ || { echo '✗ ruff check 실패'; exit 1; }
-    uvx ruff@0.17.2 format --check tools/ || { echo '✗ ruff format — uvx ruff@0.17.2 format tools/'; exit 1; }
+if [ -d tools ] && [ -d demo ]; then
+    uvx ruff@0.17.2 check tools/ demo/ || { echo '✗ ruff check 실패'; exit 1; }
+    uvx ruff@0.17.2 format --check tools/ demo/ || { echo '✗ ruff format — uvx ruff@0.17.2 format tools/ demo/'; exit 1; }
 fi
 # 화면 문자열은 strings.xml로 (Text("…") 리터럴 금지)
 if grep -rnE 'Text\(\s*"' --include='*.kt' */src/main/kotlin 2>/dev/null; then
