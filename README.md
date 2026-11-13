@@ -36,7 +36,7 @@ python3 demo/rehearsal_summary.py rehearsal_log_1.txt rehearsal_log_2.txt   # �
 | 최소 / 대상 | minSdk 28 · Kotlin 2.0.21 · Gradle 8.13 · JDK 21 |
 | 권한 | `pleos.car.permission.CAR_LIGHTS`(깜빡이) · `CAR_DRIVE`(기어) · `android.car.permission.CAR_SPEED`(런타임 — 에뮬레이터 수동 허용은 `adb shell pm grant --user 10 app.blinkercomma android.car.permission.CAR_SPEED`) · 포그라운드 서비스(미디어 재생) · 알림 |
 | 신호 실측 | `docs/signals_measured.md` — 이 앱 기준 에뮬레이터 실측(깜빡이·기어·속도·핸들 키·오디오 포커스) |
-| 검사 | `scripts/check.sh .` = ktlint · detekt(타입 분석) · 단위·시나리오 테스트 · 커버리지 · Lint · 파일 크기 · ruff → 현재 `tests OK (app 104, engine 119)` |
+| 검사 | `scripts/check.sh .` = ktlint · detekt(타입 분석) · 단위·시나리오 테스트 · 커버리지 · Lint · 파일 크기 · ruff → 현재 `tests OK (app 118, engine 119)` |
 | 리허설 | 새 설치 → 권한 → 3컷 자동 재생을 연속 2회 돌려 앱 로그 줄·시각이 같은지(차이 ≤ 0.15초) 확인 — `docs/progress.md` D4 |
 
 - 소리: 에뮬레이터를 `-no-audio`로 돌리므로 소리는 녹음되지 않는다. 문장 끝은 재생 완료 콜백이 아니라 콘텐츠 팩의 문장 길이 시계로 판정한다(콜백이 에뮬레이터에서 일찍·늦게 와서 — 실측 근거는 `docs/signals_measured.md`).
