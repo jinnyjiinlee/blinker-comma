@@ -39,7 +39,7 @@ fun ParkScreen(state: ScreenUiState.Park, actions: ParkActions, modifier: Modifi
             verticalArrangement = Arrangement.spacedBy(CommaSpace.large, Alignment.CenterVertically),
         ) {
             BrandHeader()
-            HowItWorks(Modifier.padding(top = CommaSpace.large))
+            HowItWorks(state.isAutoResume, Modifier.padding(top = CommaSpace.large))
             Column(verticalArrangement = Arrangement.spacedBy(CommaSpace.small)) {
                 TodayTimeline(state.todayCommas)
                 TodayTally(state.todaySentences, state.todayCommas)

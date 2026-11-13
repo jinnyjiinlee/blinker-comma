@@ -57,6 +57,7 @@
 | 화면 고르기(P·D·권한 안내)·이동 문턱 경계 3점·확인 안 됨 줄·첫 신호 대기·쉼표 방향(LEFT·RIGHT) | app/test ScreenInputsTest | 완료 |
 | ⏸ 진입 오프셋이 카메라 자리를 안 넘음(경계) | app/test CommaThemeFloorTest | 완료 |
 | P 원 버튼(쉼표 중·포커스 멈춤 = ▶, R8) | app/test ScreenPressTest | 완료 |
+| P 사용법 3번 줄 = 자동 재개 설정(끔 = 핸들 재생 버튼) | app/test HowItWorksTest | 완료 |
 | 화면 잘림·겹침 | 에뮬레이터 캡처(저장소 밖 build_shots 폴더 D3_*.png — JVM 테스트 아님) | 완료(D3 11장·U0 10장·U1 8장·U2 7장·U3 8장 — 상태 바뀔 때마다 갱신) |
 | D 화면도 오늘 쉼표 카운트를 받는다 | app/test ScreenInputsTest | 완료(U3) |
 | 어댑터·플레이어·서비스 | 에뮬레이터 실측 `docs/signals_measured.md`(기기 리허설 — JVM 테스트 아님) | 완료(D2 실측) |
