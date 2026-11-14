@@ -22,14 +22,14 @@ class ReaderReverseTest {
     }
 
     @Test
-    fun `R 구간에서 재개하면 같은 R 구간엔 다시 멈추지 않는다`() {
-        val events = listOf(
-            gear(1.seconds, Gear.REVERSE),
-            clipEnded(2.seconds),
-            press(3.seconds),
-            clipEnded(5.seconds, index = 2),
+    fun `R 중에 재생을 눌러도 기다리고, P로 바꾼 뒤 누르면 다음 문장을 읽는다`() {
+        val inReverse = run(listOf(gear(1.seconds, Gear.REVERSE), clipEnded(2.seconds), press(3.seconds)))
+        assertIs<ReaderPhase.Holding>(inReverse.state.phase)
+        assertEquals(true, "gear=R → keep hold" in inReverse.logs)
+        val parked = run(
+            listOf(gear(1.seconds, Gear.REVERSE), clipEnded(2.seconds), gear(4.seconds, Gear.PARK), press(5.seconds)),
         )
-        assertIs<ReaderPhase.Reading>(run(events).state.phase)
+        assertIs<ReaderPhase.Reading>(parked.state.phase)
     }
 
     @Test
@@ -37,8 +37,8 @@ class ReaderReverseTest {
         val events = listOf(
             gear(1.seconds, Gear.REVERSE),
             clipEnded(2.seconds),
-            press(3.seconds),
             gear(4.seconds, Gear.DRIVE),
+            press(5.seconds),
         )
         assertEquals(false, run(events).state.isCommaUsed)
     }

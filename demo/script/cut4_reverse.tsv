@@ -1,5 +1,5 @@
-# 컷 4 — 후진(R11). 주차하려고 R로 바꾸면 레버 없이도 지금 문장 끝에서 멈추고, 핸들 키로 다음 문장
-# 형식은 cut1_breath.tsv 머리말과 같다. adb 줄은 시연 주입(핸들 키를 VC로 못 넣음) — README·자막에 밝힌다
+# 컷 4 — 후진(R11). 주차하려고 R로 바꾸면 레버 없이도 지금 문장 끝에서 멈춘다. 후진 중엔 핸들 버튼을 눌러도 기다리고,
+# P로 바꾼 뒤 누르면 다음 문장. 형식은 cut1_breath.tsv 머리말과 같다. adb 줄은 시연 주입(핸들 키를 VC로 못 넣음)
 # at_s	hand	signal	value	memo
 0	vc	gear	PARK	준비
 0	app	auto_resume	OFF	준비 · 기본값(끔)
@@ -7,5 +7,6 @@
 -	anchor	log	clipStart	아무 문장
 end-1.0	vc	gear	REVERSE	reverse → comma armed
 -	anchor	log	→ hold	문장 끝 · 멈춤(로그 clipEnd … gear=R → hold)
-3.0	adb	media_key	PLAY_PAUSE	시연 주입 — 핸들 ▶ 대역 · mediaKey PLAY → play
-5.0	vc	gear	PARK	P 화면
+2.0	adb	media_key	PLAY_PAUSE	시연 주입 — 후진 중 핸들 ▶ · gear=R → keep hold
+3.5	vc	gear	PARK	주차 완료
+5.0	adb	media_key	PLAY_PAUSE	시연 주입 — 핸들 ▶ · mediaKey PLAY → play

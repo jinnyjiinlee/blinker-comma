@@ -56,7 +56,7 @@ S0 · 2026-11-02. 기획 정본 = `../ideas/v3/meeting/DECISION.json`(출품작 
 | R8 | 「자동 재개 끔」 모드면 R5 대신 핸들 키(또는 P의 ▶)로만 재개 | 기본 = 끔(D6, M8 must_fix — `ReaderSettings` 설정값 전환, 엔진 `CommaCardParams.DEFAULT`는 그대로 켬) | demo 컷 1·2는 준비 줄에서 「자동 재개 켬」 탭 · 컷 3은 기본값 그대로(끔) |
 | R9 | 멈춘 중 핸들 키 PLAY/PLAY_PAUSE = 즉시 재개(디바운스 없음) | — | demo 컷 3 「엄지 한 번」 |
 | R10 | 다른 앱이 포커스를 일시로 가져가면(LOSS_TRANSIENT) 멈추고, 돌려주면(GAIN) 쉼표 중이 아닐 때만 재개. 영구 LOSS면 정지 | — | Pleos 포커스 가이드 기본 매핑 |
-| R11 | 후진(R)으로 바꾸면 레버·속도와 무관하게 「쉼표 예약」 — 지금 문장 끝(또는 R4 상한)에서 멈춘다. 같은 R 구간엔 한 번(R6과 같은 방식), 기어가 바뀌면 사용 표시가 풀린다 | — | P3(2026-11-14) — 「주의가 필요한 순간」을 깜빡이 밖으로 한 칸 넓힘. `ReaderReverseTest` |
+| R11 | 후진(R)으로 바꾸면 레버·속도와 무관하게 「쉼표 예약」 — 지금 문장 끝(또는 R4 상한)에서 멈춘다. 같은 R 구간엔 한 번(R6과 같은 방식), 기어가 바뀌면 사용 표시가 풀린다. 후진 중엔 핸들 재생 키로도 재개하지 않고(로그 `gear=R → keep hold`), P·D로 바꾼 뒤 누르면 재개 | — | P3(2026-11-14) — 「주의가 필요한 순간」을 깜빡이 밖으로 한 칸 넓힘. `ReaderReverseTest` |
 
 - ⏸는 **소리가 실제로 멎는 순간** 켜지고 다시 날 때 꺼진다(명령 순간 아님).
 - 로그(영상 PiP·실측용, 태그 `Comma`) — 형식 고정, 엔진의 `toLogLine`이 만든다:
@@ -72,7 +72,7 @@ road-interpreter `engine/signal/*`·`output/Transition`·테스트 `support/Repl
 | `reader/ReaderEvent.kt` | 엔진 입력 전체: `Car(CarEvent)` · `ClipEnded(at, index)` · `PlayPressed(at, source)` · `PausePressed(at, source)` · `SkipPressed(at, step)` · `FocusChanged(at, focus)` · `Tick(at)` | — |
 | `comma/CommaCardParams.kt` | `offDebounce 0.8s` · `endWaitLimit 2.5s` · `movingMinMps 0.3` · `isAutoResume true` | 기본값 고정 테스트 1개(위 표 숫자) |
 | `comma/CommaSnapshot.kt` · `ClassifyArm.kt` | `classifyArm(snapshot, params)` → `Armed / SkipStopped / SkipNotDrive / LeverOff` | 속도 문턱 경계 3점 · 기어 P/R/N |
-| `reader/ReaderState.kt` | `data class ReaderState(phase, index, lever, gear, speedMps, armedAt, offSince, holdReason, tally)` + `fun reduce(state, event): Transition` — phase = `Stopped / Reading / Holding / FocusPaused` (sealed) | R1~R10 각각 · 디바운스 경계 3점(0.79·0.80·0.81s) · 2.5초 상한 경계 3점 |
+| `reader/ReaderState.kt` | `data class ReaderState(phase, index, lever, gear, speedMps, armedAt, offSince, holdReason, tally)` + `fun reduce(state, event): Transition` — phase = `Stopped / Reading / Holding / FocusPaused` (sealed) | R1~R11 각각 · 디바운스 경계 3점(0.79·0.80·0.81s) · 2.5초 상한 경계 3점 |
 | `output/Effect.kt` · `Transition.kt` | `PlayClip(index, fromStart)` · `PauseClip` · `ShowHoldGlyph(isOn)` · `WriteLog(line)` · `SaveTally` | — |
 | `tally/ReadingTally.kt` | `ReadingTally(sentences, commas)` — 문장 완료·쉼표 카운트. 날짜 키는 app이 넘김(엔진은 날짜를 모름) | 쉼표 수 ≤ 레버 ON 구간 수 |
 | `pack/SentencePack.kt` · `PackFile.kt` · `ClassifyPackProblems.kt` | 콘텐츠 팩 JSON(kotlinx.serialization): `title`(≤6자) · `credit` · `clips[{file, text, durationMs}]` → 문제 목록(제목 6자 초과·클립 0개·길이 0·파일 중복) | 정상 `validJson` + 한 칸씩 깨기 |
@@ -157,7 +157,7 @@ road-interpreter `engine/signal/*`·`output/Transition`·테스트 `support/Repl
 | D4 | conductor `anchor` 확장 · 대본 3컷 · 녹화 2회 동일성 · README(규정 4항목) | 3h |
 | 여유 | 결함 수정·M1 대응 | 3h |
 
-**MVP에 넣는 것**: 앱 안 영어 낭독 1팩 · 쉼표 규칙 R1~R10 · 「자동 재개 끔」 토글 · 핸들 키(MediaSession) · 오디오 포커스 표준 대응 · P/D/권한 화면 · 오늘 카운트 · 로그 줄 ⓐ~ⓓ · 대본 3컷 + conductor · release APK(D5).
+**MVP에 넣는 것**: 앱 안 영어 낭독 1팩 · 쉼표 규칙 R1~R11(R11 후진은 P3 추가) · 1시간 팩·이어 듣기(P3) · 「자동 재개 끔」 토글 · 핸들 키(MediaSession) · 오디오 포커스 표준 대응 · P/D/권한 화면 · 오늘 카운트 · 로그 줄 ⓐ~ⓓ · 대본 3컷 + conductor · release APK(D5).
 
 **뺀 것** (기획서엔 「개발 계획」으로만):
 - **외부 앱 모드**(윌라·멜론 등 다른 앱 소리를 레버로 멈추기) — 포커스 왕복이 원칙 7과 충돌 · 재생 안 하는 백그라운드 서비스의 마켓 허용 [미확인] · Mason 「2단계로 미루면 기술 13.5」(M7 summary 반대 기록 — 1단계 vs 2단계 미결을 개발 범위상 2단계로 정함)

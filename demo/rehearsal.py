@@ -64,10 +64,23 @@ def grant_speed() -> None:
     wait_screen("재생")
 
 
-def relaunch() -> None:
+# 컷 2만 이어 듣기 위치를 남긴다 — 앱을 껐다 켜도 컷 1에서 멈춘 문장부터 읽는 장면(이어 듣기 실측)
+KEEP_POSITION = {"cut2_wait_go.tsv"}
+
+
+def relaunch(keep_position: bool = False) -> None:
     adb("shell", "am", "force-stop", "--user", "10", APP)
-    # 이어 듣기 위치를 지워 매 컷 첫 문장부터(디버그 빌드만 run-as 가능)
-    adb("shell", "run-as", APP, "--user", "10", "rm", "-f", "shared_prefs/position.xml")
+    if not keep_position:  # 매 컷 첫 문장부터(디버그 빌드만 run-as 가능)
+        adb(
+            "shell",
+            "run-as",
+            APP,
+            "--user",
+            "10",
+            "rm",
+            "-f",
+            "shared_prefs/position.xml",
+        )
     mark("relaunch")  # 앱 실행 → 첫 기어 콜백 지연을 잰다(화면의 첫 신호 대기 근거)
     launch_app()
     wait_screen("재생")
@@ -80,7 +93,7 @@ def run_all(watch: LogWatch) -> None:
     grant_speed()
     for name in CUTS:
         reset_car()  # 지난 컷이 D로 끝나면 D 화면엔 「재생」이 없다 — P로 먼저
-        relaunch()
+        relaunch(keep_position=name in KEEP_POSITION)
         run_cut(SCRIPTS / name, watch)
         time.sleep(BETWEEN_CUTS_S)
     mark("rehearsal end")

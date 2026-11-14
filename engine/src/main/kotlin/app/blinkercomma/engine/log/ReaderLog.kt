@@ -65,6 +65,11 @@ sealed interface ReaderLog {
         override val line: String = "autoResume=off → keep hold"
     }
 
+    /** 후진 중 재생 누름 — 주차(P)나 전진(D)으로 바꾼 뒤에 이어 간다(R11). */
+    data object KeptHoldInReverse : ReaderLog {
+        override val line: String = "gear=R → keep hold"
+    }
+
     data class PlayedByPress(val source: PressSource, val index: Int) : ReaderLog {
         override val line: String get() = "${source.logName} PLAY → play ${sentenceLabel(index)}"
     }

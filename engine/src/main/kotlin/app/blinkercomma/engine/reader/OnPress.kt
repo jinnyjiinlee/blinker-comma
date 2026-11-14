@@ -5,10 +5,11 @@ import app.blinkercomma.engine.log.ReaderLog
 import app.blinkercomma.engine.log.toWriteLog
 import app.blinkercomma.engine.output.Effect
 import app.blinkercomma.engine.output.Transition
+import app.blinkercomma.engine.signal.Gear
 
 // 운전자 누름 — P 화면 버튼과 핸들 미디어 키가 같은 길로 들어온다
 
-/** 쉼표 중 ▶는 디바운스 없이 즉시 재개(R9) — 「자동 재개 끔」이어도 같다(R8). */
+/** 쉼표 중 ▶는 디바운스 없이 즉시 재개(R9) — 「자동 재개 끔」이어도 같다(R8). 단 후진(R) 중엔 기다린다(R11). */
 internal fun onPlayPressed(
     state: ReaderState,
     event: ReaderEvent.PlayPressed,
@@ -18,7 +19,11 @@ internal fun onPlayPressed(
     return when (state.phase) {
         ReaderPhase.Stopped -> pressed.then { startReading(it, event.at, params) }
         ReaderPhase.FocusPaused -> pressed.then { startReading(it, event.at, params, isFromStart = false) }
-        is ReaderPhase.Holding -> resume(state, ReaderLog.PlayedByPress(event.source, state.index), event.at, params)
+        is ReaderPhase.Holding -> if (state.gear == Gear.REVERSE) {
+            Transition(state, listOf(toWriteLog(ReaderLog.KeptHoldInReverse)))
+        } else {
+            resume(state, ReaderLog.PlayedByPress(event.source, state.index), event.at, params)
+        }
         is ReaderPhase.Reading -> Transition(state)
     }
 }
