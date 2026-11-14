@@ -40,6 +40,10 @@
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService" />
             </intent-filter>
+            <!-- 런처 화면이 있는 미디어 앱도 시스템 미디어 카드(홈 위젯)에 뜨게 — 없으면 MediaSourceUtil이 건너뜀 -->
+            <meta-data
+                android:name="androidx.car.app.launchable"
+                android:value="true" />
         </service>
     </application>
 </manifest>

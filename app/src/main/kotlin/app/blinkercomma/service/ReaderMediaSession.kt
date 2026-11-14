@@ -7,13 +7,14 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
 import android.view.KeyEvent
+import app.blinkercomma.R
 import app.blinkercomma.engine.reader.PressSource
 import app.blinkercomma.engine.reader.ReaderEvent
 import app.blinkercomma.engine.reader.ReaderPhase
 import kotlin.time.Duration
 
 /**
- * MediaSession — 핸들 미디어 키·시스템 미디어 카드가 들어오는 길. 메타는 제목(≤6자) 하나뿐, 문장 본문 0(원칙 6).
+ * MediaSession — 핸들 미디어 키·시스템 미디어 카드가 들어오는 길. 메타는 팩 제목(≤6자)과 앱 이름뿐, 문장 본문 0(원칙 6).
  * PLAY_PAUSE 키는 세션 기본 처리가 「재생 중이면 onPause, 아니면 onPlay」로 바꿔 준다 — 쉼표 중은 PAUSED로 알려
  * 키 한 번이 즉시 재개(R9)가 되게 한다.
  */
@@ -36,7 +37,7 @@ class ReaderMediaSession(
     }
     val session = MediaSessionCompat(context, TAG).apply {
         setCallback(callback)
-        setMetadata(MediaMetadataCompat.Builder().putString(MediaMetadataCompat.METADATA_KEY_TITLE, title).build())
+        setMetadata(metadataOf(title, context.getString(R.string.app_name)))
         setPlaybackState(toPlaybackState(ReaderPhase.Stopped))
         isActive = true
     }
@@ -63,3 +64,9 @@ private fun toPlaybackState(phase: ReaderPhase): PlaybackStateCompat {
         .setState(state, PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, 1f)
         .build()
 }
+
+// 홈 미디어 카드 두 줄 — 제목(팩) · 부제(앱 이름)
+private fun metadataOf(title: String, appName: String): MediaMetadataCompat = MediaMetadataCompat.Builder()
+    .putString(MediaMetadataCompat.METADATA_KEY_TITLE, title)
+    .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, appName)
+    .build()
