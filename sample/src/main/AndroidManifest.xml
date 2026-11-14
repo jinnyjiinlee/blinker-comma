@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-feature android:name="android.hardware.type.automotive" android:required="true" />
+
+    <!-- 차 신호는 읽기만 — 깜빡이·기어. 속도 권한은 쓰지 않는다(엔진은 속도 없이 레버 + D로 판정) -->
+    <uses-permission android:name="pleos.car.permission.CAR_LIGHTS" />
+    <uses-permission android:name="pleos.car.permission.CAR_DRIVE" />
+
+    <application
+        android:allowBackup="false"
+        android:label="@string/sample_name"
+        android:theme="@android:style/Theme.Material.NoActionBar">
+        <activity
+            android:name=".SampleActivity"
+            android:exported="true">
+            <meta-data android:name="distractionOptimized" android:value="true" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sample_name">쉼표 샘플</string>
+    <string name="sample_title">쉼표 샘플 — 팟캐스트형 플레이어</string>
+    <string name="sample_detail">음원 파일 하나 + 자막 경계 · 판단은 깜빡이 쉼표 엔진(:engine)</string>
+    <string name="sample_play">재생</string>
+    <string name="sample_reading">읽는 중</string>
+    <string name="sample_holding">⏸ 쉼표 — 레버를 내리면 0.8초 뒤 다음 문장</string>
+    <string name="sample_stopped">멈춤</string>
+    <string name="sample_cue">자막 %1$d / %2$d</string>
+</resources>

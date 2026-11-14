@@ -16,4 +16,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "blinker-comma"
-include(":engine", ":app")
+include(":engine", ":app", ":sample")

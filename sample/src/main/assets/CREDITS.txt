@@ -1,0 +1,7 @@
+쉼표 샘플 음원 — 출처·라이선스
+
+원작: The Aesop for Children (Aesop) — LibriVox 녹음, Public Domain Mark 1.0
+  https://archive.org/details/aesopforchildren_1308_librivox
+  원본: theaesopforchildren_08_aesop_64kb.mp3 (sha256 60407b4d135ee0e517a2f97997f9ad35783c514ebc47c0f125b5d09f91c06c04)
+  앞 24초(장 머리말·낭독자 소개)는 잘라 냈다. mono 22050Hz AAC 64k로 다시 인코딩.
+자막: tools/vtt_from_stt.py — word-level 받아쓰기(whisper base)의 문장 끝으로 만든 WebVTT. 시각은 잘라 낸 24초만큼 당겼다.
