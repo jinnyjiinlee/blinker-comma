@@ -44,7 +44,7 @@ python3 demo/rehearsal_summary.py rehearsal_log_1.txt rehearsal_log_2.txt   # �
 | 리허설 | 새 설치 → 권한 → 4컷 자동 재생을 연속 2회 돌려 앱 로그 줄·시각이 같은지 확인 — `docs/progress.md` P3 |
 
 - 소리: 에뮬레이터를 `-no-audio`로 돌리므로 소리는 녹음되지 않는다. 문장 끝은 재생 완료 콜백이 아니라 콘텐츠 팩의 문장 길이 시계로 판정한다(콜백이 에뮬레이터에서 일찍·늦게 와서 — 실측 근거는 `docs/signals_measured.md`).
-- 콘텐츠: **퍼블릭 도메인 영어 낭독 「이솝 우화」 약 53분(998조각)**(LibriVox 14개 장, Public Domain Mark — `app/src/main/assets/packs/aesop/CREDITS.txt`). `tools/build_long_pack.py`가 장마다 word-level STT 타임스탬프로 문장 끝을 찾아 자르고, 3초 넘는 문장은 원문 쉼표(,;:) 자리에서 나눈다. 장 머리말·꼬리말(낭독자 소개)은 뺀다. 예전 3분 팩 `packs/en1`은 그대로 둔다.
+- 콘텐츠: **사람이 읽은 퍼블릭 도메인 낭독 2팩** — 한국어 현진건 단편 약 68분(1,326조각, `packs/hyun`, 기본) · 영어 이솝 우화 약 62분(1,066조각, `packs/aesop`). 정차 화면의 팩 제목을 누르면 바뀐다(앱이 새 팩으로 다시 시작). LibriVox, Public Domain Mark — 각 폴더 `CREDITS.txt`. `tools/build_long_pack.py`가 받아쓰기 문장 끝으로 자르고, 긴 문장은 원문 쉼표·받아쓰기 구간 경계에서 나누며(`pack_split.py`), 자르는 자리는 가장 조용한 순간(`quiet_cut.py`). 예전 3분 팩 `packs/en1`은 그대로 둔다.
 
 ## 4. APK 위치
 - 제출용 릴리스 APK: **`apk/CommaLane_깜빡이쉼표_release.apk`**(서명 완료 — `apksigner verify` v2 스킴 통과, 2026-11-14 재확인). 빌드: `./gradlew :app:assembleRelease`(서명은 저장소 밖 `~/.blinker-comma/keystore.properties`를 읽음 — 그 파일이 없으면 서명 없이 빌드됨).
