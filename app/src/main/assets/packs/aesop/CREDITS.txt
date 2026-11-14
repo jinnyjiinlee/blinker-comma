@@ -1,13 +1,11 @@
-이솝 우화 — 출처·라이선스 (P3, 2026-11-14)
+이솝 우화 — 출처·라이선스 (2026-11-14)
 
 원작: The Aesop for Children (Aesop, Milo Winter 삽화본, 1919)
 녹음: LibriVox 자원봉사자 낭독(낭독자 이름은 팩에 넣지 않았다 — 각 장 머리말에서 뺌)
-  Book: https://librivox.org/the-aesop-for-children-by-aesop/
   Archive.org item: https://archive.org/details/aesopforchildren_1308_librivox
-라이선스: Public Domain Mark 1.0 (archive.org 메타데이터 licenseurl = http://creativecommons.org/publicdomain/mark/1.0/)
-  LibriVox 녹음은 미국 내 공공 도메인. 확인 날짜 2026-11-14.
+라이선스: Public Domain Mark 1.0, 확인 2026-11-14
 
-수록 장(원본 파일 · sha256 · 장 제목):
+수록(원본 파일 · sha256 · 제목):
   theaesopforchildren_01_aesop_64kb.mp3  c9e9b07e3b57a3092a7a0b074e8dc375eccfdbf2b66c84d97a13265e5ef584b7
     01 - Fables 1-4: The Wolf and the Kid; The Tortoise and the Ducks; The Young Crab and His Mother; The Frogs and the Ox
   theaesopforchildren_02_aesop_64kb.mp3  469dfd3da8b70b11a44b563d23cc3384f19e5b191d68a66c8712d7ce9a18347a
@@ -37,9 +35,8 @@
   theaesopforchildren_15_aesop_64kb.mp3  1250b8d9a9cabcbcd2c75a79ccc7f449aa28fbf4cdceb139239d04add74a9417
     15 - Fables 57-60: The Dog and His Master's Dinner; The Vain Jackdaw and his Borrowed Feathers; The Monkey and the Dolphin; The Wolf and the Ass
 
-자르기: tools/build_long_pack.py — 장마다 word-level STT(whisper, 모델 base) 타임스탬프의 문장 끝 부호(.!?)로 자르고,
-  3초가 넘는 문장은 원문 쉼표(,;:) 자리에서 구절로 나눴다(앞뒤 조각 1초 이상일 때만). 사람 손 교정 없음 —
-  pack.json의 text는 받아쓰기 그대로라 오인식이 있을 수 있다(화면에 문장 글자는 나오지 않는다).
-  장 머리말(「Section N of … This is a LibriVox recording … by …」)과 꼬리말(「End of section N」)은 뺐다.
-  결과: 998조각, 총 3187.3초(약 53분), 2.5초 이내 조각 42%.
-  섹션 13(기존 packs/en1 3분 팩)은 이 팩에 넣지 않았다.
+자르기: tools/build_long_pack.py — word-level 받아쓰기(whisper, 모델 base) 문장 끝 부호로 나누고, 3초 넘는 문장은 원문 쉼표,
+  6초 넘는 조각은 받아쓰기 구간 경계에서 한 번 더 나눴다. 자르는 자리는 경계 ±0.2초 안에서 가장 조용한 10ms(tools/quiet_cut.py).
+  장 머리말(녹음 안내·낭독자 소개)과 꼬리말은 뺐다. pack.json의 text는 받아쓰기 그대로라 오인식이 있다(화면에 글자는 안 나온다).
+  결과: 1066조각, 총 3728.4초(약 62분), 레버를 아무 순간에 올렸을 때 2.5초 안에 조각 끝에 닿을 확률 67.6%.
+  섹션 13(기존 packs/en1 3분 팩)은 넣지 않았다.

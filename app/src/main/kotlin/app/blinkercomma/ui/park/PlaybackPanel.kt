@@ -1,6 +1,7 @@
 package app.blinkercomma.ui.park
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,24 +29,29 @@ import app.blinkercomma.ui.theme.CommaType
 
 /** P 화면 오른쪽 판 — 팩 제목(위) · 재생 버튼+진행 링(가운데) · 못 받은 신호·시연 주입(아래). */
 @Composable
-fun PlaybackPanel(state: ScreenUiState.Park, onPlayToggle: () -> Unit, modifier: Modifier = Modifier) {
+fun PlaybackPanel(state: ScreenUiState.Park, actions: ParkActions, modifier: Modifier = Modifier) {
     Column(
         modifier.background(CommaColors.surface, CommaShape.panel).padding(CommaSpace.large),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(CommaSpace.xlarge, Alignment.CenterVertically),
     ) {
-        PackTitle(state.packTitle)
-        PlayButtonWithRing(state, onPlayToggle)
+        PackTitle(state.packTitle, actions.onPackChange)
+        PlayButtonWithRing(state, actions.onPlayToggle)
         PhaseStatus(state)
         if (state.missingSignals.isNotEmpty() || state.isDemoInjected) SignalFooter(state)
     }
 }
 
+/** 팩 제목 — 누르면 다음 팩(한국어 단편 ↔ 영어 이솝). 정차 화면에서만 보인다. */
 @Composable
-private fun PackTitle(title: String) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+private fun PackTitle(title: String, onPackChange: () -> Unit) {
+    Column(
+        Modifier.clickable(onClickLabel = stringResource(R.string.pack_switch), onClick = onPackChange),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
         Text(stringResource(R.string.now_reading), style = CommaType.caption, color = CommaColors.onSurfaceMuted)
         Text(title, style = CommaType.title, color = CommaColors.onSurface)
+        Text(stringResource(R.string.pack_switch), style = CommaType.caption, color = CommaColors.signal)
     }
 }
 

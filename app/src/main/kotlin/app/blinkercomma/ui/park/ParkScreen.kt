@@ -47,12 +47,16 @@ fun ParkScreen(state: ScreenUiState.Park, actions: ParkActions, modifier: Modifi
             SettingToggleRow(autoResumeText(state.isAutoResume), state.isAutoResume, actions.onAutoResumeToggle)
             if (state.credit.isNotBlank()) CreditLine(state.credit)
         }
-        PlaybackPanel(state, actions.onPlayToggle, Modifier.width(CommaSize.sidePanel).fillMaxHeight())
+        PlaybackPanel(state, actions, Modifier.width(CommaSize.sidePanel).fillMaxHeight())
     }
 }
 
 /** P 화면에서 누를 수 있는 것 전부. */
-data class ParkActions(val onPlayToggle: () -> Unit, val onAutoResumeToggle: () -> Unit)
+data class ParkActions(
+    val onPlayToggle: () -> Unit,
+    val onAutoResumeToggle: () -> Unit,
+    val onPackChange: () -> Unit = {},
+)
 
 @Composable
 private fun autoResumeText(isOn: Boolean) = ToggleRowText(

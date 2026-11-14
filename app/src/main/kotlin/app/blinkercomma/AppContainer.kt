@@ -14,10 +14,10 @@ import app.blinkercomma.session.ReaderSession
 
 /** 수동 DI — 앱 전체에서 하나씩만. 팩(JSON 수 KB)·오늘 카운트·이어 듣기 위치는 작아서 앱 시작 때 바로 읽는다. */
 class AppContainer(context: Context) {
-    val pack: LoadedPack = PackRepository(context.assets).loadPack()
+    val settings = ReaderSettings(context)
+    val pack: LoadedPack = PackRepository(context.assets).loadPack(settings.packFolder)
     val tallyStore = TallyStore(context)
     val positionStore = PositionStore(context, packKey = "${(pack as? LoadedPack.Ready)?.folder}/${pack.clips.size}")
-    val settings = ReaderSettings(context)
     val injection = DemoInjectionMarks()
     val speedPermission = SpeedPermissionStore(context)
     val session = ReaderSession(

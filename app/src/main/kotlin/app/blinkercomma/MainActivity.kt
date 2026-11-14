@@ -29,6 +29,14 @@ class MainActivity : ComponentActivity() {
         startService(Intent(this, ReaderService::class.java))
     }
 
+    /** 팩을 바꾸면 세션·플레이어를 새 팩으로 다시 만든다 — 앱을 다시 띄우는 게 가장 단순하고 확실하다(정차 화면에서만). */
+    private fun switchPack() {
+        container.settings.saveNextPack()
+        stopService(Intent(this, ReaderService::class.java))
+        startActivity(Intent(this, MainActivity::class.java).addFlags(RESTART_FLAGS))
+        android.os.Process.killProcess(android.os.Process.myPid())
+    }
+
     @Composable
     private fun AppRoute() {
         val askSpeed = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
@@ -43,8 +51,11 @@ class MainActivity : ComponentActivity() {
                     )
                 },
                 onAutoResumeToggle = { container.settings.saveAutoResume(!container.settings.isAutoResume.value) },
+                onPackChange = ::switchPack,
             ),
             onAllowSpeed = { askSpeed.launch(SpeedPermissionStore.SPEED_PERMISSION) },
         )
     }
 }
+
+private const val RESTART_FLAGS = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

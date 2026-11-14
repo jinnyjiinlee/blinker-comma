@@ -1,0 +1,23 @@
+한국 단편 — 출처·라이선스 (2026-11-14)
+
+원작: 현진건(1900~1943) 단편 「피아노」 「술 권하는 사회」 「빈처」 — 저작권 보호기간 만료
+녹음: LibriVox 자원봉사자 한국어 낭독(낭독자 이름은 팩에 넣지 않았다 — 각 장 머리말에서 뺌)
+  Archive.org item: https://archive.org/details/short_stories_hyun_1411_librivox
+라이선스: Public Domain Mark 1.0 (archive.org 메타데이터 licenseurl = http://creativecommons.org/publicdomain/mark/1.0/), 확인 2026-11-14
+
+수록(원본 파일 · sha256 · 제목):
+  short_stories_01_hyun_64kb.mp3  579deb697bd43031c54335bd97478adabf972d3fe2697589807e04a35d5ce374
+    01 - 피아노
+  short_stories_02_hyun_64kb.mp3  cbd0061ca22a298684678cdec25f008998c4df39c000e5e2a29e4d580c9378c0
+    02 - 술 권하는 사회 Part 1
+  short_stories_03_hyun_64kb.mp3  45ffa53e007137fa39c9de6e3e12f843c17b764c79b8a4cf888f8d28053eb33b
+    03 - 술 권하는 사회 Part 2
+  short_stories_04_hyun_64kb.mp3  1c42b3efe30dd48ac18e24e520cf24cea8b37ecad6c750bfb399f78d010aba85
+    04 - 빈처 Part 1
+  short_stories_05_hyun_64kb.mp3  23fdfb484127d4e7ebec0c17ad5dc35276450c36b91d8325633edb198eed86cd
+    05 - 빈처 Part 2
+
+자르기: tools/build_long_pack.py — word-level 받아쓰기(whisper, 모델 base) 문장 끝 부호로 나누고, 3초 넘는 문장은 원문 쉼표,
+  6초 넘는 조각은 받아쓰기 구간 경계에서 한 번 더 나눴다. 자르는 자리는 경계 ±0.2초 안에서 가장 조용한 10ms(tools/quiet_cut.py).
+  장 머리말(녹음 안내·낭독자 소개)과 꼬리말은 뺐다. pack.json의 text는 받아쓰기 그대로라 오인식이 있다(화면에 글자는 안 나온다).
+  결과: 1326조각, 총 4087.7초(약 68분), 레버를 아무 순간에 올렸을 때 2.5초 안에 조각 끝에 닿을 확률 72.3%.
