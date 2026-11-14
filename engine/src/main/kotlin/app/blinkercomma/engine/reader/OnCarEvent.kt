@@ -15,7 +15,9 @@ internal fun onCarEvent(state: ReaderState, event: CarEvent, params: CommaCardPa
         is CarEvent.TurnSignalChanged -> onLever(state, event, params)
         is CarEvent.GearChanged -> {
             val seen = if (event.gear == state.gear) emptyList() else listOf(toWriteLog(ReaderLog.GearSeen(event.gear)))
-            Transition(state.copy(gear = event.gear), seen).then { trackArm(it, event.at, params) }
+            val isNewGear = event.gear != state.gear
+            val updated = state.copy(gear = event.gear, isCommaUsed = state.isCommaUsed && !isNewGear)
+            Transition(updated, seen).then { trackArm(it, event.at, params) }
         }
         is CarEvent.SpeedChanged -> trackArm(state.copy(speedMps = event.speedMps), event.at, params)
     }
@@ -51,7 +53,7 @@ private fun noCommaLogs(state: ReaderState, params: CommaCardParams): List<Effec
     val entry = when (classifyArm(state.snapshot, params)) {
         ArmDecision.SKIP_STOPPED -> ReaderLog.NoCommaStopped(state.speedMps ?: 0.0)
         ArmDecision.SKIP_NOT_DRIVE -> ReaderLog.NoCommaNotDrive(state.gear)
-        ArmDecision.ARMED, ArmDecision.LEVER_OFF -> null
+        ArmDecision.ARMED, ArmDecision.ARMED_REVERSE, ArmDecision.LEVER_OFF -> null
     }
     return listOfNotNull(entry?.let(::toWriteLog))
 }
@@ -75,7 +77,7 @@ private fun trackArm(state: ReaderState, at: Duration, params: CommaCardParams):
     val isArmed = canArm(state, params)
     return when {
         isArmed && phase.armedAt == null ->
-            Transition(state.copy(phase = ReaderPhase.Reading(at)), listOf(toWriteLog(ReaderLog.Armed)))
+            Transition(state.copy(phase = ReaderPhase.Reading(at)), listOf(toWriteLog(armLog(state))))
         !isArmed && phase.armedAt != null ->
             Transition(state.copy(phase = ReaderPhase.Reading()), listOf(toWriteLog(ReaderLog.CommaCancelled)))
         else -> Transition(state)

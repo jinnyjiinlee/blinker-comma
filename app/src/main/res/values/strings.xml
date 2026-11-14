@@ -11,7 +11,7 @@
     <string name="phase_reading">읽는 중</string>
     <string name="phase_holding">쉼표 중</string>
     <string name="phase_focus_paused">다른 소리 대기 중</string>
-    <string name="sentence_progress">%1$d / %2$d 문장</string>
+    <string name="sentence_progress">%1$d번째 문장 · 전체 %2$d</string>
 
     <!-- 사용법 세 줄 — P 화면 왼쪽(처음 본 사람이 앱이 하는 일을 바로 알게) -->
     <string name="step_lever_title">깜빡이를 켜면</string>

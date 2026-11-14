@@ -54,8 +54,8 @@ class ClassifyArmTest {
     }
 
     @Test
-    fun `R이면 예약하지 않는다`() {
-        assertEquals(ArmDecision.SKIP_NOT_DRIVE, classifyArm(lanechange.copy(gear = Gear.REVERSE), params))
+    fun `R이면 레버 없이도 후진 쉼표를 예약한다`() {
+        assertEquals(ArmDecision.ARMED_REVERSE, classifyArm(lanechange.copy(gear = Gear.REVERSE), params))
     }
 
     @Test
@@ -71,5 +71,13 @@ class ClassifyArmTest {
     @Test
     fun `속도를 확인 못 하면 레버와 D만으로 예약한다`() {
         assertEquals(ArmDecision.ARMED, classifyArm(lanechange.copy(speedMps = null), params))
+    }
+
+    @Test
+    fun `R이면 레버를 내려도 예약한다`() {
+        assertEquals(
+            ArmDecision.ARMED_REVERSE,
+            classifyArm(lanechange.copy(gear = Gear.REVERSE, lever = TurnSignal.OFF, speedMps = 0.0), params),
+        )
     }
 }

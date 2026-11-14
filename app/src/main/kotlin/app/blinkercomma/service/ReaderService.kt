@@ -43,7 +43,8 @@ class ReaderService : MediaBrowserServiceCompat(), LifecycleOwner {
         sessionToken = media.session.sessionToken
         player = ClipPlayer(this, container.pack, session::onEvent, session::onSoundStarted, ::monotonicNow)
         focus = AudioFocusGate(this, session::onEvent, ::monotonicNow)
-        session.attach(EffectRunner(player, focus, container.tallyStore, ::startForegroundOnce)::run)
+        val runner = EffectRunner(player, focus, container.tallyStore, container.positionStore, ::startForegroundOnce)
+        session.attach(runner::run)
         lifecycleScope.launch { session.state.distinctUntilChangedBy { it.phase }.collect { onPhase(it.phase) } }
         lifecycleScope.launch {
             carEvents(this@ReaderService, vehicle, container.speedPermission.status).collect(session::onEvent)

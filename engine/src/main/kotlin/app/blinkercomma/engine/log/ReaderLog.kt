@@ -26,6 +26,10 @@ sealed interface ReaderLog {
         override val line: String = "moving → comma armed"
     }
 
+    data object ArmedReverse : ReaderLog {
+        override val line: String = "reverse → comma armed"
+    }
+
     data object CommaCancelled : ReaderLog {
         override val line: String = "comma cancelled"
     }

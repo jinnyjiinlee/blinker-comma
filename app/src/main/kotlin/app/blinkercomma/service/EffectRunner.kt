@@ -1,6 +1,7 @@
 package app.blinkercomma.service
 
 import android.util.Log
+import app.blinkercomma.data.PositionStore
 import app.blinkercomma.data.TallyStore
 import app.blinkercomma.engine.output.Effect
 import app.blinkercomma.player.ClipPlayer
@@ -10,6 +11,7 @@ class EffectRunner(
     private val player: ClipPlayer,
     private val focus: AudioFocusGate,
     private val tally: TallyStore,
+    private val position: PositionStore,
     private val onPlaying: () -> Unit,
 ) {
     fun run(effect: Effect) {
@@ -18,6 +20,7 @@ class EffectRunner(
                 focus.hold()
                 onPlaying()
                 player.play(effect.index, effect.isFromStart)
+                position.save(effect.index)
             }
             Effect.PauseClip -> player.pause()
             // 로그 줄은 릴리스에서도 남긴다 — 영상 PiP·실측 근거(실명·위치 없음)

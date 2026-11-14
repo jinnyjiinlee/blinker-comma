@@ -1,19 +1,23 @@
 package app.blinkercomma.engine.reader
 
-import app.blinkercomma.engine.comma.ArmDecision
 import app.blinkercomma.engine.comma.CommaCardParams
 import app.blinkercomma.engine.comma.classifyArm
 import app.blinkercomma.engine.log.ReaderLog
 import app.blinkercomma.engine.log.toWriteLog
 import app.blinkercomma.engine.output.Effect
 import app.blinkercomma.engine.output.Transition
+import app.blinkercomma.engine.signal.Gear
 import kotlin.time.Duration
 
 // 여러 이벤트가 같이 쓰는 단계 이동 — 재생 시작·쉼표·재개·정지
 
-/** 쉼표를 예약할 수 있나 — 이번 레버 구간에 이미 쉼표를 냈으면 안 된다(R6). */
+/** 예약 로그 — 후진(R11)과 깜빡이(R1)를 로그에서 구분한다. */
+internal fun armLog(state: ReaderState): ReaderLog =
+    if (state.gear == Gear.REVERSE) ReaderLog.ArmedReverse else ReaderLog.Armed
+
+/** 쉼표를 예약할 수 있나 — 이번 레버 구간(후진은 이번 R 구간)에 이미 쉼표를 냈으면 안 된다(R6·R11). */
 internal fun canArm(state: ReaderState, params: CommaCardParams): Boolean =
-    !state.isCommaUsed && classifyArm(state.snapshot, params) == ArmDecision.ARMED
+    !state.isCommaUsed && classifyArm(state.snapshot, params).isArmed
 
 /** 지금 문장을 재생한다. 레버를 켠 채 달리는 중이면 이 순간부터 쉼표 예약(R1). */
 internal fun startReading(
@@ -24,7 +28,7 @@ internal fun startReading(
 ): Transition<ReaderState> {
     val isArmed = canArm(state, params)
     val play = listOf(Effect.PlayClip(state.index, isFromStart), toWriteLog(ReaderLog.ClipStarted(state.index)))
-    val arm = if (isArmed) listOf(toWriteLog(ReaderLog.Armed)) else emptyList()
+    val arm = if (isArmed) listOf(toWriteLog(armLog(state))) else emptyList()
     return Transition(state.copy(phase = ReaderPhase.Reading(at.takeIf { isArmed })), play + arm)
 }
 
