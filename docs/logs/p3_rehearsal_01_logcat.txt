@@ -1,0 +1,223 @@
+16:35:32.237 CommaStage: rehearsal permission
+16:35:34.845 CommaSignal: speed 확인 안 됨 — CAR_SPEED 허용 기다림
+16:35:35.201 CommaDeck: preload prepareMs=373
+16:35:35.288 CommaDeck: preload prepareMs=86
+16:35:36.157 CommaSignal: car TurnSignalChanged(at=7m 50.699s, signal=OFF)
+16:35:36.161 CommaSignal: car TurnSignalChanged(at=7m 50.704s, signal=OFF)
+16:35:36.183 CommaSignal: car GearChanged(at=7m 50.726s, gear=PARK)
+16:35:36.184 Comma: gear=PARK
+16:35:36.196 CommaSignal: car GearChanged(at=7m 50.738s, gear=PARK)
+16:35:44.328 CommaSignal: car SpeedChanged(at=7m 58.87s, speedMps=0.0)
+16:35:46.826 CommaStage: relaunch
+16:35:48.901 CommaSignal: car SpeedChanged(at=8m 3.442s, speedMps=0.0)
+16:35:49.074 CommaSignal: car TurnSignalChanged(at=8m 3.617s, signal=OFF)
+16:35:49.077 CommaSignal: car TurnSignalChanged(at=8m 3.62s, signal=OFF)
+16:35:49.080 CommaSignal: car GearChanged(at=8m 3.623s, gear=PARK)
+16:35:49.081 Comma: gear=PARK
+16:35:49.084 CommaSignal: car GearChanged(at=8m 3.627s, gear=PARK)
+16:35:50.606 CommaDeck: preload prepareMs=2088
+16:35:50.667 CommaDeck: preload prepareMs=61
+16:35:55.996 CommaStage: cut cut1_breath prep
+16:36:02.148 Comma: screen PLAY → play s=1
+16:36:02.159 CommaFocus: focus request=1
+16:36:02.169 Comma: clipStart s=1
+16:36:02.182 CommaDeck: open warm=true prepareMs=0 startMs=12
+16:36:02.223 CommaPlayer: start s=1 fromMs=0 clipMs=2560 openMs=13
+16:36:02.379 CommaDeck: preload prepareMs=156
+16:36:02.700 CommaSignal: car GearChanged(at=8m 17.243s, gear=DRIVE)
+16:36:02.700 Comma: gear=DRIVE
+16:36:03.362 CommaSignal: car SpeedChanged(at=8m 17.905s, speedMps=11.111111640930176)
+16:36:04.783 CommaPlayer: end s=1 by=clock playedMs=2601
+16:36:04.784 Comma: clipStart s=2
+16:36:04.787 CommaDeck: open warm=true prepareMs=0 startMs=4
+16:36:04.788 CommaPlayer: start s=2 fromMs=0 clipMs=8520 openMs=4
+16:36:04.854 CommaStage: anchor clipStart | CommaPlayer: start s=2 fromMs=0 clipMs=8520 openMs=4
+16:36:04.885 CommaDeck: preload prepareMs=98
+16:36:04.907 CommaDeck: release ms=21
+16:36:12.721 CommaSignal: car TurnSignalChanged(at=8m 27.264s, signal=RIGHT)
+16:36:12.723 Comma: turnSignal=RIGHT
+16:36:12.723 Comma: moving → comma armed
+16:36:12.793 CommaStage: row end-0.6 vc turn_signal RIGHT late=10ms
+16:36:13.309 CommaPlayer: end s=2 by=clock playedMs=8521
+16:36:13.331 CommaGlyph: holdGlyph=on
+16:36:13.332 Comma: clipEnd s=2 lever=ON → hold
+16:36:13.396 CommaStage: anchor →_hold | Comma: clipEnd s=2 lever=ON → hold
+16:36:14.444 CommaSignal: car TurnSignalChanged(at=8m 28.987s, signal=OFF)
+16:36:14.445 Comma: turnSignal=OFF
+16:36:14.533 CommaStage: row 1.1 vc turn_signal OFF late=4ms
+16:36:14.566 CommaStage: cut cut1_breath end
+16:36:15.247 Comma: OFF held 0.80s → play s=3
+16:36:15.248 Comma: clipStart s=3
+16:36:15.251 CommaDeck: open warm=true prepareMs=1 startMs=4
+16:36:15.252 CommaGlyph: holdGlyph=off
+16:36:15.252 CommaPlayer: start s=3 fromMs=0 clipMs=1580 openMs=5
+16:36:15.335 CommaDeck: preload prepareMs=82
+16:36:15.363 CommaDeck: release ms=27
+16:36:16.831 CommaPlayer: completion callback s=3 playedMs=1579
+16:36:16.832 CommaPlayer: end s=3 by=clock playedMs=1580
+16:36:16.833 Comma: clipStart s=4
+16:36:16.836 CommaDeck: open warm=true prepareMs=0 startMs=3
+16:36:16.837 CommaPlayer: start s=4 fromMs=0 clipMs=3260 openMs=3
+16:36:16.913 CommaDeck: preload prepareMs=76
+16:36:16.917 CommaDeck: release ms=3
+16:36:17.468 CommaSignal: car GearChanged(at=8m 32.011s, gear=PARK)
+16:36:17.469 Comma: gear=PARK
+16:36:17.771 CommaStage: relaunch
+16:36:19.499 CommaSignal: car SpeedChanged(at=8m 34.041s, speedMps=0.0)
+16:36:19.635 CommaSignal: car TurnSignalChanged(at=8m 34.178s, signal=OFF)
+16:36:19.646 CommaSignal: car TurnSignalChanged(at=8m 34.185s, signal=OFF)
+16:36:19.646 CommaSignal: car GearChanged(at=8m 34.187s, gear=PARK)
+16:36:19.647 Comma: gear=PARK
+16:36:21.979 CommaDeck: preload prepareMs=3386
+16:36:22.031 CommaDeck: preload prepareMs=51
+16:36:26.999 CommaStage: cut cut2_wait_go prep
+16:36:32.653 Comma: screen PLAY → play s=1
+16:36:32.664 CommaFocus: focus request=1
+16:36:32.673 Comma: clipStart s=1
+16:36:32.690 CommaDeck: open warm=true prepareMs=0 startMs=16
+16:36:32.766 CommaPlayer: start s=1 fromMs=0 clipMs=2560 openMs=17
+16:36:32.854 CommaDeck: preload prepareMs=82
+16:36:33.234 CommaSignal: car GearChanged(at=8m 47.777s, gear=DRIVE)
+16:36:33.235 Comma: gear=DRIVE
+16:36:34.686 CommaPlayer: completion callback s=1 playedMs=1997
+16:36:35.326 CommaPlayer: end s=1 by=clock playedMs=2636
+16:36:35.328 Comma: clipStart s=2
+16:36:35.330 CommaDeck: open warm=true prepareMs=0 startMs=3
+16:36:35.331 CommaPlayer: start s=2 fromMs=0 clipMs=8520 openMs=4
+16:36:35.465 CommaStage: anchor clipStart | CommaPlayer: start s=2 fromMs=0 clipMs=8520 openMs=4
+16:36:35.575 CommaDeck: preload prepareMs=243
+16:36:35.584 CommaDeck: release ms=8
+16:36:36.353 CommaSignal: car TurnSignalChanged(at=8m 50.894s, signal=RIGHT)
+16:36:36.354 Comma: turnSignal=RIGHT
+16:36:36.354 Comma: lever=ON speed=0 → no comma
+16:36:36.422 CommaStage: row 1.0 vc turn_signal RIGHT late=17ms
+16:36:43.851 CommaPlayer: end s=2 by=clock playedMs=8520
+16:36:43.864 CommaDeck: open warm=true prepareMs=0 startMs=9
+16:36:43.867 Comma: clipStart s=3
+16:36:43.946 CommaPlayer: start s=3 fromMs=0 clipMs=1580 openMs=10
+16:36:44.039 CommaStage: anchor clipStart | CommaPlayer: start s=3 fromMs=0 clipMs=1580 openMs=10
+16:36:44.101 CommaDeck: preload prepareMs=156
+16:36:44.119 CommaDeck: release ms=16
+16:36:44.548 CommaSignal: car SpeedChanged(at=8m 59.091s, speedMps=8.333333969116211)
+16:36:44.551 Comma: moving → comma armed
+16:36:44.612 CommaStage: row end-1.0 vc speed 30 late=32ms
+16:36:45.416 CommaPlayer: completion callback s=3 playedMs=1552
+16:36:45.517 CommaPlayer: end s=3 by=clock playedMs=1653
+16:36:45.520 CommaGlyph: holdGlyph=on
+16:36:45.521 Comma: clipEnd s=3 lever=ON → hold
+16:36:45.599 CommaStage: anchor →_hold | Comma: clipEnd s=3 lever=ON → hold
+16:36:46.143 CommaStage: row 0.5 vc turn_signal OFF late=18ms
+16:36:46.171 CommaStage: cut cut2_wait_go end
+16:36:46.341 CommaSignal: car TurnSignalChanged(at=9m 0.632s, signal=OFF)
+16:36:46.341 Comma: turnSignal=OFF
+16:36:46.903 Comma: OFF held 0.80s → play s=4
+16:36:46.903 Comma: clipStart s=4
+16:36:46.912 CommaDeck: open warm=true prepareMs=0 startMs=8
+16:36:46.912 CommaGlyph: holdGlyph=off
+16:36:46.913 CommaPlayer: start s=4 fromMs=0 clipMs=3260 openMs=9
+16:36:47.035 CommaDeck: preload prepareMs=121
+16:36:47.086 CommaDeck: release ms=50
+16:36:49.075 CommaSignal: car GearChanged(at=9m 3.617s, gear=PARK)
+16:36:49.076 Comma: gear=PARK
+16:36:49.384 CommaStage: relaunch
+16:36:51.813 CommaSignal: car SpeedChanged(at=9m 6.355s, speedMps=0.0)
+16:36:52.264 CommaSignal: car TurnSignalChanged(at=9m 6.8s, signal=OFF)
+16:36:52.270 CommaSignal: car GearChanged(at=9m 6.813s, gear=PARK)
+16:36:52.270 Comma: gear=PARK
+16:36:52.282 CommaSignal: car TurnSignalChanged(at=9m 6.825s, signal=OFF)
+16:36:52.299 CommaSignal: car GearChanged(at=9m 6.842s, gear=PARK)
+16:36:57.538 CommaDeck: preload prepareMs=6900
+16:36:57.638 CommaDeck: preload prepareMs=100
+16:37:00.283 CommaStage: cut cut3_key_resume prep
+16:37:06.231 Comma: screen PLAY → play s=1
+16:37:06.235 CommaFocus: focus request=1
+16:37:06.249 Comma: clipStart s=1
+16:37:06.267 CommaDeck: open warm=true prepareMs=0 startMs=7
+16:37:06.304 CommaPlayer: start s=1 fromMs=0 clipMs=2560 openMs=17
+16:37:06.435 CommaDeck: preload prepareMs=131
+16:37:06.770 CommaSignal: car GearChanged(at=9m 21.312s, gear=DRIVE)
+16:37:06.770 Comma: gear=DRIVE
+16:37:07.280 CommaSignal: car SpeedChanged(at=9m 21.822s, speedMps=11.111111640930176)
+16:37:08.862 CommaPlayer: end s=1 by=clock playedMs=2595
+16:37:08.864 Comma: clipStart s=2
+16:37:08.865 CommaDeck: open warm=true prepareMs=0 startMs=2
+16:37:08.867 CommaPlayer: start s=2 fromMs=0 clipMs=8520 openMs=3
+16:37:08.916 CommaDeck: preload prepareMs=49
+16:37:08.931 CommaStage: anchor clipStart | CommaPlayer: start s=2 fromMs=0 clipMs=8520 openMs=3
+16:37:08.946 CommaDeck: release ms=30
+16:37:16.394 CommaSignal: car TurnSignalChanged(at=9m 30.937s, signal=RIGHT)
+16:37:16.395 Comma: turnSignal=RIGHT
+16:37:16.395 Comma: moving → comma armed
+16:37:16.461 CommaStage: row end-1.0 vc turn_signal RIGHT late=6ms
+16:37:17.387 CommaPlayer: end s=2 by=clock playedMs=8521
+16:37:17.399 CommaGlyph: holdGlyph=on
+16:37:17.399 Comma: clipEnd s=2 lever=ON → hold
+16:37:17.484 CommaStage: anchor →_hold | Comma: clipEnd s=2 lever=ON → hold
+16:37:18.416 CommaSignal: car TurnSignalChanged(at=9m 32.959s, signal=OFF)
+16:37:18.419 Comma: turnSignal=OFF
+16:37:18.419 Comma: autoResume=off → keep hold
+16:37:18.471 CommaStage: row 1.0 vc turn_signal OFF late=5ms
+16:37:20.510 CommaMedia: media button code=85 action=0
+16:37:20.510 CommaMedia: media button code=85 action=1
+16:37:20.568 CommaStage: row 3.0 adb media_key PLAY_PAUSE late=116ms
+16:37:20.812 Comma: mediaKey PLAY → play s=3
+16:37:20.813 Comma: clipStart s=3
+16:37:20.817 CommaDeck: open warm=true prepareMs=0 startMs=4
+16:37:20.817 CommaGlyph: holdGlyph=off
+16:37:20.818 CommaPlayer: start s=3 fromMs=0 clipMs=1580 openMs=4
+16:37:21.104 CommaDeck: preload prepareMs=286
+16:37:21.117 CommaDeck: release ms=13
+16:37:22.397 CommaPlayer: end s=3 by=clock playedMs=1580
+16:37:22.399 Comma: clipStart s=4
+16:37:22.404 CommaDeck: open warm=true prepareMs=1 startMs=5
+16:37:22.405 CommaPlayer: start s=4 fromMs=0 clipMs=3260 openMs=6
+16:37:22.417 CommaSignal: car SpeedChanged(at=9m 36.96s, speedMps=0.0)
+16:37:22.479 CommaStage: row 5.0 vc speed 0 late=30ms
+16:37:22.483 CommaDeck: preload prepareMs=78
+16:37:22.917 CommaSignal: car GearChanged(at=9m 37.46s, gear=PARK)
+16:37:22.917 Comma: gear=PARK
+16:37:22.979 CommaStage: cut cut3_key_resume end
+16:37:22.986 CommaStage: row 5.5 vc gear PARK late=17ms
+16:37:25.665 CommaPlayer: end s=4 by=clock playedMs=3261
+16:37:25.666 Comma: clipStart s=5
+16:37:25.669 CommaDeck: open warm=true prepareMs=0 startMs=3
+16:37:25.670 CommaPlayer: start s=5 fromMs=0 clipMs=4400 openMs=3
+16:37:26.351 CommaStage: relaunch
+16:37:28.522 CommaSignal: car SpeedChanged(at=9m 43.065s, speedMps=0.0)
+16:37:28.684 CommaSignal: car TurnSignalChanged(at=9m 43.227s, signal=OFF)
+16:37:28.687 CommaSignal: car TurnSignalChanged(at=9m 43.23s, signal=OFF)
+16:37:28.689 CommaSignal: car GearChanged(at=9m 43.232s, gear=PARK)
+16:37:28.689 Comma: gear=PARK
+16:37:28.690 CommaSignal: car GearChanged(at=9m 43.233s, gear=PARK)
+16:37:31.115 CommaDeck: preload prepareMs=3802
+16:37:31.951 CommaDeck: preload prepareMs=835
+16:37:36.753 CommaStage: cut cut4_reverse prep
+16:37:42.568 Comma: screen PLAY → play s=1
+16:37:42.575 CommaFocus: focus request=1
+16:37:42.582 Comma: clipStart s=1
+16:37:42.607 CommaDeck: open warm=true prepareMs=0 startMs=25
+16:37:42.706 CommaPlayer: start s=1 fromMs=0 clipMs=2560 openMs=25
+16:37:42.764 CommaStage: anchor clipStart | CommaPlayer: start s=1 fromMs=0 clipMs=2560 openMs=25
+16:37:42.783 CommaDeck: preload prepareMs=80
+16:37:44.283 CommaSignal: car GearChanged(at=9m 58.825s, gear=REVERSE)
+16:37:44.283 Comma: gear=REVERSE
+16:37:44.283 Comma: reverse → comma armed
+16:37:44.363 CommaStage: row end-1.0 vc gear REVERSE late=16ms
+16:37:45.266 CommaPlayer: end s=1 by=clock playedMs=2659
+16:37:45.269 CommaGlyph: holdGlyph=on
+16:37:45.270 Comma: clipEnd s=1 gear=R → hold
+16:37:45.368 CommaStage: anchor →_hold | Comma: clipEnd s=1 gear=R → hold
+16:37:48.387 CommaMedia: media button code=85 action=0
+16:37:48.400 CommaMedia: media button code=85 action=1
+16:37:48.517 CommaStage: row 3.0 adb media_key PLAY_PAUSE late=128ms
+16:37:48.703 Comma: mediaKey PLAY → play s=2
+16:37:48.719 CommaDeck: open warm=true prepareMs=0 startMs=15
+16:37:48.735 Comma: clipStart s=2
+16:37:48.735 CommaGlyph: holdGlyph=off
+16:37:48.741 CommaPlayer: start s=2 fromMs=0 clipMs=8520 openMs=16
+16:37:48.865 CommaDeck: preload prepareMs=127
+16:37:50.314 CommaSignal: car GearChanged(at=10m 4.844s, gear=PARK)
+16:37:50.322 Comma: gear=PARK
+16:37:50.352 CommaStage: row 5.0 vc gear PARK late=9ms
+16:37:50.387 CommaStage: cut cut4_reverse end
+16:37:53.334 CommaStage: rehearsal end

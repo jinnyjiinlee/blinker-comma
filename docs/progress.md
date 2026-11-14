@@ -448,3 +448,19 @@
 - `scripts/check.sh .` → `tests OK (app 118, engine 119)`, check OK.
 - `apksigner verify` → v2 스킴 통과.
 - 에뮬레이터(Pleos_Connect_34)에 릴리스 APK 새 설치 → P 화면 끔·켬 두 상태 캡처, 3번 줄 전환·잘림 없음 확인.
+
+## P3-2 1등 개선 라운드 (2026-11-14)
+
+블라인드 심사 3인(사업·차량 UX·SDK, 서브에이전트) 기준점 44·30·36/100. 공통 지적: 기능 하나 크기, 콘텐츠 3분, 사업성(가상 패널·MAU 0~601), 방어적 문서, 영상·양식 소리 표기 불일치.
+
+### 한 일
+- R11 후진(R) 쉼표 — 레버 없이 문장 끝에서 멈춤, R 구간 한 번(`ReaderReverseTest`·`Cut4ReverseTest`), 로그 `clipEnd … gear=R → hold`.
+- 이어 듣기 — `PositionStore`(팩이 바뀌면 처음부터). 진행 라벨 「N번째 문장 · 전체 M」.
+- 쉼표 중 「다음」 버튼이 한 문장 건너뛰던 결함 수정(redteam W-1).
+- 1시간 팩 `packs/aesop` — LibriVox 14개 장 998조각 53분, `tools/build_long_pack.py`(원문 쉼표 분할). 기본 팩 전환.
+- 다른 앱용: `docs/INTEGRATION.md`·`IntegrationExampleTest`·`tools/pack_from_transcript.py`(WebVTT·SRT → 팩).
+- 시연: 컷 4 「후진」 대본, 리허설 2회 성공(`docs/logs/p3_rehearsal_01·02_logcat.txt`), `demo/soundtrack.py`로 로그 시각대로 소리 입힘.
+
+### 실측
+- check.sh: tests OK (app 118, engine 127). release APK apksigner v2 통과.
+- 리허설 2회 비교: 4컷 줄 순서 같음, 차이는 컷 2 레버 OFF 전달 시각 0.17초 하나.

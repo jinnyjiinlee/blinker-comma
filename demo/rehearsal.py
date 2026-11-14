@@ -17,7 +17,12 @@ from device import APP, adb, launch_app, reset_car, screen_has, screen_xml, tap_
 from log_watch import LogWatch
 
 SCRIPTS = Path(__file__).resolve().parent / "script"
-CUTS = ["cut1_breath.tsv", "cut2_wait_go.tsv", "cut3_key_resume.tsv"]
+CUTS = [
+    "cut1_breath.tsv",
+    "cut2_wait_go.tsv",
+    "cut3_key_resume.tsv",
+    "cut4_reverse.tsv",
+]
 PERMISSION_WINDOW = "com.android.permissioncontroller"  # 차량용 권한 창(Car UI 목록 — 버튼 id 없음, 글자 「허용」)
 DEVICE_VIDEO = "/sdcard/rehearsal.mp4"
 RECORD_LIMIT_S = 180  # screenrecord 상한
@@ -61,6 +66,8 @@ def grant_speed() -> None:
 
 def relaunch() -> None:
     adb("shell", "am", "force-stop", "--user", "10", APP)
+    # 이어 듣기 위치를 지워 매 컷 첫 문장부터(디버그 빌드만 run-as 가능)
+    adb("shell", "run-as", APP, "--user", "10", "rm", "-f", "shared_prefs/position.xml")
     mark("relaunch")  # 앱 실행 → 첫 기어 콜백 지연을 잰다(화면의 첫 신호 대기 근거)
     launch_app()
     wait_screen("재생")

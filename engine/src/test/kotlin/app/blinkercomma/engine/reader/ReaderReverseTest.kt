@@ -18,6 +18,7 @@ class ReaderReverseTest {
         val result = run(listOf(gear(1.seconds, Gear.REVERSE), clipEnded(2.seconds)))
         assertIs<ReaderPhase.Holding>(result.state.phase)
         assertEquals(true, "reverse → comma armed" in result.logs)
+        assertEquals(true, "clipEnd s=2 gear=R → hold" in result.logs)
     }
 
     @Test

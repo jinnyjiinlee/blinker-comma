@@ -1,0 +1,45 @@
+이솝 우화 — 출처·라이선스 (P3, 2026-11-14)
+
+원작: The Aesop for Children (Aesop, Milo Winter 삽화본, 1919)
+녹음: LibriVox 자원봉사자 낭독(낭독자 이름은 팩에 넣지 않았다 — 각 장 머리말에서 뺌)
+  Book: https://librivox.org/the-aesop-for-children-by-aesop/
+  Archive.org item: https://archive.org/details/aesopforchildren_1308_librivox
+라이선스: Public Domain Mark 1.0 (archive.org 메타데이터 licenseurl = http://creativecommons.org/publicdomain/mark/1.0/)
+  LibriVox 녹음은 미국 내 공공 도메인. 확인 날짜 2026-11-14.
+
+수록 장(원본 파일 · sha256 · 장 제목):
+  theaesopforchildren_01_aesop_64kb.mp3  c9e9b07e3b57a3092a7a0b074e8dc375eccfdbf2b66c84d97a13265e5ef584b7
+    01 - Fables 1-4: The Wolf and the Kid; The Tortoise and the Ducks; The Young Crab and His Mother; The Frogs and the Ox
+  theaesopforchildren_02_aesop_64kb.mp3  469dfd3da8b70b11a44b563d23cc3384f19e5b191d68a66c8712d7ce9a18347a
+    02 - Fables 5-8: The Dog, the Cock, and the Fox; Belling the Cat; The Eagle and the Jackdaw; The Boy and the Filberts
+  theaesopforchildren_03_aesop_64kb.mp3  3be24cd356be631a6300ff4ad9e4b73f21cfe28e71ffb7c8bd0ab9c327620a51
+    03 - Fables 9-12: Hercules and the Wagoner; The Kid and the Wolf; The Town Mouse and the Country Mouse; The Fox and the Grapes
+  theaesopforchildren_04_aesop_64kb.mp3  18e94d1c0b46614c94f9ac32439145e032ce51329855d8ab83a5e78eb00aa7da
+    04 - Fables 13-16: The Bundle of Sticks; The Wolf and the Crane; The Ass and His Driver; The Oxen and the Wheels
+  theaesopforchildren_05_aesop_64kb.mp3  a629747449758a6aae6c384a68dab651720fda910a7567e284e8d9451b7a8fc5
+    05 - Fables 17-20: The Lion and the Mouse; The Shepherd Boy and the Wolf; The Gnat and the Bull; The Plane Tree
+  theaesopforchildren_06_aesop_64kb.mp3  f4b555c1112a23265af145cf7b4d55e8e45d588b369a84f283ed0eb9575c09aa
+    06 - Fables 21-24: The Farmer and the Stork; The Sheep and the Pig; The Travelers and the Purse; The Lion and the Ass
+  theaesopforchildren_07_aesop_64kb.mp3  526c3f460ab1c614f07487950783f33965bb210e15f5e0bffbd0c6aa35d46d58
+    07 - Fables 25-28: The Frogs Who Wished for a King; The Owl and the Grasshopper; The Wolf and His Shadow; The Oak and the Reeds
+  theaesopforchildren_08_aesop_64kb.mp3  60407b4d135ee0e517a2f97997f9ad35783c514ebc47c0f125b5d09f91c06c04
+    08 - Fables 29-32: The Rat and the Elephant; The Boys and the Frogs; The Crow and the Pitcher; The Ants and the Grasshopper
+  theaesopforchildren_09_aesop_64kb.mp3  cc49f4cc3b2df1e7e37cb3ddf7f4d8f973ea305ea8f25bd14115c69f1b258a4b
+    09 - Fables 33-36: The Ass Carrying the Image; A Raven and a Swan; The Two Goats; The Ass and the Load of Salt
+  theaesopforchildren_10_aesop_64kb.mp3  e8a5237140b818a31266f1972e6c64a61e9801662525a665f6167865aabde0b0
+    10 - Fables 37-40: The Lion and the Gnat; The Leap at Rhodes; The Cock and the Jewel; The Monkey and the Camel
+  theaesopforchildren_11_aesop_64kb.mp3  def6965fa55592c51b4f8bd6666b35934cbce966e1115fe3e1cac31001eb149a
+    11 - Fables 41-44: The Wild Boar and the Fox; The Ass, the Fox, and the Lion; The Birds, the Beasts, and the Bat; The Lion, the Bear, and the Fox
+  theaesopforchildren_12_aesop_64kb.mp3  75f2759b834486b26971cc32e7574e92c8da270faf91fa483ef3e3b421b11d0a
+    12 - Fables 45-48: The Wolf and the Lamb; The Wolf and the Sheep; The Hares and the Frogs; The Fox and the Stork
+  theaesopforchildren_14_aesop_64kb.mp3  6b2af8cb4cec9d66cba12cf6cfa90dca69d50bbb26b28b067bb9a1dd7795f94c
+    14 - Fables 53-56: The Mice and the Weasels; The Wolf and the Lean Dog; The Fox and the Lion; The Lion and the Ass
+  theaesopforchildren_15_aesop_64kb.mp3  1250b8d9a9cabcbcd2c75a79ccc7f449aa28fbf4cdceb139239d04add74a9417
+    15 - Fables 57-60: The Dog and His Master's Dinner; The Vain Jackdaw and his Borrowed Feathers; The Monkey and the Dolphin; The Wolf and the Ass
+
+자르기: tools/build_long_pack.py — 장마다 word-level STT(whisper, 모델 base) 타임스탬프의 문장 끝 부호(.!?)로 자르고,
+  3초가 넘는 문장은 원문 쉼표(,;:) 자리에서 구절로 나눴다(앞뒤 조각 1초 이상일 때만). 사람 손 교정 없음 —
+  pack.json의 text는 받아쓰기 그대로라 오인식이 있을 수 있다(화면에 문장 글자는 나오지 않는다).
+  장 머리말(「Section N of … This is a LibriVox recording … by …」)과 꼬리말(「End of section N」)은 뺐다.
+  결과: 998조각, 총 3187.3초(약 53분), 2.5초 이내 조각 42%.
+  섹션 13(기존 packs/en1 3분 팩)은 이 팩에 넣지 않았다.

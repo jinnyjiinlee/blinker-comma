@@ -2,8 +2,9 @@
 
 ## 1. 앱 이름 · 한 줄 소개
 - **앱 이름**: 깜빡이 쉼표 (패키지 `app.blinkercomma`, 팀 CommaLane)
-- **한 줄 소개**: 깜빡이를 켜면 낭독이 그 문장 끝에서 숨을 참고, 핸들 재생 버튼으로 다음 문장을 이어 읽는다(자동 재개를 켜면 레버가 돌아올 때 바로).
-- 차로를 바꾸려고 깜빡이를 올리는 몇 초 동안 듣던 영어 낭독이 문장 중간에서 흘러가 버리지 않게, 앱이 그 문장 끝에서 멈추고(⏸ 하나) 핸들 재생 버튼을 누르면 다음 문장을 읽는다. 자동 재개(기본값 끔)를 켜 두면 레버가 0.8초 내려가 있을 때 버튼 없이 이어 읽는다. 차량 제어 0 · 주행 중 화면 조작 0 · 네트워크·계정 0.
+- **한 줄 소개**: 차로를 바꾸거나 후진하는 순간, 차 안 낭독이 듣던 문장 끝에서 숨을 참았다가 핸들 버튼 한 번에 다음 문장부터 이어 준다 — 그리고 이 판단을 다른 오디오 앱에 붙이는 「쉼표 규칙」 엔진.
+- 깜빡이(달리는 중)나 후진 기어가 들어오면 지금 문장을 끝까지 읽고 멈춘다(⏸). 핸들 재생 버튼을 누르면 다음 문장부터. 「자동 재개」(기본값 끔)를 켜 두면 레버가 0.8초 내려가 있을 때 버튼 없이 이어 읽는다. 시동을 껐다 켜도 마지막 문장부터 이어 듣는다. 차량 제어 0 · 주행 중 화면 조작 0 · 네트워크·계정 0.
+- **다른 오디오 앱에 붙이기**: 판단은 전부 순수 Kotlin `engine` 모듈에 있다 — `docs/INTEGRATION.md`(연동 방법·규칙 요약), `IntegrationExampleTest`(그대로 돌아가는 예제), `tools/pack_from_transcript.py`(자막 WebVTT·SRT가 있는 음성 → 팩).
 
 ## 2. 실행 방법
 ```
@@ -24,7 +25,9 @@ python3 demo/conductor.py demo/script/cut1_breath.tsv cut1_log.txt          # �
 python3 demo/rehearsal.py <APK> rehearsal.mp4 rehearsal_log.txt             # 새 설치 → 권한 → 3컷 + 화면 녹화
 python3 demo/rehearsal_summary.py rehearsal_log_1.txt rehearsal_log_2.txt   # 두 번 돌린 결과가 같은지
 ```
-대본(`demo/script`의 TSV, 형식은 `docs/ARCHITECTURE.md` 6절): 컷 1 「숨 참기」 · 컷 2 「신호 대기 → 출발」 · 컷 3 「자동 재개 끔 + 핸들 키」.
+대본(`demo/script`의 TSV, 형식은 `docs/ARCHITECTURE.md` 6절): 컷 1 「숨 참기」 · 컷 2 「신호 대기 → 출발」 · 컷 3 「자동 재개 끔 + 핸들 키」 · 컷 4 「후진」. 리허설은 디버그 APK로 돈다(릴리스는 속도 로그를 남기지 않아 대본이 속도 반영을 확인할 수 없다).
+
+**영상에 소리 입히기**: 에뮬레이터는 `-no-audio`라 녹화에 소리가 없다. `python3 demo/soundtrack.py <녹화.mp4> <로그> <팩 폴더> <영상 0초의 로그 시각> <출력.mp4>`가 앱 로그의 재생 시작·끝 시각대로 팩 음원을 붙인다.
 
 **시연 주입(정직 표기)**: 핸들 미디어 키는 Virtual Console에 카드가 없어 `adb shell input keyevent 85`로 넣는다(컷 3). 그 밖에 VC로 못 넣는 신호(오디오 포커스 등)는 디버그 빌드에서만 `adb shell am broadcast --user 10 -a app.blinkercomma.debug.INJECT -p app.blinkercomma --es signal focus --es value LOSS_TRANSIENT`로 넣고, 그동안 화면에 노란 「시연 주입」이 뜬다(릴리스 APK엔 수신기 없음).
 
@@ -36,11 +39,11 @@ python3 demo/rehearsal_summary.py rehearsal_log_1.txt rehearsal_log_2.txt   # �
 | 최소 / 대상 | minSdk 28 · Kotlin 2.0.21 · Gradle 8.13 · JDK 21 |
 | 권한 | `pleos.car.permission.CAR_LIGHTS`(깜빡이) · `CAR_DRIVE`(기어) · `android.car.permission.CAR_SPEED`(런타임 — 에뮬레이터 수동 허용은 `adb shell pm grant --user 10 app.blinkercomma android.car.permission.CAR_SPEED`) · 포그라운드 서비스(미디어 재생) · 알림 |
 | 신호 실측 | `docs/signals_measured.md` — 이 앱 기준 에뮬레이터 실측(깜빡이·기어·속도·핸들 키·오디오 포커스) |
-| 검사 | `scripts/check.sh .` = ktlint · detekt(타입 분석) · 단위·시나리오 테스트 · 커버리지 · Lint · 파일 크기 · ruff → 현재 `tests OK (app 118, engine 119)` |
-| 리허설 | 새 설치 → 권한 → 3컷 자동 재생을 연속 2회 돌려 앱 로그 줄·시각이 같은지(차이 ≤ 0.15초) 확인 — `docs/progress.md` D4 |
+| 검사 | `scripts/check.sh .` = ktlint · detekt(타입 분석) · 단위·시나리오 테스트 · 커버리지 · Lint · 파일 크기 · ruff → 현재 `tests OK (app 118, engine 127)` |
+| 리허설 | 새 설치 → 권한 → 4컷 자동 재생을 연속 2회 돌려 앱 로그 줄·시각이 같은지 확인 — `docs/progress.md` P3 |
 
 - 소리: 에뮬레이터를 `-no-audio`로 돌리므로 소리는 녹음되지 않는다. 문장 끝은 재생 완료 콜백이 아니라 콘텐츠 팩의 문장 길이 시계로 판정한다(콜백이 에뮬레이터에서 일찍·늦게 와서 — 실측 근거는 `docs/signals_measured.md`).
-- 콘텐츠: **퍼블릭 도메인 영어 낭독 38문장**(LibriVox, Public Domain Mark — `app/src/main/assets/packs/en1/CREDITS.txt`). `tools/cut_pack.py`로 원본 mp3를 word-level STT 타임스탬프 기준 문장 단위로 자름(D5).
+- 콘텐츠: **퍼블릭 도메인 영어 낭독 「이솝 우화」 약 1시간**(LibriVox 14개 장, Public Domain Mark — `app/src/main/assets/packs/aesop/CREDITS.txt`). `tools/build_long_pack.py`가 장마다 word-level STT 타임스탬프로 문장 끝을 찾아 자르고, 3초 넘는 문장은 원문 쉼표(,;:) 자리에서 나눈다. 장 머리말·꼬리말(낭독자 소개)은 뺀다. 예전 3분 팩 `packs/en1`은 그대로 둔다.
 
 ## 4. APK 위치
 - 제출용 릴리스 APK: **`apk/CommaLane_깜빡이쉼표_release.apk`**(서명 완료 — `apksigner verify` v2 스킴 통과, D5). 빌드: `./gradlew :app:assembleRelease`(서명은 저장소 밖 `~/.blinker-comma/keystore.properties`를 읽음 — 그 파일이 없으면 서명 없이 빌드됨).

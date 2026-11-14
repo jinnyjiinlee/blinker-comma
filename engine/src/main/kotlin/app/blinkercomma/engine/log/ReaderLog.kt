@@ -44,8 +44,12 @@ sealed interface ReaderLog {
     }
 
     /** ⓑ */
-    data class HeldAtEnd(val index: Int) : ReaderLog {
-        override val line: String get() = "clipEnd ${sentenceLabel(index)} lever=ON → hold"
+    /** 무엇 때문에 멈췄나를 줄에 남긴다 — 깜빡이(lever=ON) 또는 후진(gear=R, R11). */
+    data class HeldAtEnd(val index: Int, val isReverse: Boolean = false) : ReaderLog {
+        override val line: String get() {
+            val cause = if (isReverse) "gear=R" else "lever=ON"
+            return "clipEnd ${sentenceLabel(index)} $cause → hold"
+        }
     }
 
     data class HeldMid(val index: Int, val waited: Duration) : ReaderLog {

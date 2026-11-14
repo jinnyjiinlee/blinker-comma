@@ -35,7 +35,7 @@ class PackRepository(private val assets: AssetManager) {
     }
 
     private companion object {
-        const val DEFAULT_FOLDER = "packs/en1"
+        const val DEFAULT_FOLDER = "packs/aesop"
         const val PACK_FILE = "pack.json"
         const val TAG = "CommaPack"
     }
