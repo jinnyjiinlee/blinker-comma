@@ -30,13 +30,16 @@ internal fun onPausePressed(state: ReaderState, event: ReaderEvent.PausePressed)
         stop(state, ReaderLog.StoppedByPress(event.source, state.index))
     }
 
-/** 건너뛰기. 쉼표 중 「이전」은 방금 끝난 문장을 다시 듣는 길이다. 멈춰 있으면 자리만 옮긴다. */
+/**
+ * 건너뛰기. 쉼표 중 「이전」은 방금 끝난 문장을 다시 듣는 길이다. 멈춰 있으면 자리만 옮긴다.
+ * 문장 끝 쉼표에선 자리가 이미 다음 문장이라 「다음」 한 번은 그 문장을 읽는다(핸들에 다음 버튼만 있는 차의 재개 길).
+ */
 internal fun onSkipPressed(
     state: ReaderState,
     event: ReaderEvent.SkipPressed,
     params: CommaCardParams,
 ): Transition<ReaderState> {
-    val index = (state.index + event.step).coerceIn(0, state.clipCount - 1)
+    val index = (state.index + stepFrom(state.phase, event.step)).coerceIn(0, state.clipCount - 1)
     val moved = Transition(state.copy(index = index), listOf(toWriteLog(ReaderLog.Skipped(event.step, index))))
     return when (state.phase) {
         is ReaderPhase.Reading -> moved.then { startReading(it, event.at, params) }
@@ -44,4 +47,10 @@ internal fun onSkipPressed(
             .let { it.copy(effects = it.effects + Effect.ShowHoldGlyph(false)) }
         ReaderPhase.Stopped, ReaderPhase.FocusPaused -> moved.then { Transition(it.copy(phase = ReaderPhase.Stopped)) }
     }
+}
+
+/** 문장 끝 쉼표는 이미 한 칸 넘어가 있다 — 「다음」에서 그 한 칸을 뺀다. */
+private fun stepFrom(phase: ReaderPhase, step: Int): Int {
+    val isAtSentenceEnd = phase is ReaderPhase.Holding && phase.reason == HoldReason.SENTENCE_END
+    return if (isAtSentenceEnd && step > 0) step - 1 else step
 }

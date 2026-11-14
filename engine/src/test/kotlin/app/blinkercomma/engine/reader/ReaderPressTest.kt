@@ -106,6 +106,13 @@ class ReaderPressTest {
     }
 
     @Test
+    fun `문장 끝 쉼표 중 다음을 누르면 건너뛰지 않고 바로 다음 문장을 읽는다`() {
+        val result = run(listOf(skip(+1)), initial = holding)
+        assertEquals(holding.index, result.state.index)
+        assertEquals(Effect.PlayClip(holding.index, isFromStart = true), result.effects.first { it is Effect.PlayClip })
+    }
+
+    @Test
     fun `포커스로 멈춘 중 건너뛰면 자리만 옮기고 멈춘다`() {
         val result = run(listOf(focus(1.seconds, LOSS_TRANSIENT), skip(+1)))
         assertEquals(reading.copy(phase = ReaderPhase.Stopped, index = 2), result.state)
