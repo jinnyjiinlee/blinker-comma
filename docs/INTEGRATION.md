@@ -57,5 +57,8 @@ fun feed(event: ReaderEvent) {
 
 ## 4. 확인 방법
 
+- 실제 두 번째 앱: `sample/`(쉼표 샘플) — 문장 파일 대신 음원 하나 + WebVTT. `CommaDriver.kt`가 이 문서 1절 그대로, `CuePlayer.kt`가 「재생 위치가 다음 경계를 지나면 멈추고 ClipEnded」(2절 스트리밍 방식). 에뮬레이터 실측 `docs/logs/sample_demo_logcat.txt`.
+
+
 `engine/src/test/.../IntegrationExampleTest.kt`가 이 문서의 1절 코드를 그대로 돌린다 — 가짜 플레이어 하나로
 「읽는 중 깜빡이 ON → 문장 끝에서 다음 문장을 틀지 않고 멈춤 표시 → 핸들 키로 다음 문장」을 확인한다.

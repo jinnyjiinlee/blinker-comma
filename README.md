@@ -4,6 +4,7 @@
 - **앱 이름**: 깜빡이 쉼표 (패키지 `app.blinkercomma`, 출품 이름 CommaLane — 개인 참가이며 블라인드 심사용 이름. APK 파일명 규정 「팀명_앱이름_release.apk」의 팀명 자리에 쓴다)
 - **한 줄 소개**: 차로를 바꾸거나 후진하는 순간, 차 안 낭독이 듣던 문장 끝에서 숨을 참았다가 핸들 버튼 한 번에 다음 문장부터 이어 준다 — 그리고 이 판단을 다른 오디오 앱에 붙이는 「쉼표 규칙」 엔진.
 - 깜빡이(달리는 중)나 후진 기어가 들어오면 지금 문장을 끝까지 읽고 멈춘다(⏸). 핸들 재생 버튼을 누르면 다음 문장부터. 「자동 재개」(기본값 끔)를 켜 두면 레버가 0.8초 내려가 있을 때 버튼 없이 이어 읽는다. 시동을 껐다 켜도 마지막 문장부터 이어 듣는다. 차량 제어 0 · 주행 중 화면 조작 0 · 네트워크·계정 0.
+- **두 번째 앱 `sample/`(쉼표 샘플)**: 엔진만 가져다 쓴 팟캐스트형 플레이어 — 음원 파일 하나 + WebVTT 자막 경계(`CommaDriver.kt` 연동, `CuePlayer.kt` 재생). `./gradlew :sample:assembleDebug`, 시연 녹화 `python3 demo/sample_demo.py <mp4> <로그>`(로그 `docs/logs/sample_demo_logcat.txt`).
 - **다른 오디오 앱에 붙이기**: 판단은 전부 순수 Kotlin `engine` 모듈에 있다 — `docs/INTEGRATION.md`(연동 방법·규칙 요약), `IntegrationExampleTest`(그대로 돌아가는 예제), `tools/pack_from_transcript.py`(자막 WebVTT·SRT가 있는 음성 → 팩).
 
 ## 2. 실행 방법
@@ -39,7 +40,7 @@ python3 demo/rehearsal_summary.py rehearsal_log_1.txt rehearsal_log_2.txt   # �
 | 최소 / 대상 | minSdk 28 · Kotlin 2.0.21 · Gradle 8.13 · JDK 21 |
 | 권한 | `pleos.car.permission.CAR_LIGHTS`(깜빡이) · `CAR_DRIVE`(기어) · `android.car.permission.CAR_SPEED`(런타임 — 에뮬레이터 수동 허용은 `adb shell pm grant --user 10 app.blinkercomma android.car.permission.CAR_SPEED`) · 포그라운드 서비스(미디어 재생) · 알림 |
 | 신호 실측 | `docs/signals_measured.md` — 이 앱 기준 에뮬레이터 실측(깜빡이·기어·속도·핸들 키·오디오 포커스) |
-| 검사 | `scripts/check.sh .` = ktlint · detekt(타입 분석) · 단위·시나리오 테스트 · 커버리지 · Lint · 파일 크기 · ruff → 현재 `tests OK (app 118, engine 127)` |
+| 검사 | `scripts/check.sh .` = ktlint · detekt(타입 분석) · 단위·시나리오 테스트 · 커버리지 · Lint · 파일 크기 · ruff → 현재 `tests OK (app 118, engine 127, sample 4)` |
 | 리허설 | 새 설치 → 권한 → 4컷 자동 재생을 연속 2회 돌려 앱 로그 줄·시각이 같은지 확인 — `docs/progress.md` P3 |
 
 - 소리: 에뮬레이터를 `-no-audio`로 돌리므로 소리는 녹음되지 않는다. 문장 끝은 재생 완료 콜백이 아니라 콘텐츠 팩의 문장 길이 시계로 판정한다(콜백이 에뮬레이터에서 일찍·늦게 와서 — 실측 근거는 `docs/signals_measured.md`).
