@@ -47,6 +47,7 @@ python3 demo/rehearsal_summary.py rehearsal_log_1.txt rehearsal_log_2.txt   # �
 - 콘텐츠: **사람이 읽은 퍼블릭 도메인 낭독 2팩** — 한국어 현진건 단편 약 68분(1,326조각, `packs/hyun`, 기본) · 영어 이솝 우화 약 62분(1,066조각, `packs/aesop`). 정차 화면의 팩 제목을 누르면 바뀐다(앱이 새 팩으로 다시 시작). LibriVox, Public Domain Mark — 각 폴더 `CREDITS.txt`. `tools/build_long_pack.py`가 받아쓰기 문장 끝으로 자르고, 긴 문장은 원문 쉼표·받아쓰기 구간 경계에서 나누며(`pack_split.py`), 자르는 자리는 가장 조용한 순간(`quiet_cut.py`). 예전 3분 팩 `packs/en1`은 그대로 둔다.
 
 ## 4. APK 위치
+- 내려받기 주소로 받은 경우: 소스 zip에는 용량(Vercel 파일당 100MB) 때문에 `apk/` 폴더를 빼고, 같은 파일을 내려받기 페이지 ②번(`CommaLane_blinker-comma_release.apk`)으로 따로 두었다. 두 파일의 SHA-256은 내려받기 페이지에 있다.
 - 제출용 릴리스 APK: **`apk/CommaLane_깜빡이쉼표_release.apk`**(서명 완료 — `apksigner verify` v2 스킴 통과, 2026-11-14 재확인). 빌드: `./gradlew :app:assembleRelease`(서명은 저장소 밖 `~/.blinker-comma/keystore.properties`를 읽음 — 그 파일이 없으면 서명 없이 빌드됨).
 - 지금 빌드되는 디버그 APK: `./gradlew :app:assembleDebug` → `app/build/outputs/apk/debug/app-debug.apk`(저장소엔 올리지 않음).
 
