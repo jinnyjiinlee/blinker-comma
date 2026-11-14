@@ -10,7 +10,7 @@
 
 | 바로 가기 | |
 |---|---|
-| 서명된 APK 내려받기 | [Releases · v1.0-submission](https://github.com/jinnyjiinlee/blinker-comma/releases/tag/v1.0-submission) · 저장소 안 [`apk/`](apk/) |
+| 서명된 APK 내려받기 | [Releases · v1.0-submission](../../releases/tag/v1.0-submission) · 저장소 안 [`apk/`](apk/) |
 | 5분 안에 돌려 보기 | [2. 실행 방법](#2-실행-방법) |
 | 다른 오디오 앱에 붙이기 | [`docs/INTEGRATION.md`](docs/INTEGRATION.md) |
 | 규칙 전문 | [`docs/SPEC.md`](docs/SPEC.md) (원칙 11개 · 쉼표 규칙 R1~R11) |
@@ -65,7 +65,7 @@
 
 ### 가장 빠른 길 — 서명된 APK 설치
 
-1. [Releases](https://github.com/jinnyjiinlee/blinker-comma/releases/tag/v1.0-submission)에서 `CommaLane_blinker-comma_release.apk`를 받습니다(저장소 [`apk/`](apk/)의 파일과 같습니다).
+1. [Releases](../../releases/tag/v1.0-submission)에서 `CommaLane_blinker-comma_release.apk`를 받습니다(저장소 [`apk/`](apk/)의 파일과 같습니다).
 2. Pleos Connect 에뮬레이터를 켜고 설치·실행합니다. 에뮬레이터에서는 **사용자 10**에서 앱이 돕니다.
    ```bash
    adb install CommaLane_blinker-comma_release.apk
@@ -114,7 +114,7 @@ adb shell am start --user 10 -n app.blinkercomma/.MainActivity
 
 ## 4. APK 위치
 
-- **제출용 릴리스 APK**: [`apk/CommaLane_깜빡이쉼표_release.apk`](apk/) — 서명 완료(`apksigner verify` v2 통과). 같은 파일이 [Releases](https://github.com/jinnyjiinlee/blinker-comma/releases/tag/v1.0-submission)에도 있습니다.
+- **제출용 릴리스 APK**: [`apk/CommaLane_깜빡이쉼표_release.apk`](apk/) — 서명 완료(`apksigner verify` v2 통과). 같은 파일이 [Releases](../../releases/tag/v1.0-submission)에도 있습니다.
   - SHA-256 `5c17f5e8198e66ee9a25bec8dcb7891781a7c7ab366524cee2709b11fdf8073b`
   - 파일명의 `CommaLane`은 APK 파일명 규정 「팀명_앱이름_release.apk」의 팀명 자리에 쓴 출품 이름입니다.
 - **예비 내려받기 주소로 받은 경우**: 그 소스 zip에는 용량 때문에 `apk/` 폴더가 빠져 있고, 같은 APK가 내려받기 페이지 ②번에 따로 있습니다.
